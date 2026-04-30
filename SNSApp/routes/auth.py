@@ -1,0 +1,110 @@
+from flask import Blueprint,request,redirect, render_template, session,url_for,flash
+from Models.User import User
+from Models.Post import Post
+from Models.Comment import Comment
+from util.SessionManager import SessionManager as SM
+import hashlib
+import re
+
+auth = Blueprint('auth', __name__)
+
+EMAIL_PATTERN = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+
+# 新規登録ページの表示
+@auth.route('/signup', methods=['GET'])
+def signup_view():
+    # ログイン済みの場合は投稿一覧へ
+    if SM.is_live_session():
+        return redirect(url_for('posts.posts_view'))
+    
+    return render_template('auth/signup.html')
+
+
+# ログインページの表示
+@auth.route('/login', methods=['GET'])
+def login_view():
+    # ログイン済みの場合は投稿一覧へ
+    if SM.is_live_session():
+        return redirect(url_for('posts.posts_view'))
+    
+    return render_template('auth/login.html')
+
+# ログイン処理
+@auth.route('/login', methods=['POST'])
+def login_process():
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    # ログイン不正
+    if email.strip() =='' or password.strip() == '':
+        flash('メールアドレスorパスワードが空です','error')
+        return redirect(url_for('auth.login_view'))
+    
+    # メールアドレスでユーザー情報検索
+    user = User.find_by_email(email)
+    
+    # ユーザーが見つからなかった場合
+    if user is None:
+        flash('メールアドレスorパスワードが違います','error')
+        return redirect(url_for('auth.login_view'))
+        
+    # -- ユーザーが存在していた場合 --
+    hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+    
+    # パスワードが一致しない場合
+    if hashPassword != user["password"]:
+        flash('メールアドレスorパスワードが違います','error')
+        return redirect(url_for('auth.login_view'))
+    
+    # ログイン成功
+    # セッション情報作成
+    SM.create_session(user["id"])
+    return redirect(url_for('posts.posts_view'))
+
+# 新規登録
+@auth.route('/signup', methods=['POST'])
+def signup_process():
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+    password = request.form.get('password', '')
+    password_confirmation = request.form.get('password_confirmation', '')
+    
+    # 空チェック
+    if not name or not email or not password or not password_confirmation:
+        flash("空のフォームがあります" , 'error')
+        return redirect(url_for('auth.signup_view'))
+
+    # パスワード一致チェック
+    if password != password_confirmation:
+        flash('二つのパスワードの値が違っています','error')
+        return redirect(url_for('auth.signup_view'))
+
+    # メール形式チェック
+    if re.match(EMAIL_PATTERN, email) is None:
+        flash('正しいメールアドレスの形式ではありません','error')
+        return redirect(url_for('auth.signup_view'))
+
+    # 既存ユーザーチェック
+    registered_user = User.find_by_email(email)
+    if registered_user is not None:
+        flash('既に登録されているメールアドレスです','error')
+        return redirect(url_for('auth.signup_view'))
+
+    # 入力されたパスワードをハッシュ化
+    hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+    # 新規登録
+    user_id = User.create(name, email, hashed_password)
+
+    # セッション情報作成
+    SM.create_session(user_id)
+
+    return redirect(url_for('posts.posts_view'))
+
+
+# ログアウト
+@auth.route('/logout')
+def logout():
+    # セッションクリア
+    SM.clear_session()
+    return redirect(url_for('auth.login_view'))
