@@ -52,6 +52,7 @@ CREATE TABLE
         content TEXT NOT NULL,
         created_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         updated_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+        deleted_at DATETIME (6) DEFAULT NULL,
         PRIMARY KEY (id),
         KEY idx_comments_user_id (user_id),
         KEY idx_comments_post_id (post_id),
