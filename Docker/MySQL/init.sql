@@ -35,6 +35,7 @@ CREATE TABLE
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
         user_id BIGINT UNSIGNED NOT NULL,
         content TEXT NOT NULL,
+        study_time TIME NOT NULL,
         created_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         updated_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
         deleted_at DATETIME (6) DEFAULT NULL,
@@ -106,7 +107,7 @@ CREATE TABLE
         CONSTRAINT fk_batonlogs_user FOREIGN KEY (baton_id) REFERENCES Baton (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
--- 勉強ID
+/* 勉強ID
 CREATE TABLE
     studys (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -121,6 +122,7 @@ CREATE TABLE
         CONSTRAINT fk_study_post FOREIGN KEY (post_id) REFERENCES posts (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+*/
 
 -- リアクションユーザーID
 CREATE TABLE
