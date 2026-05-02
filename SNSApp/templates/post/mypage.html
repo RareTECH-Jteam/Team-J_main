@@ -59,17 +59,29 @@
         <section class="new-post">
             <form class="new-post-main" action="/posts" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> <!-- なりすましリクエスト防止（CSRF対策） -->
-                <textarea name="content" placeholder="勉強実績を記録して、ドヤってみよう！"></textarea> <!-- 新規投稿フォームに投稿するまで表示する文言 -->
-                <div class="new-post-footer">
-                    <label class="study-box">
-                        勉強時間：
-                    <input type="number" name="study-time" step="5" min="0" placeholder="分"> <!-- numberにすることでクリックするたび5分刻みで数字が変わる。最小0分 -->
-                        分
-                    </label>
-                    <button class="btn-primary" type="submit">
-                        投稿する
-                    </button>
+
+                <!-- 上段 -->
+                <div class="new-post-body">
+                    <textarea name="content" placeholder="勉強実績を記録して、ドヤってみよう！"></textarea> <!-- 新規投稿フォームに投稿するまで表示する文言 -->
+                    <div class="post-image">
+                        <img src="../img/Studying_rabbit.PNG" alt="studying rabbit">
+                    </div>
+
+                                        <!-- 下段 -->
+                    <div class="new-post-footer">
+                        <label class="study-box">
+                            勉強時間：
+                        <input type="number" name="study-time" step="5" min="0" placeholder="分"> <!-- numberにすることでクリックするたび5分刻みで数字が変わる。最小0分 -->
+                            分
+                        </label>
+                        <button class="btn-primary" type="submit">
+                            投稿する
+                        </button>
+                    </div>
+
                 </div>
+
+
             </form>
         </section>
 
