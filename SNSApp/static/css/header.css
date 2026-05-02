@@ -6,7 +6,7 @@
     padding-top: env(safe-area-inset-top); /* iphoneノッチ対策 */
     gap: 8px;
     text-align: center;
-    font-size: 39px;
+    font-size: 40px;
     font-weight: 700;
     color: #FFFFFF;
     img {
