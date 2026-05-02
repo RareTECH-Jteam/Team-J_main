@@ -157,11 +157,11 @@ VALUES
   ('てる', 'qn3dyx11w4ge@example.com', '44b4c21936c779156df19a17832a0d91ecbfb37e6889ef6d9b465c75b00ef060');
 
 
-INSERT INTO posts (user_id, content)
+INSERT INTO posts (user_id, content,study_time)
 VALUES
-  (1, 'こんにちは！数学勉強中です！'),
-  (2, '試験頑張ってきます'),
-  (3, 'ハッカソンの会議の日です！');
+  (1, 'こんにちは！数学勉強中です！','01:30:00'),
+  (2, '試験頑張ってきます','05:30:00'),
+  (3, 'ハッカソンの会議の日です！', '00:45:00');
 
 
 INSERT INTO comments (user_id, post_id, content)
