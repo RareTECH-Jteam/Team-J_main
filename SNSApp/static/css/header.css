@@ -1,0 +1,26 @@
+.header-inner {
+    display: flex;
+    justify-content: center; /*　横方向の中央揃え */
+    align-items: center; /* 縦方向の中央揃え */
+    height: 80px; /* 高さを固定 */
+    padding-top: env(safe-area-inset-top); /* iphoneノッチ対策 */
+    gap: 8px;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 700;
+    color: #FFFFFF;
+    img {
+        width: 80px;
+        height: auto;
+    }
+}
+
+.logout {
+    display: flex;
+    justify-content: right; /* 横方向の中央揃え */
+    height: 20px; /* 高さを固定 */
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 0 32px; /* 左右の余白 */
+
+}

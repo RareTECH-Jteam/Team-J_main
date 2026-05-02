@@ -1,0 +1,98 @@
+/*とりあえず全部中央揃えに */
+.mypage {
+    max-width: 600px; /* 横幅制限（スマホ想定） */
+    margin: 0 auto; /*　全体を中央寄せに */
+    padding: 0 16px; /* 端の余白（スマホで詰まりすぎを防ぐ） */
+
+}
+
+/* テキスト系をまとめてセンターアライン */
+.page-title, .total-study-time, .flash-messages, .new-post {
+    text-align: center; 
+}
+
+.page-title {
+    height: 56px;
+    font-size: 40px;
+    font-weight: 700;
+}
+.total-study-time {
+    height: 56px; /* base.htmlとfooter.htmlでflex: columnというのが良いみたい */
+    text-align: center;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.new-post {
+    margin-top: 16px;
+}
+
+/* formを縦並びにする */
+.new-post-main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px; /* 間の余白 */
+    border-radius: 16px;
+    padding: 16px;
+}
+
+/* 上段だけ横並びにする（投稿フォームとイメージ */
+.new-post-body {
+    position: relative;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    width: 100%;
+    background-color: #FFF;
+}
+
+.new-post textarea {
+    flex: 1; /* 居残り幅全部使う */
+    min-height: 96px;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    background: #FFF;
+    padding: 8px;
+    padding-bottom: 96px;
+}
+
+.post-image {
+    margin-left: auto;
+}
+
+.post-image img {
+    flex-shrink: 0;
+    width: 112px;
+    background: #FFF;
+}
+
+.study-box {
+    margin-left: 134px;
+    text-align: left;
+    color: #FFF;
+    background-color:goldenrod;
+    padding: 8px 16px;
+    border-radius: 16px;
+}
+
+.btn-primary {
+    margin-right: 4px;
+    color: #FFF;
+    background-color: goldenrod;
+    font-size: 16px;
+    padding: 8px 16px;
+}
+
+.new-post-footer {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color:#FFF
+}

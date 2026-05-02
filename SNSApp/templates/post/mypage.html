@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}マイページ{% endblock %} <!-- タブへの表示内容  -->
+
+{% block page_css %} <!-- page_cssって何だったっけ？ -->
+<!-- 今はコメントアウトしておく！ -->
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css')}}"> -->
+
+<!-- 下記は仮 -->
+<link rel="stylesheet" href="../../static/css/base.css">
+<link rel="stylesheet" href="../../static/css/header.css">
+<link rel="stylesheet" href="../../static/css/mypage.css">
+
+<!-- めっちゃ仮でheader.html読み込ませている -->
+
+<header> <!-- CSS：header全体のサイズを指定する -->
+    <div class="header-inner"> <!-- CSS：ロゴの位置を指定 -->
+        <img src="../img/Normal_cat.PNG" alt="cat">  <!-- CSS：画像サイズと位置調整 -->
+        <span>マナ部</span>
+        <img src="../img/Normal_rabbit.PNG" alt="rabbit"><br>
+    </div>
+
+    <!-- 下記も今は無効にしておく -->
+        <!-- {% if sessions.get('user_id') %}
+        <a class="logout" href="{{ url_for('logout')}}">ログアウト</a>
+        {% endif %} -->
+    <div class="logout">ログアウト</div>
+
+</header>
+    <!-- サンプルアプリを参考にしながら進める（cmd+/　でコメントアウト） -->
+<!-- めっちゃ仮　の終わり -->
+
+{% endblock %}
+
+{% block content %}
+<div class="mypage">
+    <!-- メイン -->
+    <main>
+        <div class="page-title">
+        マイページ
+        </div>
+        <div class="total-study-time">
+        {{ user.id }}さんのトータル勉強時間：<br>
+        時間分 <!-- 勉強時間を「時間」＋「分」に換算して表示・・どうするんかな？ -->
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- 新規投稿フォーム -->
+        <section class="new-post">
+            <form class="new-post-main" action="/posts" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> <!-- なりすましリクエスト防止（CSRF対策） -->
+
+                <!-- 上段 -->
+                <div class="new-post-body">
+                    <textarea name="content" placeholder="勉強実績を記録して、ドヤってみよう！"></textarea> <!-- 新規投稿フォームに投稿するまで表示する文言 -->
+                    <div class="post-image">
+                        <img src="../img/Studying_rabbit.PNG" alt="studying rabbit">
+                    </div>
+
+                                        <!-- 下段 -->
+                    <div class="new-post-footer">
+                        <label class="study-box">
+                            勉強時間：
+                        <input type="number" name="study-time" step="5" min="0" placeholder="分"> <!-- numberにすることでクリックするたび5分刻みで数字が変わる。最小0分 -->
+                            分
+                        </label>
+                        <button class="btn-primary" type="submit">
+                            投稿する
+                        </button>
+                    </div>
+
+                </div>
+
+
+            </form>
+        </section>
+
+    </main>
+        {% include 'common/footer_mypage.html' %}
+</div>

@@ -1,0 +1,24 @@
+<!-- 下記は後で有効にする -->
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css')}}"> -->
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css')}}"> -->
+
+<!-- 実験的にcssを読み込ませる -->
+<link rel="stylesheet" href="../../static/css/base.css">
+<link rel="stylesheet" href="../../static/css/header.css">
+
+
+<header> <!-- CSS：header全体のサイズを指定する -->
+    <div class="header-inner"> <!-- CSS：ロゴの位置を指定 -->
+        <img src="../img/Normal_cat.PNG" alt="cat">  <!-- CSS：画像サイズと位置調整 -->
+        <span>マナ部</span>
+        <img src="../img/Normal_rabbit.PNG" alt="rabbit"><br>
+    </div>
+
+    <!-- 下記も今は無効にしておく -->
+        <!-- {% if sessions.get('user_id') %}
+        <a class="logout" href="{{ url_for('logout')}}">ログアウト</a>
+        {% endif %} -->
+    <div class="logout">ログアウト</div>
+
+</header>
+    <!-- サンプルアプリを参考にしながら進める（cmd+/　でコメントアウト） -->
