@@ -45,7 +45,7 @@ class Post:
         try:
             with conn.cursor() as cur:
                 sql = "UPDATE posts SET deleted_at = NOW() WHERE id = %s;"
-                cur.execute(sql, (post_id))
+                cur.execute(sql, (post_id,))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
@@ -65,6 +65,23 @@ class Post:
             return post
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+    
+    #総勉強時間取得
+    @classmethod
+    def get_total_study_time(cls, user_id):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = "SUM(study_time) DIV 60 AS hours,SUM(study_time) MOD 60 AS minutes"
+                cur.execute(sql, (user_id,))
+                all_study = cur.fetchone()
+            return all_study
+        except pymysql.Error as e:
+            print(f"エラーが発生:{e}")
             abort(500)
         finally:
             db_pool.release(conn)
