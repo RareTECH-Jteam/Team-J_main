@@ -3,7 +3,6 @@
     max-width: 600px; /* 横幅制限（スマホ想定） */
     margin: 0 auto; /*　全体を中央寄せに */
     padding: 0 16px; /* 端の余白（スマホで詰まりすぎを防ぐ） */
-
 }
 
 /* テキスト系をまとめてセンターアライン */
@@ -39,7 +38,7 @@
 
 /* 上段だけ横並びにする（投稿フォームとイメージ */
 .new-post-body {
-    position: relative;
+    position: relative; /* 勉強時間などの枠を白い枠に入れ込むため */
     display: flex;
     gap: 12px;
     align-items: flex-start;
@@ -68,25 +67,34 @@
     background: #FFF;
 }
 
+/* 勉強時間入力スペース周りの色や形状調整 */
 .study-box {
-    margin-left: 134px;
+    margin-left: 200px;
     text-align: left;
-    color: #FFF;
-    background-color:goldenrod;
+    background-color:#00C3D0;
     padding: 8px 16px;
     border-radius: 16px;
 }
 
+/* 勉強時間入力スペースの色や形状調整 */
+.study-box input {
+    width: 60px;
+    background-color:#FFF;
+    padding: 4px 8px;
+    border-radius: 8px;
+    text-align: right;
+}
+
+/* 投稿ボタンの色や形状調整 */
 .btn-primary {
     margin-right: 4px;
-    color: #FFF;
-    background-color: goldenrod;
+    background-color:#00C3D0;
     font-size: 16px;
     padding: 8px 16px;
 }
 
 .new-post-footer {
-    position: absolute;
+    position: absolute; /* 勉強時間入力スペースなどを枠に入れる */
     bottom: 8px;
     left: 8px;
     right: 8px;
