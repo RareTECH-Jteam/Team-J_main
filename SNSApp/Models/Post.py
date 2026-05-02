@@ -76,7 +76,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SUM(study_time) DIV 60 AS hours,SUM(study_time) MOD 60 AS minutes"
+                sql = "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(study_time))) AS all_study FROM posts WHERE user_id = %s;"
                 cur.execute(sql, (user_id,))
                 all_study = cur.fetchone()
             return all_study
