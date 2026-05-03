@@ -1,0 +1,51 @@
+{%extends "base.html" %}
+
+<!--headタグ内の設定-->
+{% block title %}マナ部 新規登録{% endblock %}
+{% block page_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}"> {% endblock %}
+
+
+<!--bpdyタグ内のコード-->
+{% block page_title %}新規登録{% endblock %}
+
+
+{% block content %}
+    <p class="auth-subtitle">ユーザー情報を入力して新規登録してください。</p>
+
+    <!-- フラッシュメッセージまたは入力値チェックを設定する？ -->
+
+    <!--フォーム入力-->
+    <form class="auth-form" method="post">
+        
+        <!--ユーザー名入力-->
+        <div>
+            <label>ユーザー名</label>
+            <input type="text" name="username" placeholder="ユーザー名" required>
+        </div>
+
+        <!--メールアドレス入力-->
+        <div>
+            <label>メールアドレス</label>
+            <input type="text" name="email" placeholder="メールアドレス" required>
+        </div>
+        
+        <!--パスワード入力-->
+        <div>
+            <label>パスワード</label>
+            <input type="password" name="password" placeholder="パスワード" required>
+        </div>
+
+        <!--パスワード（確認用）入力-->
+        <div>
+            <label>パスワード（確認用）</label>
+            <input type="password" name="password_confirmation" placeholder="パスワード（確認用）" required>
+        </div>
+        
+        <!--ログイン・画面遷移ボタン-->
+        <div class="auth-botton-container">
+            <button class="auth-botton" type="submit">登録</button>
+            <a class="switch-auth-mode" href="{{url_for('auth.login_view')}}">ログインはこちら</a>
+        </div>
+
+    </form>
+{% endblock %} 

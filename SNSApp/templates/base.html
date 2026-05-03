@@ -13,13 +13,13 @@
     {% include 'common/header.html' %}                          
 
     <main>
-    <h1>{% block page_title %}{% endblock %}</h1>                   <!--headerの下に表示するページタイトル文のことです-->
+        <h2 class="auth-title">{% block page_title %}{% endblock %}</h2>                   <!--headerの下に表示するページタイトル文のことです-->
 
-        {% block main %}{% endblock %}                                  <!--ページタイトル以外のmain部分です-->
+        {% block content %}{% endblock %}                                  <!--ページタイトル以外のmain部分です-->
     
         <!--フッターは２つファイルを作成するので、mainにそれぞれincludeしてください-->
-        <!--(マイページはfooter_mypage.html、投稿詳細、バトン画面、ランキングはfooter_mypageback.htmlをincludeしてください)-->
-    </main\>
+        <!--(マイページはfooter_mypage.html、投稿詳細・バトン画面・ランキングはfooter_mypageback.htmlをincludeしてください)-->
+    </main>
 
 </body>
 

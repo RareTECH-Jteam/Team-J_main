@@ -64,7 +64,7 @@ def login_process():
 # 新規登録
 @auth.route('/signup', methods=['POST'])
 def signup_process():
-    name = request.form.get('name', '').strip()
+    name = request.form.get('username', '').strip()
     email = request.form.get('email', '').strip()
     password = request.form.get('password', '')
     password_confirmation = request.form.get('password_confirmation', '')

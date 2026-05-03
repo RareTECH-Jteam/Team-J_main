@@ -22,7 +22,7 @@
 
     <!-- 下記も今は無効にしておく -->
         <!-- {% if sessions.get('user_id') %}
-        <a class="logout" href="{{ url_for('logout')}}">ログアウト</a>
+        <a class="logout" href="{{ url_for('auth.logout')}}">ログアウト</a>
         {% endif %} -->
     <div class="logout">ログアウト</div>
 
@@ -71,7 +71,19 @@
                     <div class="new-post-footer">
                         <label class="study-box">
                             勉強時間：
-                        <input type="number" name="study-time" step="5" min="0" placeholder="分"> <!-- numberにすることでクリックするたび5分刻みで数字が変わる。最小0分 -->
+                        
+                        <!-- スマホで数字キーボード使用 -->
+                        <!-- 数字のみで1〜3桁限定 -->
+                        <!-- 3桁まで -->
+                        <!-- 初期値に0を入れておくことでBEでの処理を楽に！ -->
+                        <input 
+                            type="text"
+                            name="study-time"
+                            inputmode="numeric" 
+                            pattern="[0-9]{1,3}"
+                            maxlength="3"
+                            value="0"
+                        >
                             分
                         </label>
                         <button class="btn-primary" type="submit">
