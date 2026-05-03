@@ -1,22 +1,40 @@
 {% extends "base.html" %}
 
+<!--headタグ内の設定-->
 {% block title %}ログイン - Manabu {% endblock %}
-{% block page_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}">
-{% endblock %}
+{% block page_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}">{% endblock %}
+
+
+<!--bpdyタグ内のコード-->
+{% block page_title %}ログイン{% endblock %}
 
 {% block content %}
-<div class="page-auth">
-    <main class="page-auth-main">
-        <div class~"auth-wrapper">
-            <div class ="card">
-                <div class="card-header">
-                    <h2 class="auth-title">ログイン</h2>
-                    <p class="card-subtitle">
-                        メールアドレスとパスワードを入力してログインして下さい。
-                    </p>
-            </div>
+    <p class="auth-subtitle">メールアドレスとパスワードを入力してログインしてください。</p>
+
+    <!-- フラッシュメッセージ表示（このコミットでは入力値チェックとするが、次のコミットでフラッシュメッセージを表示させる） -->
+
+
+     <!--フォーム入力-->
+    <form class="auth-form" method="post"> <!--login[POST]のURL-->
+
+        <!--メールアドレス入力-->
+        <div>
+            <label>メールアドレス</label>
+            <input type="text" name="email" placeholder="メールアドレス" required>
         </div>
-    </main>
-</div>
-<!-- サンプルアプリを参考にしながら進める（cmd+/　でコメントアウト） -->
+        
+        <!--パスワード入力-->
+        <div>
+            <label>パスワード</label>
+            <input type="password" name="password_confirmation" placeholder="パスワード" required>
+        </div>
+
+        <img src="../img/Cheering_cat.PNG" alt="Cheering_cat">  <!--後でurl_forに変更する-->
+        
+        <div class="auth-botton-container">
+            <button class="auth-botton" type="submit">ログイン</button>
+            <a class="switch-auth-mode" href="{{url_for('auth.signup_view')}}">新規登録はこちら</a>
+        </div>
+        
+    </form>
+{% endblock %} 
