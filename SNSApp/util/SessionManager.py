@@ -1,4 +1,4 @@
-from flask import session
+from flask import session, flash
 
 class SessionManager:
     @staticmethod
@@ -8,6 +8,7 @@ class SessionManager:
     @staticmethod
     def is_live_session():
         if session.get('user_id') == None:
+            flash(flash('セッションが切れています。再度ログインしてください。'))
             return False
         return True
     
