@@ -12,7 +12,6 @@ class Baton:
     def create(cls, user_id, task_id, content): 
         conn = db_pool.get_conn()
         conn.ping(reconnect=True)
-        #conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
                 sql =  "INSERT INTO batons (user_id, task_id, content) VALUES (%s, %s, %s);"

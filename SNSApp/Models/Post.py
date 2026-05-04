@@ -24,13 +24,14 @@ class Post:
             db_pool.release(conn)
 
     @classmethod
-    def create(cls, user_id, content):
+    #投稿&勉強時間投稿
+    def create(cls, user_id, content, study_time):
         conn = db_pool.get_conn()
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO posts (user_id, content) VALUES (%s, %s);"
-                cur.execute(sql, (user_id, content))
+                sql = "INSERT INTO posts (user_id, content, study_time) VALUES (%s, %s, %s);"
+                cur.execute(sql, (user_id, content, study_time))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
@@ -69,6 +70,23 @@ class Post:
         finally:
             db_pool.release(conn)
     
+    #投稿編集
+    @classmethod
+    def update(cls, post_id, content, study_time):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = "UPDATE posts SET content = %s, study_time = %s, WHERE id = %s;"
+                cur.execute(sql, (post_id, content, study_time))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+
     #総勉強時間取得
     @classmethod
     def get_total_study_time(cls, user_id):

@@ -52,3 +52,19 @@ class Comment:
             abort(500)
         finally:
             db_pool.release(conn)
+    
+    #コメント編集
+    @classmethod
+    def update(cls, comment_id, content):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = "UPDATE comments SET content = %s, WHERE id = %s;"
+                cur.execute(sql, (comment_id, content))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
