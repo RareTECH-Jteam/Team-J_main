@@ -66,7 +66,6 @@ CREATE TABLE
     tasks (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
         content TEXT NOT NULL,
-        menu VARCHAR(255) NOT NULL ,
         PRIMARY KEY (id),
         created_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         updated_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)
@@ -150,6 +149,7 @@ CREATE TABLE
         CONSTRAINT fk_reactions_Re_user_id FOREIGN KEY (Re_user_id) REFERENCES Re_users (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+
 INSERT INTO users (name, email, password)
 VALUES 
   ('Tomo', 'Tomo64@example.com', '0c120c7ab57b43d4db1837f2a4332ced20b2f3160bdeb186a8d601e3b0d6ace5'),
@@ -169,3 +169,31 @@ VALUES
     (2, 1, '私もがんばります！'),
     (3, 2, '応援しています！頑張ってください。'),
     (1, 3, '22時からですね！');
+
+INSERT INTO tasks(content)
+VALUES
+('今日授業で習ったこと、1つ教えて！') ,
+('最近のマナビで「へーー」って思ったこと教えてー ') ,
+('得意な教科の問題、何でもいいから3問解いてみて！ ') ,
+('苦手な教科の教科書を1ページだけ音読しろ ') ,
+('「これ知らんやろ」って思ってること教えて') ,
+('昨日より1ミリだけ賢くなったこと教えて') ,
+('ノートのどっか1行だけ写してみて') ,
+('今日の授業で一番どうでもよかったこと教えて') ,
+('3分だけ何か勉強して「やった」って言い切れ') ,
+('英単語1個だけ覚えてドヤって') ,
+('「これテスト出そう」って勝手に予想してみて') ,
+('今日の先生の話で一番印象に残ったフレーズ教えて') ,
+('数学でも英語でもいいから“1問だけ”倒してこい') ,
+('ノート開いた瞬間スクショ（証拠）') ,
+('「なんとなく理解した気がする」ことを説明してみて') ,
+('30秒だけ教科書読んで、覚えてる単語3つ書け') ,
+('友達に1つだけ勉強の話ふってみて（内容も書け）') ,
+('今日の授業を一言でまとめろ（雑でOK）') ,
+('「これ誰かに教えたい」って思うこと1つ書いて') ,
+('過去の自分に1行だけアドバイスするとしたら？') ,
+('「これ一生使わんやろ」って思った知識教えて') ,
+('勉強に関係ありそうでなさそうな豆知識1つ') ,
+('今日の集中力を10点満点で評価して理由もどうぞ') ,
+('1分だけタイマーなしで集中してみて感想書け') ,
+('今の気分で一番マシな教科に1秒触れろ（開くだけOK）') 
