@@ -1,4 +1,4 @@
-{%extends "base.html" %}
+co{%extends "base.html" %}
 
 <!--headタグ内の設定-->
 {% block title %}マナ部 新規登録{% endblock %}
@@ -12,11 +12,11 @@
 {% block content %}
     <p class="auth-subtitle">ユーザー情報を入力して新規登録してください。</p>
 
-    <!-- フラッシュメッセージまたは入力値チェックを設定する？ -->
+    <!-- フラッシュメッセージを設定する -->
 
     <!--フォーム入力-->
-    <form class="auth-form" method="post">
-        
+    <form class="auth-form" action="{{url_for('auth.signup_process')}}" method="post">
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">  <!--暗号トークンをform送信-->
         <!--ユーザー名入力-->
         <div>
             <label>ユーザー名</label>
