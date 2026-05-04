@@ -36,3 +36,19 @@ class Comment:
             abort(500)
         finally:
             db_pool.release(conn)
+    
+     #コメント削除
+    @classmethod
+    def delete(cls, comment_id):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = "UPDATE comments SET deleted_at = NOW() WHERE id = %s;"
+                cur.execute(sql, (comment_id,))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
