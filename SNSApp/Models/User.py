@@ -57,3 +57,20 @@ class User:
             abort(500)
         finally:
             db_pool.release(conn)
+
+    @classmethod
+    # 自分以外のユーザー一覧を取得する
+    def get_other_user_ids(cls, user_id):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT id FROM users WHERE id <> %s;"
+                cur.execute(sql , user_id)
+                user = cur.fetchone()
+            return user["id"] if user else None
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
