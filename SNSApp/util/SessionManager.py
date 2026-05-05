@@ -8,7 +8,6 @@ class SessionManager:
     @staticmethod
     def is_live_session():
         if session.get('user_id') == None:
-            flash('セッションが切れています。再度ログインしてください。','error')
             return False
         return True
     
