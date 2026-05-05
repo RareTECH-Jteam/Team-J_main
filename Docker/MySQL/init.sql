@@ -72,7 +72,29 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 
--- バトンID
+CREATE TABLE 
+    Baton (
+        id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,           -- バトンID
+        sender_id   BIGINT UNSIGNED NOT NULL,                          -- 送信者ID
+        receiver_id BIGINT UNSIGNED NOT NULL,                          -- 受信者ID
+        task_id     BIGINT UNSIGNED NOT NULL,                          -- 課題ID
+        content     TEXT NOT NULL,                                     -- バトン内容
+        status      TINYINT NOT NULL DEFAULT 0,                        -- ステータス(0:未完了 1:完了 2:失敗)
+        batonpop    BIT(1) NOT NULL DEFAULT 0,                         -- 通知フラグ(0:未通知 1:通知済み)
+        get_at      DATETIME(6) DEFAULT NULL,                          -- 受け取り日時
+        release_at  DATETIME(6) DEFAULT NULL,                          -- 渡し日時
+        created_at  DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), -- 作成日時
+        updated_at  DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), -- 更新日時
+        PRIMARY KEY (id),
+        KEY idx_baton_sender_id   (sender_id),
+        KEY idx_baton_receiver_id (receiver_id),
+        KEY idx_baton_task_id     (task_id),
+        CONSTRAINT fk_baton_sender   FOREIGN KEY (sender_id)   REFERENCES users (id),
+        CONSTRAINT fk_baton_receiver FOREIGN KEY (receiver_id) REFERENCES users (id),
+        CONSTRAINT fk_baton_task     FOREIGN KEY (task_id)     REFERENCES tasks (id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+/* バトンID(旧式)
 CREATE TABLE
     Baton (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -92,7 +114,7 @@ CREATE TABLE
         CONSTRAINT fk_baton_task FOREIGN KEY (task_id) REFERENCES tasks (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
-
+*/
 -- バトン履歴ID
 CREATE TABLE
     Batonlogs (
