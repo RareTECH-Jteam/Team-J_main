@@ -15,7 +15,7 @@ EMAIL_PATTERN = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 def signup_view():
     # ログイン済みの場合は投稿一覧へ
     if SM.is_live_session():
-        return redirect(url_for('posts.posts_view'))
+        return redirect(url_for('posts.mypage_view'))
     
     return render_template('auth/signup.html')
 
@@ -25,7 +25,7 @@ def signup_view():
 def login_view():
     # ログイン済みの場合は投稿一覧へ
     if SM.is_live_session():
-        return redirect(url_for('posts.posts_view'))
+        return redirect(url_for('posts.mypage_view'))
     
     return render_template('auth/login.html')
 
@@ -33,7 +33,7 @@ def login_view():
 @auth.route('/login', methods=['POST'])
 def login_process():
     email = request.form.get('email')
-    password = request.form.get('password')
+    password = request.form.get('password_confirmation')
 
     # ログイン不正
     if email.strip() =='' or password.strip() == '':
@@ -59,7 +59,7 @@ def login_process():
     # ログイン成功
     # セッション情報作成
     SM.create_session(user["id"])
-    return redirect(url_for('posts.posts_view'))
+    return redirect(url_for('posts.mypage_view'))
 
 # 新規登録
 @auth.route('/signup', methods=['POST'])
@@ -99,7 +99,7 @@ def signup_process():
     # セッション情報作成
     SM.create_session(user_id)
 
-    return redirect(url_for('posts.posts_view'))
+    return redirect(url_for('posts.mypage_view'))
 
 
 # ログアウト
