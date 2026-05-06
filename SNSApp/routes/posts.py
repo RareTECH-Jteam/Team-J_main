@@ -63,6 +63,35 @@ def create_post():
     return redirect(url_for('posts.mypage_view'))
 
 
+# 投稿編集機能
+@posts.route('/posts/<int:post_id>/update', methods=['POST'])
+def update_post(post_id):
+    # セッションが無効の場合
+    if not SM.is_live_session():
+        # ログインページ表示
+        return redirect(url_for('auth.login_view'))
+
+    # JSONを取得
+    data = request.get_json()
+    
+    # 投稿内容
+    content = data['content']
+    if content.strip() == '':
+        flash('投稿内容が空です','error')
+        return {'message': 'error'}, 400
+
+    # 勉強時間
+    minutes = data['study_time']
+    if int(minutes) < 0:
+        flash('勉強時間が不正です','error')
+        return {'message': 'error'}, 400
+   
+    study_time = Post.minutes_to_time(minutes)
+    Post.update(post_id,content,study_time)
+
+    return {'message' : 'success'} , 200
+
+
 # 投稿削除処理
 @posts.route('/posts/<int:post_id>/delete', methods=['POST'])
 def delete_post(post_id):
@@ -142,4 +171,3 @@ def create_comment(post_id):
     Comment.create(user_id, post_id, content)
     flash('コメントの投稿が完了しました','success')
     return redirect(url_for('posts.post_detail_view', post_id=post_id))
-
