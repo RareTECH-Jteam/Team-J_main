@@ -1,3 +1,11 @@
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest('.post-menu')) {
+                document.querySelectorAll('.menu-dropdown').forEach(menu => {
+                    menu.style.display = "none"
+                })
+            }
+        })      
+        
         function toggleMenu(postId){
             const elements = getElements(postId);
         

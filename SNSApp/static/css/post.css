@@ -59,17 +59,24 @@
 /* 編集用デザイン 仮で作成 */
 .post-menu{
     position: relative;
+    display: inline-block;
+}
+.menu-btn{
+    transform: rotate(90deg);
+    border: none;
+    margin: 2px;
 }
 .menu-dropdown{
     position: absolute;
-    right: 126px;
-    top: 100;
+    top: 100%;
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     z-index: 100;
     min-width: 150px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .menu-dropdown button{
     display: block;
