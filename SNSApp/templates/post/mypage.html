@@ -19,10 +19,9 @@
         <img src="../img/Normal_rabbit.PNG" alt="rabbit"><br>
     </div>
 
-    <!-- 下記も今は無効にしておく -->
-        <!-- {% if sessions.get('user.id') %}
+        {% if session.get('user.id') %}
         <a class="logout" href="{{ url_for('auth.logout')}}">ログアウト</a>
-        {% endif %} -->
+        {% endif %}
     <div class="logout">ログアウト</div>
 
 </header>
