@@ -54,3 +54,93 @@
     font-size: 16px;
     padding: 8px 16px;
 }
+
+
+/* 編集用デザイン 仮で作成 */
+.post-menu{
+    position: relative;
+}
+.menu-dropdown{
+    position: absolute;
+    right: 126px;
+    top: 100;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 100;
+    min-width: 150px;
+}
+.menu-dropdown button{
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.menu-dropdown button:hover{
+    background: #f5f5f5;
+}
+.edit-post {
+    text-align: center; 
+}
+
+.edit-post {
+    margin-top: 16px;
+}
+
+/* 上段だけ横並びにする（投稿フォームとイメージ */
+.edit-post-body {
+    position: relative; /* 勉強時間などの枠を白い枠に入れ込むため */
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    width: 100%;
+    background-color: #FFF;
+}
+.edit-post textarea {
+    flex: 1; /* 残り幅全部使う */
+    min-height: 96px;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    background: #FFF;
+    padding: 8px;
+    padding-bottom: 96px;
+}
+/* 勉強時間入力スペース周りの色や形状調整 */
+.edit-study-box {
+    margin-left: 175px;
+    text-align: left;
+    background-color:#00C3D0;
+    padding: 8px 16px;
+    border-radius: 16px;
+}
+
+/* 勉強時間入力スペースの色や形状調整 */
+.edit-study-box input {
+    width: 60px;
+    background-color:#FFF;
+    padding: 4px 8px;
+    border-radius: 8px;
+    text-align: right;
+}
+
+.edit-post-footer {
+    position: absolute; /* 勉強時間入力スペースなどを枠に入れる */
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color:#FFF
+}
+
+.edit-post-footer button {
+    padding: 4px 12px;
+    white-space: nowrap;  /* テキストが折り返さないようにする */
+}
