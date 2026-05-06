@@ -1,0 +1,25 @@
+/*とりあえず全部中央揃えに */
+.page {
+    max-width: 600px; /* 横幅制限（スマホ想定） */
+    margin: 0 auto; /*　全体を中央寄せに */
+    padding: 0 16px; /* 端の余白（スマホで詰まりすぎを防ぐ） */
+}
+
+/* テキスト系をまとめてセンターアライン */
+.page-title {
+    text-align: center; 
+}
+
+.page-title {
+    height: 56px;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+/* 投稿ボタンの色や形状調整 */
+.btn-primary {
+    margin-right: 4px;
+    background-color:#00C3D0;
+    font-size: 16px;
+    padding: 8px 16px;
+}

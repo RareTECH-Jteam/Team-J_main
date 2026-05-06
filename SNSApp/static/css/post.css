@@ -1,0 +1,56 @@
+/*とりあえず全部中央揃えに */
+.page {
+    max-width: 600px; /* 横幅制限（スマホ想定） */
+    margin: 0 auto; /*　全体を中央寄せに */
+    padding: 0 16px; /* 端の余白（スマホで詰まりすぎを防ぐ） */
+}
+
+/* テキスト系をまとめてセンターアライン */
+.page-title, .post-detail, .comment-list, .empty, .flash-messages, .new-post {
+    text-align: center; 
+}
+
+.page-title {
+    height: 56px;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.new-post {
+    margin-top: 16px;
+}
+
+/* formを縦並びにする */
+.new-post-main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px; /* 間の余白 */
+    border-radius: 16px;
+    padding: 16px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    display: flex;
+    justify-content: space-between;
+    background-color:#FFF
+}
+
+.new-post textarea {
+    flex: 1; /* 残り幅全部使う */
+    min-height: 96px;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    background: #FFF;
+    padding: 8px;
+    padding-bottom: 96px;
+}
+
+/* 投稿ボタンの色や形状調整 */
+.btn-primary {
+    margin-right: 4px;
+    background-color:#00C3D0;
+    font-size: 16px;
+    padding: 8px 16px;
+}

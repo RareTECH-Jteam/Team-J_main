@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}投稿詳細{% endblock %} <!-- タブへの表示内容  -->
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post.css')}}">
+<!-- 下記は仮 -->
+<link rel="stylesheet" href="../../static/css/base.css">
+<link rel="stylesheet" href="../../static/css/header.css">
+<link rel="stylesheet" href="../../static/css/post.css">
+
+<!-- めっちゃ仮でheader.html読み込ませている -->
+<header> <!-- CSS：header全体のサイズを指定する -->
+    <div class="header-inner"> <!-- CSS：ロゴの位置を指定 -->
+        <img src="../img/Normal_cat.PNG" alt="cat">  <!-- CSS：画像サイズと位置調整 -->
+        <span>マナ部</span>
+        <img src="../img/Normal_rabbit.PNG" alt="rabbit"><br>
+    </div>
+
+    <!-- 下記も今は無効にしておく -->
+        <!-- {% if sessions.get('user.id') %}
+        <a class="logout" href="{{ url_for('auth.logout')}}">ログアウト</a>
+        {% endif %} -->
+    <div class="logout">ログアウト</div>
+
+</header>
+    <!-- サンプルアプリを参考にしながら進める（cmd+/　でコメントアウト） -->
+<!-- めっちゃ仮　の終わり -->
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <main>
+        <div class="page-title">
+            投稿詳細
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- 対象の投稿（マイページで選択した一件のみ -->
+        <section class="post-detail">
+            <div class="post-card">
+                <div class="post-content">
+                    <div class="post-header">
+                        <div class="post-user">
+                            <span class="display-name">{{ post.user_name }}</span>
+                        </div>
+                        <div class="post-time">{{ post.created_at }}</div>
+                    </div>
+                    <div class="post-body">
+                        {{ post.content }}
+                    </div>
+                    <div class="post-footer">
+                        <div class="post-actions">
+
+                            {% if post.user_id == user_id %}
+
+                            <!-- 投稿編集 ここ、どうしようかな・・困った。編集画面を新たに作るか、新規投稿スペースを使うか？-->
+                            <form action="/posts/{{ post.id }}/edit" method="post">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button class="post-btn post-btn-edit" type="submit"
+                                    onclick="return confirmation('この投稿を編集しますか？');">編集</button>
+                            </form>
+
+                            <!-- 投稿削除 -->
+                            <form action="/posts/{{ post.id }}/delete" method="post">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button class="post-btn post-btn-delete" type="submit"
+                                    onclick="return confirmation('この投稿を削除しますか？');">削除</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- コメント一覧 -->
+        {% if comments and comments|length > 0 %}
+        <section class="comment-list">
+            {% for comment in comments %}
+            <div class="comment-card">
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <span class="display-name">{{ comment.user_name }}</span>
+                        </div>
+                        <div class="comment-time">{{ comment.created_at }}</div>
+                    </div>
+                    <div class="comment-body">
+                        {{ comment.content }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+        {% else %}
+        <div class="empty">
+            コメントがありません。
+        </div>
+        {% endif %}
+
+        <!-- コメント全体のアクション：サンプルアプリと異なり、下段へ -->
+        <section class="comments-section">
+            <div class="comments-title">コメント</div>
+
+        <!-- コメント投稿フォーム -->
+            <section class="new-post">
+                <form class="new-post-main" action="/posts/{{ post.id }}/comments" method="post">
+                    <textarea name="content" placeholder="どんなコメントで高め合う！？"></textarea>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="new-post-fotter">
+                        <button class="btn-primary" type="submit">
+                            コメントを投稿する
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </section>
+    </main>
+    {% include 'common/footer_mypageback.html' %}
+</div>
+{% endblock %}
