@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}投稿詳細{% endblock %} <!-- タブへの表示内容  -->
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/baton.css')}}">
+<!-- 下記は仮 -->
+<link rel="stylesheet" href="../../static/css/base.css">
+<link rel="stylesheet" href="../../static/css/header.css">
+<link rel="stylesheet" href="../../static/css/baton.css">
+
+<!-- めっちゃ仮でheader.html読み込ませている -->
+<header> <!-- CSS：header全体のサイズを指定する -->
+    <div class="header-inner"> <!-- CSS：ロゴの位置を指定 -->
+        <img src="../img/Normal_cat.PNG" alt="cat">  <!-- CSS：画像サイズと位置調整 -->
+        <span>マナ部</span>
+        <img src="../img/Normal_rabbit.PNG" alt="rabbit"><br>
+    </div>
+
+    <!-- 下記も今は無効にしておく -->
+        <!-- {% if sessions.get('user.id') %}
+        <a class="logout" href="{{ url_for('auth.logout')}}">ログアウト</a>
+        {% endif %} -->
+    <div class="logout">ログアウト</div>
+
+</header>
+    <!-- サンプルアプリを参考にしながら進める（cmd+/　でコメントアウト） -->
+<!-- めっちゃ仮　の終わり -->
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <main>
+        <div class="page-title">
+            バトン
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% if baton %} <!-- 他の人からバトンが届いている場合、表示 -->
+        <section class="baton-arrived">
+            <div class="mybaton-card">
+                <div class="mybaton-header">
+                    {{ user_name }}さんからバトンが届きました！ <!-- ここの引数は何？ -->
+                    <div class="mybaton-contents">
+                        {{ baton }} <!-- ここの引数は何？ -->
+                    </div>
+<!-- ここにformアクション必要かな？？ -->
+                    <button class="complete" type="submit"
+                        onclick="return confirmation('このバトンを完了しますか？');">完了</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% include 'common/footer_mypageback.html' %}
+</div>
+{% endblock %}
+
+
+<!-- バトン表示させるのに参照中
+              <form class="new-post-main" action="/posts/{{ post.id }}/comments" method="post">
+                    <textarea name="content" placeholder="どんなコメントで高め合う！？"></textarea>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      -->
