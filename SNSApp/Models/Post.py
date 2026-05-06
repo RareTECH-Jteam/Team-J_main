@@ -7,6 +7,15 @@ db_pool = DB.init_db_pool()
 
 # Postsクラス
 class Post:
+    @staticmethod
+    # 分 → 00:00:00の形式に変換
+    def minutes_to_time(minutes):
+        minutes = int(minutes)
+        h = minutes // 60
+        m = minutes % 60
+
+        return f"{h:02}:{m:02}:00"
+    
     @classmethod
     def get_all(cls):
         conn = db_pool.get_conn()
@@ -77,15 +86,14 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE posts SET content = %s, study_time = %s, WHERE id = %s;"
-                cur.execute(sql, (post_id, content, study_time))
+                sql = "UPDATE posts SET content = %s, study_time = %s  WHERE id = %s;"
+                cur.execute(sql, (content ,study_time,post_id ))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             db_pool.release(conn)
-
 
     #総勉強時間取得
     @classmethod
@@ -95,9 +103,9 @@ class Post:
         try:
             with conn.cursor() as cur:
                 sql = """SELECT SUM(TIME_TO_SEC(study_time)) DIV 3600 AS hours,
-                                SUM(TIME_TO_SEC(study_time)) MOD 3600 DIV 60 AS minutes,
+                                SUM(TIME_TO_SEC(study_time)) MOD 3600 DIV 60 AS minutes
                                 FROM posts WHERE user_id = %s;"""
-                cur.execute(sql, (user_id,))
+                cur.execute(sql, (user_id))
                 all_study = cur.fetchone()
             return all_study
         except pymysql.Error as e:
