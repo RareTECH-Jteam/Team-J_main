@@ -37,7 +37,7 @@ def index():
         return redirect(url_for('auth.login_view'))
 
     # 投稿一覧ページ    
-    return redirect(url_for('posts.posts_view'))
+    return redirect(url_for('posts.mypage_view'))
 
 @app.errorhandler(400)
 def bad_request(error):
