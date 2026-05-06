@@ -34,7 +34,7 @@
                         </div>
                         <div class="post-time">{{ post.created_at }}</div>
                     </div>
-                    <div class="post-body">
+                    <div class="post-body" id="post-detalibody-{{post.id}}">
                         {{ post.content }}
                     </div>
                     <div class="post-footer">
@@ -43,6 +43,13 @@
                             {% if post.user_id == user_id %}
 
                             <!-- 投稿編集 ここ、どうしようかな・・困った。編集画面を新たに作るか、新規投稿スペースを使うか？-->
+                            <div class="post-menu">
+                                <button class="menu-btn" onclick="toggleMenu('{{ post.id }}')">︙</button>
+                                <div class="menu-dropdown" id="menu-{{ post.id }}" style="display:none;">
+                                    <button onclick="enableEdit('{{ post.id }}')">編集</button>
+                                    <button onclick="deletePost('{{ post.id }}')">削除</button>
+                                </div>
+                            </div>                          
                             <form action="/posts/{{ post.id }}/edit" method="post">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button class="post-btn post-btn-edit" type="submit"
