@@ -8,7 +8,7 @@ posts = Blueprint('posts', __name__)
 
 # 投稿一覧ページの表示
 @posts.route('/posts', methods=['GET'])
-def posts_view():
+def mypage_view():
     # セッションが無効の場合
     if not SM.is_live_session():
         # ログインページ表示
@@ -17,12 +17,25 @@ def posts_view():
     # ユーザーID設定
     user_id = SM.get_user_id()
 
+    # ユーザー名取得
+    username = User.get_name_by_id(user_id)
+
+    # 総勉強時間取得
+    total_study_time = Post.get_total_study_time(user_id)
+
+    # 自分の投稿一覧
     all_posts = Post.get_all()
     for post in all_posts:
         post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
         post['user_name'] = User.get_name_by_id(post['user_id'])
 
-    return render_template('post/posts.html', posts=all_posts, user_id=user_id)
+
+    return render_template('post/mypage.html',
+                            name=username, 
+                            total_hours=total_study_time['hours'],
+                            total_minutes=total_study_time['minutes'],
+                            posts=all_posts
+    )       
 
 
 # 投稿処理
@@ -42,12 +55,12 @@ def create_post():
     # 投稿内容が空の場合
     if content == '':
         flash('投稿内容が空です','error')
-        return redirect(url_for('posts.posts_view'))
+        return redirect(url_for('posts.mypage_view'))
     
     # 投稿情報作成
     Post.create(user_id, content)
     flash('投稿が完了しました','success')
-    return redirect(url_for('posts.posts_view'))
+    return redirect(url_for('posts.mypage_view'))
 
 
 # 投稿削除処理
@@ -70,12 +83,12 @@ def delete_post(post_id):
     # 自分以外の投稿を削除しようとした場合
     if post['user_id'] != user_id:
         flash('この投稿を削除することはできません', 'error')
-        return redirect(url_for('posts.posts_view'))
+        return redirect(url_for('posts.mypage_view'))
 
     # 投稿削除
     Post.delete(post_id)
     flash('投稿が削除されました','success')
-    return redirect(url_for('posts.posts_view'))
+    return redirect(url_for('posts.mypage_view'))
 
 
 # 投稿詳細ページの表示
