@@ -14,11 +14,9 @@
         <img src="../img/Normal_rabbit.PNG" alt="rabbit"><br>
     </div>
 
-    <!-- 下記も今は無効にしておく -->
-        <!-- {% if sessions.get('user_id') %}
-        <a class="logout" href="{{ url_for('logout')}}">ログアウト</a>
-        {% endif %} -->
+        {% if session.get('user_id') %}
+        <a class="logout" href="{{ url_for('auth.logout')}}">ログアウト</a>
+        {% endif %}
     <div class="logout">ログアウト</div>
 
 </header>
-    <!-- サンプルアプリを参考にしながら進める（cmd+/　でコメントアウト） -->
