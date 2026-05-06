@@ -40,8 +40,8 @@
         マイページ
         </div>
         <div class="total-study-time">
-        {{ user.id }}さんのトータル勉強時間：<br>
-        時間分 <!-- 勉強時間を「時間」＋「分」に換算して表示・・どうするんかな？ -->
+        {{ name }}さんのトータル勉強時間：<br>
+        時間分 <!-- 勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
         </div>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -97,6 +97,44 @@
             </form>
         </section>
 
+        {% if posts %} <!-- 投稿が存在する場合、表示 -->
+        <section class="post-list">
+            {% for post in posts %}
+            <div class="post-card">
+                <div class="post-content">
+                    <div class="post-header">
+                        <div class="post-user">
+                            <span class="display-name">{{ post.user_name }}</span>
+                        </div>
+                        <div class="post-time">{{ post.created_at }}</div>
+                    </div>
+                    <div class="post-body">
+                        {{ post.content }}
+                    </div>
+                    <div class="post-footer">
+                        <div class="post-actions">
+                            <!-- 詳細・コメント画面へ（GET / posts/{post_id}） -->
+                            <a class="post-btn" href="/posts/{{ post_id }}">詳細</a> <!-- 詳細ボタンではなくて投稿のフレームそのものをボタンにしたいなと思いつつ -->
+
+                            {% if post.user_id == user_id %} <!-- 自分の投稿であれば削除ボタンを表示 -->
+                            <form action="/posts/{{ post_id }}/delete" method="delete">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button class="post-btn post-btn-delete" type="submit"
+                                onclick="return confirm('この投稿を削除しますか？');">削除</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+        {% else %}
+        <div class="empty">
+            <p>投稿がありません。</p>
+        </div>
+        {% endif %}
     </main>
         {% include 'common/footer_mypage.html' %}
 </div>
+{% endblock %}

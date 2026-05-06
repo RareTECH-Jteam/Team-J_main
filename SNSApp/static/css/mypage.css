@@ -47,7 +47,7 @@
 }
 
 .new-post textarea {
-    flex: 1; /* 居残り幅全部使う */
+    flex: 1; /* 残り幅全部使う */
     min-height: 96px;
     border: none;
     resize: none;
