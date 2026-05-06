@@ -3,30 +3,8 @@
 {% block title %}マイページ{% endblock %} <!-- タブへの表示内容  -->
 
 {% block page_css %} <!-- page_cssって何だったっけ？ -->
-<!-- 今はコメントアウトしておく！ -->
-<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css')}}"> -->
 
-<!-- 下記は仮 -->
-<link rel="stylesheet" href="../../static/css/base.css">
-<link rel="stylesheet" href="../../static/css/header.css">
-<link rel="stylesheet" href="../../static/css/mypage.css">
-
-<!-- めっちゃ仮でheader.html読み込ませている -->
-<header> <!-- CSS：header全体のサイズを指定する -->
-    <div class="header-inner"> <!-- CSS：ロゴの位置を指定 -->
-        <img src="../img/Normal_cat.PNG" alt="cat">  <!-- CSS：画像サイズと位置調整 -->
-        <span>マナ部</span>
-        <img src="../img/Normal_rabbit.PNG" alt="rabbit"><br>
-    </div>
-
-        {% if session.get('user.id') %}
-        <a class="logout" href="{{ url_for('auth.logout')}}">ログアウト</a>
-        {% endif %}
-    <div class="logout">ログアウト</div>
-
-</header>
-    <!-- サンプルアプリを参考にしながら進める（cmd+/　でコメントアウト） -->
-<!-- めっちゃ仮　の終わり -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css')}}">
 
 {% endblock %}
 
@@ -62,7 +40,7 @@
                 <div class="new-post-body">
                     <textarea name="content" placeholder="勉強実績を記録して、ドヤってみよう！"></textarea> <!-- 新規投稿フォームに投稿するまで表示する文言 -->
                     <div class="post-image">
-                        <img src="../img/Studying_rabbit.PNG" alt="studying rabbit">
+                        <img src="{{ url_for('static', filename='img/Studying_rabbit.PNG') }}" alt="studying rabbit">
                     </div>
 
                                         <!-- 下段 -->

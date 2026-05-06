@@ -4,13 +4,6 @@
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/post.css')}}">
-<!-- 下記は仮 -->
-<link rel="stylesheet" href="../../static/css/base.css">
-<link rel="stylesheet" href="../../static/css/header.css">
-<link rel="stylesheet" href="../../static/css/post.css">
-
-    <!-- サンプルアプリを参考にしながら進める（cmd+/　でコメントアウト） -->
-<!-- めっちゃ仮　の終わり -->
 {% endblock %}
 
 {% block content %}
@@ -60,14 +53,14 @@
                             <form action="/posts/{{ post.id }}/edit" method="post">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button class="post-btn post-btn-edit" type="submit"
-                                    onclick="return confirmation('この投稿を編集しますか？');">編集</button>
+                                    onclick="return confirm('この投稿を編集しますか？');">編集</button>
                             </form>
 
                             <!-- 投稿削除 -->
                             <form action="/posts/{{ post.id }}/delete" method="post">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button class="post-btn post-btn-delete" type="submit"
-                                    onclick="return confirmation('この投稿を削除しますか？');">削除</button>
+                                    onclick="return confirm('この投稿を削除しますか？');">削除</button>
                             </form>
                             {% endif %}
                         </div>
