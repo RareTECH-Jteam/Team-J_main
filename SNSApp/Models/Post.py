@@ -26,43 +26,21 @@ class Post:
 
     @staticmethod
     def validate_minutes(minutes):
-        # 空白かどうか
         if not minutes or minutes.strip() == '':
             return '勉強時間を入力してください'
 
-        # 数値かどうか
+        minutes = minutes.strip()  # ← ここで strip した値に更新
+
+        # 数値チェック
         if not minutes.isnumeric():
             return '勉強時間は数値または、0以上で入力してください'
-        
-        # 3桁以上の場合
-        if minutes > 999:
+
+        # int に変換してから比較
+        if int(minutes) > 999:
             return '勉強時間は3桁以下で入力してください'
         
         return None
     
-    @staticmethod
-    def validate_content(content):
-        # 空白かどうか
-        if not content or content.strip() == '':
-            return '投稿内容を入力してください'
-
-        return None
-
-    @staticmethod
-    def validate_minutes(minutes):
-        # 空白かどうか
-        if not minutes or minutes.strip() == '':
-            return '勉強時間を入力してください'
-
-        # 数値かどうか
-        if not minutes.isnumeric():
-            return '勉強時間は数値または、0以上で入力してください'
-        
-        # 3桁以上の場合
-        if minutes > 999:
-            return '勉強時間は3桁以下で入力してください'
-        
-        return None
 
     @classmethod
     def get_all(cls):
@@ -87,7 +65,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO Posts (user_id, content, study_time) VALUES (%s, %s, %s);"
+                sql = "INSERT INTO posts (user_id, content, study_time) VALUES (%s, %s, %s);"
                 cur.execute(sql, (user_id, content, study_time))
                 conn.commit()
         except pymysql.Error as e:
