@@ -34,13 +34,13 @@
                         </div>
                         <div class="post-time">{{ post.created_at }}</div>
                     </div>
-                    <div class="post-body" id="post-detalibody-{{post.id}}">
+                    <div class="post-body" id="post-detailbody-{{ post.id }}">
                         {{ post.content }}
                     </div>
                     <!-- 編集エリア（非表示） -->
-                    <section class="edit-post" id="edit-area-{{post.id}}" style="display: none;">
+                    <section class="edit-post" id="edit-area-{{ post.id }}" style="display: none;">
                         <div class="edit-post-body">
-                            <textarea id="edit-content-{{post.id}}" name="content">{{post.content}}</textarea> 
+                            <textarea id="edit-content-{{ post.id }}" name="content">{{ post.content }}</textarea> 
                             <div class="edit-post-footer">
                                 <label class="edit-study-box">勉強時間：
                                     <input 
@@ -53,8 +53,8 @@
                                     >
                                     分
                                 </label>
-                                <button class="btn-primary" onclick="saveEdit('{{post.id}}')">保存</button>
-                                <button class="btn-primary" onclick="cancelEdit('{{post.id}}')">キャンセル</button>
+                                <button class="btn-primary" onclick="saveEdit('{{ post.id }}')">保存</button>
+                                <button class="btn-primary" onclick="cancelEdit('{{ post.id }}')">キャンセル</button>
                             </div>
                         </div>
                     </section>
@@ -90,7 +90,7 @@
             </div>
         </section>
 
-        <!-- コメント一覧 -->
+        <!-- 選んだ投稿に対するコメント一覧 -->
         {% if comments and comments|length > 0 %}
         <section class="comment-list">
             {% for comment in comments %}
@@ -124,7 +124,7 @@
                 <form class="new-post-main" action="/posts/{{ post.id }}/comments" method="post">
                     <textarea name="content" placeholder="どんなコメントで高め合う！？"></textarea>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <div class="new-post-fotter">
+                    <div class="new-post-footer">
                         <button class="btn-primary" type="submit">
                             コメントを投稿する
                         </button>

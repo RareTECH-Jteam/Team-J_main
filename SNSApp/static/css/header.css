@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center; /*　空白がある場合、横方向中央揃え */
     align-items: center; /* 縦方向の中央揃え */
-    min-height: 80px; /* 高さを固定 */
+    min-height: 72px; /* 高さを固定 */
     padding-top: env(safe-area-inset-top); /* iphoneノッチ対策 */
     gap: 8px;
     text-align: center;
@@ -22,8 +22,7 @@
 .logout {
     display: flex;
     justify-content: right; /* 空白がある場合、右揃え */
-    height: 20px; /* 高さを固定 */
-    font-size: 20px;
+    font-size: 16px;
     color: #FFFFFF;
     padding: 0 32px; /* 左右の余白 */
 }
