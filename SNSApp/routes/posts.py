@@ -23,7 +23,21 @@ def mypage_view():
     # 総勉強時間取得
     total_study_time = Post.get_total_study_time(user_id)
 
-    # 自分の投稿一覧
+    
+    # -- 初期値を設定(投稿したことが無い場合) --
+    if total_study_time['hours']  is None :
+        total_hours = "00"
+
+    if total_study_time['minutes'] is None:
+        total_minutes = "00"
+    
+    # -- 投稿したことがある場合 --
+    if total_study_time['hours'] is not None and total_study_time['minutes'] is not None:
+        total_hours = total_study_time['hours']
+        total_minutes = total_study_time['minutes']
+
+
+    # 投稿一覧
     all_posts = Post.get_all()
     for post in all_posts:
         post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
@@ -32,8 +46,8 @@ def mypage_view():
 
     return render_template('post/mypage.html',
                             user_name=username, 
-                            total_hours=total_study_time['hours'],
-                            total_minutes=total_study_time['minutes'],
+                            total_hours=total_hours,
+                            total_minutes=total_minutes,
                             posts=all_posts
     )       
 
