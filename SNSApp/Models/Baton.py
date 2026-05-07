@@ -9,13 +9,13 @@ db_pool = DB.init_db_pool()
 class Baton:
     @classmethod
     #バトン作成
-    def create(cls, user_id, task_id, content): 
+    def create(cls, sender_id, receiver_id, task_id, content): 
         conn = db_pool.get_conn()
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql =  "INSERT INTO batons (user_id, task_id, content) VALUES (%s, %s, %s);"
-                cur.execute(sql(user_id, task_id, content))
+                sql =  "INSERT INTO batons (sender_id, receiver_id, task_id, content) VALUES (%s, %s, %s, %s);"
+                cur.execute(sql(sender_id, receiver_id, task_id, content))
                 conn.commit()
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
