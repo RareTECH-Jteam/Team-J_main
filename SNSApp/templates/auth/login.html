@@ -2,14 +2,17 @@
 
 <!--headタグ内の設定-->
 {% block title %}ログイン - Manabu {% endblock %}
-{% block page_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}">{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/header.css')}}"> 
+{% endblock %}
 
 
 <!--bpdyタグ内のコード-->
 {% block page_title %}ログイン{% endblock %}
 
 {% block content %}
-    <p class="auth-subtitle">メールアドレスとパスワードを入力してログインしてください。</p>
+    <p class="auth-subtitle">メールアドレスとパスワードを入力して<br>ログインしてください。</p>
 
     <!-- フラッシュメッセージ表示-->
 
@@ -21,7 +24,7 @@
         <!--メールアドレス入力-->
         <div>
             <label>メールアドレス</label>
-            <input type="text" name="email" placeholder="メールアドレス" required>
+            <input type="text" name="email" placeholder="メールアドレス" required>  <!--フラッシュメッセージを導入したらrequiredは消します-->
         </div>
         
         <!--パスワード入力-->
@@ -30,7 +33,7 @@
             <input type="password" name="password_confirmation" placeholder="パスワード" required>
         </div>
 
-        <img src="../img/Cheering_cat.PNG" alt="Cheering_cat">  <!--後でurl_forに変更する-->
+        <img src="{{ url_for('static', filename='img/Cheering_cat.PNG')}}" alt="Cheering_cat">  <!--後でurl_forに変更する-->
         
         <div class="auth-botton-container">
             <button class="auth-botton" type="submit">ログイン</button>

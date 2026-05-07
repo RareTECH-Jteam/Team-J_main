@@ -1,3 +1,21 @@
+*{
+    max-width: 100%;
+}
+
+
 body {
- background-color: #00C3D0;
+    background-color: #00C3D0;
+    width: 393px;       /*iphone16の横幅*/
+    height: 852px;      /*iphone16の縦幅*/
+    margin: 0% auto;
+}
+
+main{
+    width: 90%;
+    height: 80%;
+    margin: 5% auto;
+}
+
+.auth-title{
+    text-align: center;
 }

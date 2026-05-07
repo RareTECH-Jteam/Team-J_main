@@ -1,8 +1,11 @@
-co{%extends "base.html" %}
+{%extends "base.html" %}
 
 <!--headタグ内の設定-->
 {% block title %}マナ部 新規登録{% endblock %}
-{% block page_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}"> {% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/header.css')}}"> 
+{% endblock %}
 
 
 <!--bpdyタグ内のコード-->
@@ -36,7 +39,7 @@ co{%extends "base.html" %}
         </div>
 
         <!--パスワード（確認用）入力-->
-        <div>
+        <div class="confirm-password">
             <label>パスワード（確認用）</label>
             <input type="password" name="password_confirmation" placeholder="パスワード（確認用）" required>
         </div>
