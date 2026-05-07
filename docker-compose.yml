@@ -22,6 +22,7 @@ services:
       - MYSQL_DATABASE=${DB_DATABASE}
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD}
+      - TZ=Asia/Tokyo
     # .envファイルから環境変数を読み込む
     env_file:
       - .env
