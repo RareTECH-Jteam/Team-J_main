@@ -1,4 +1,4 @@
-/*とりあえず全部中央揃えに */
+/*とりあえずページを中央揃えに */
 .mypage {
     max-width: 600px; /* 横幅制限（スマホ想定） */
     margin: 0 auto; /*　全体を中央寄せに */
@@ -29,11 +29,11 @@
 .post-card {
     padding: 16px;
     margin: 8px 16px; /* 箱の大きさ調整 */
-    background: #FFF;
+    background-color: #F3F3F3;
 }
 
 .post-content {
-    background: #FFF;
+    background-color: #F3F3F3;
     text-align: left;
     font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
 }
@@ -68,7 +68,7 @@
     gap: 12px;
     align-items: flex-start;
     width: 100%;
-    background-color: #FFF;
+    background-color: #F3F3F3;
 }
 
 .new-post textarea {
@@ -77,20 +77,20 @@
     border: none;
     resize: none;
     font-size: 14px;
-    background: #FFF;
+    background-color: #F3F3F3;
     padding: 8px;
     padding-bottom: 80px;
 }
 
 .post-image {
     margin-left: auto;
-    background-color: #FFF;
+    background-color: #F3F3F3;
 }
 
 .post-image img {
-    flex-shrink: 0;
+    flex-shrink: 0; /* 狭くても潰れるな！ってやつ */
     width: 80px;
-    background: #FFF;
+    background-color: #F3F3F3;
 }
 
 /* 勉強時間入力スペース周りの色や形状調整 */
@@ -106,7 +106,7 @@
 /* 勉強時間入力スペースの色や形状調整 */
 .study-box input {
     width: 40px;
-    background-color:#FFF;
+    background-color:#F3F3F3;
     padding: 4px 8px;
     border-radius: 8px;
     text-align: right;
@@ -130,5 +130,5 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color:#FFF
+    background-color:#F3F3F3
 }
