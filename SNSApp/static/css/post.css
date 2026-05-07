@@ -1,4 +1,4 @@
-/*とりあえず全部中央揃えに */
+/*とりあえずページを中央揃えに */
 .page {
     max-width: 600px; /* 横幅制限（スマホ想定） */
     margin: 0 auto; /*　全体を中央寄せに */
@@ -19,11 +19,11 @@
 .post-card {
     padding: 16px;
     margin: 8px 16px; /* 箱の大きさ調整 */
-    background: #FFF;
+    background-color: #F3F3F3;
 }
 
 .post-content {
-    background: #FFF;
+    background-color: #F3F3F3;
     text-align: left;
     font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
 }
@@ -40,11 +40,11 @@
 .comment-card {
     padding: 8px 16px;
     margin: 8px 32px; /* 箱の大きさ調整 */
-    background: #e2eba3; /* コメントの色を変えて、オリジナル投稿と区別 */
+    background-color: #e2eba3; /* コメントの色を変えて、オリジナル投稿と区別 */
 }
 
 .comment-content {
-    background: #e2eba3; /* コメントの色を変えて、オリジナル投稿と区別 */
+    background-color: #e2eba3; /* コメントの色を変えて、オリジナル投稿と区別 */
     text-align: left;
     font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
 }
@@ -86,7 +86,7 @@
     cursor: pointer;
 }
 .menu-dropdown button:hover{
-    background: #f5f5f5;
+    background-color: #f5f5f5;
 }
 .edit-post {
     text-align: center; 
@@ -103,7 +103,7 @@
     gap: 12px;
     align-items: flex-start;
     width: 100%;
-    background-color: #FFF;
+    background-color: #F3F3F3;
 }
 .edit-post textarea {
     flex: 1; /* 残り幅全部使う */
@@ -111,7 +111,7 @@
     border: none;
     resize: none;
     font-size: 12px;
-    background: #FFF;
+    background-color: #F3F3F3;
     padding: 8px;
     padding-bottom: 96px;
 }
@@ -127,7 +127,7 @@
 /* 勉強時間入力スペースの色や形状調整 */
 .edit-study-box input {
     width: 60px;
-    background-color:#FFF;
+    background-color:#F3F3F3;
     padding: 4px 8px;
     border-radius: 8px;
     text-align: right;
@@ -142,7 +142,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color:#FFF
+    background-color:#F3F3F3
 }
 
 .new-post {
@@ -161,7 +161,7 @@
     right: 8px;
     display: flex;
     justify-content: space-between;
-    background-color:#FFF
+    background-color:#F3F3F3
 }
 
 .new-post textarea {
@@ -170,7 +170,7 @@
     border: none;
     resize: none;
     font-size: 16px;
-    background: #FFF;
+    background-color: #F3F3F3;
     padding: 8px;
     padding-bottom: 32px;
 }

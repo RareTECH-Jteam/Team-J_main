@@ -13,7 +13,8 @@
     <main>
         <div class="page-title">
             <div class="title-image">
-                <img src="{{ url_for('static', filename='img/Baton_rabbit.PNG')}}" alt="baton-rabbit">
+                <!-- <img src="{{ url_for('static', filename='img/Baton_rabbit.PNG')}}" alt="baton-rabbit"> -->
+                <img class="send-task-image" src="../../static/img/Baton_rabbit.PNG" alt="baton-rabbit"> <!-- 仮！！ -->
             </div>
             <div class="title">
                 バトン
@@ -32,44 +33,49 @@
         {% endwith %}
 
         <!-- もらったバトン表示 -->
-        {% if baton %} <!-- 他の人からバトンが届いている場合、表示 -->
+
         <section class="task-arrived">
+            
             <div class="mytask-card">
                 <div class="mytask-content">
+                    {% if baton %} <!-- 他の人からバトンが届いている場合、表示 -->
                     <div class="mytask-header">
                         <div class="task-sender">
-                            {{ sender_name }}さんからバトンが届きました！
+                            {{ sender_name }}さんからバトンが届いたよ！
                         </div>
                         <div class="task-send-time">{{ created_at }}</div>
                     </div>
                     <div class="task-body" id="task-detailbody-{{ task_id }}">
                         {{ task.content }}
                     </div>
+                    {% else %}
+                    <div class="empty">
+                    <p>バトン来てないよ</p>
+                    </div>
+                    {% endif %}
                 </div>
-                <form action="taskupdate" method="post">
+                <form class="complete-form" action="taskupdate" method="post">
                     <input type="hidden" name="task_id" value="{{ task_id }}">
                     <input type="hidden" name="is_done" value="1">
-                    <button type="submit"
-                    onclick="return confirmation('このバトンを完了しますか？');">
+                    <button class="mytask-complete" type="submit"
+                    onclick="return confirmation('このバトンを完了しますか？');"> <!-- バトンあり　のフラグが立った時だけ表示させたい -->
                     完了
                     </button>
                 </form>
                 </div>
             </div>
+
+
         </section>
-        {% else %}
-        <div class="empty">
-            <p>バトンはありません。</p>
-        </div>
-        {% endif %}
+
 
         <!-- バトンを作成フォーム -->
 
         <section class="new-task">
             <form class="new-task-main" action="/posts" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> <!-- なりすましリクエスト防止（CSRF対策） -->
-                <label for="select-task">バトンを選ぶ</label>
-                <select name="select-task" id="select-task"> <!-- プルダウンリストからタスクを選ぶ -->
+                <label for="select-task" class="select-title">バトンを選ぶ</label>
+                <select name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ -->
                     {% for task in tasks}
                     <option class="task">
                         {{ task }}
@@ -80,10 +86,8 @@
                     {% endfor %}
                 </select>
                 <div class="send-task">
-                    <div class="send-task-image">
-                        <img src="{{ url_for('static', filename='img/Baton_pass_hachimaki.PNG')}}" alt="baton_pass">
-                    </div>
-
+                        <!-- <img class="send-task-image" src="{{ url_for('static', filename='img/Baton_pass_hachimaki.PNG')}}" alt="baton_pass"> -->
+                        <img class="send-task-image" src="../../static/img/Baton_pass_hachimaki.PNG" alt="baton_pass"> <!-- 仮！！ -->
                     <button class="send-task-btn" type="submit"
                     onclick="return confirm('このバトンを次の人に送りますか？');">次の人にバトンを渡す！</button>
                 </div>
