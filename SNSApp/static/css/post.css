@@ -37,6 +37,10 @@
     font-weight: 600;
 }
 
+.post-study-time {
+    color: chocolate;
+}
+
 .comment-card {
     padding: 8px 16px;
     margin: 8px 32px; /* 箱の大きさ調整 */
