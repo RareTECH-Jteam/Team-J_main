@@ -5,7 +5,7 @@
     <meta charset="UTF-8">                                                  <!--文字エンコードをUTF-8に指定-->
     <title>{% block title %}マナ部{% endblock %}</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">   <!--画面サイズをデバイスサイズに合わせて最適化-->
-    <link rel="stylesheet" href="base.css">                                 <!--パスはファイルを入れたら記述します-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css')}}">       
     {% block page_css %}{% endblock %}
 </head>
 
@@ -13,7 +13,7 @@
     {% include 'common/header.html' %}                          
 
     <main>
-        <h2 class="auth-title">{% block page_title %}{% endblock %}</h2>                   <!--headerの下に表示するページタイトル文のことです-->
+        <h1 class="auth-title">{% block page_title %}{% endblock %}</h1>                   <!--headerの下に表示するページタイトル文のことです-->
 
         {% block content %}{% endblock %}                                  <!--ページタイトル以外のmain部分です-->
     

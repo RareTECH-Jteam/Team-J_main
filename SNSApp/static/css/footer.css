@@ -1,8 +1,11 @@
 footer{
-    
+    width: 100%;
+    height: 20%;
 }
 
 .footer-container{
+    width: 30%;
+    height: 20%;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -13,21 +16,24 @@ footer{
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 500px;
-    height: 100px;
-    margin-right: 0px;
+    /* width: 500px; */
+    /* height: 100px; */
+    /* margin-right: 0px; */
 }
 
 .footer-img{
-    width: 100px;
+    width: 100%;
     object-fit: contain;
 }
 
 .footer-botton{
+    height: 100%;
+    width: 50%;
     background-color: hsl(47, 100%, 50%);
     text-decoration-line: none;
-
-
+    text-align: center;
+    line-height: 100%;
+    font-weight: 700;
     border-radius: 50px;
 
 }
