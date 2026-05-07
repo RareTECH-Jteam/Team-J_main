@@ -43,8 +43,15 @@
                     <div class="post-body" id="post-detailbody-{{ post.id }}">
                         {{ post.content }}
                     </div>
-                    <div class="post-study-time">
-                        勉強時間：{{ post.study_time }}
+                    <div class="post-study-time" data-minutes="{{ hours * 60 + minutes }}">
+                        勉強時間：
+                        {% if hours and minutes %}
+                            {{ hours }}時間{{ minutes }}分
+                        {% elif hours %}
+                            {{ hours }}時間
+                        {% else %}
+                            {{ minutes }}分
+                        {% endif %}      
                     </div>
 
                     <!-- 編集エリア（非表示） -->
