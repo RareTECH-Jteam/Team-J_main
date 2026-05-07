@@ -169,7 +169,7 @@ def post_detail_view(post_id):
         comment['created_at'] = comment['created_at'].strftime('%Y-%m-%d %H:%M')
         comment['user_name'] = User.get_name_by_id(comment['user_id'])
 
-    return render_template('post/post_detail.html', post=post, comments = comments, user_id=user_id)
+    return render_template('post/post_detail.html', post=post, comments=comments, user_id=user_id)
 
 
 # コメント処理

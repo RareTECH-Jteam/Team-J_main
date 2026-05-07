@@ -80,7 +80,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE Posts SET deleted_at = NOW() WHERE id = %s;"
+                sql = "UPDATE posts SET deleted_at = NOW() WHERE id = %s;"
                 cur.execute(sql, (post_id,))
                 conn.commit()
         except pymysql.Error as e:
@@ -95,7 +95,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM Posts WHERE id=%s AND deleted_at IS NULL;"
+                sql = "SELECT * FROM posts WHERE id=%s AND deleted_at IS NULL;"
                 cur.execute(sql, (post_id,))
                 post = cur.fetchone()
             return post
@@ -112,7 +112,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE Posts SET content = %s, study_time = %s ,  updated_at = SYSDATE(6) WHERE id = %s;"
+                sql = "UPDATE posts SET content = %s, study_time = %s ,  updated_at = SYSDATE(6) WHERE id = %s;"
                 cur.execute(sql, (content ,study_time,post_id ))
                 conn.commit()
         except pymysql.Error as e:

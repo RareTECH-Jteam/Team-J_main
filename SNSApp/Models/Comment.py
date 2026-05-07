@@ -13,7 +13,7 @@ class Comment:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO Comments (user_id, post_id, content) VALUES (%s, %s, %s);"
+                sql = "INSERT INTO comments (user_id, post_id, content) VALUES (%s, %s, %s);"
                 cur.execute(sql, (user_id, post_id, content))
                 conn.commit()
         except pymysql.Error as e:
@@ -27,7 +27,7 @@ class Comment:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM Comments WHERE post_id=%s ORDER BY created_at DESC;"
+                sql = "SELECT * FROM comments WHERE post_id=%s ORDER BY created_at DESC;"
                 cur.execute(sql, (post_id,))
                 comments = cur.fetchall()
             return comments
@@ -44,7 +44,7 @@ class Comment:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE Comments SET deleted_at = NOW() WHERE id = %s;"
+                sql = "UPDATE comments SET deleted_at = NOW() WHERE id = %s;"
                 cur.execute(sql, (comment_id,))
                 conn.commit()
         except pymysql.Error as e:
@@ -60,8 +60,8 @@ class Comment:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE Comments SET content = %s, WHERE id = %s;"
-                cur.execute(sql, (comment_id, content))
+                sql = "UPDATE comments SET content = %s, WHERE id = %s;"
+                cur.execute(sql, (content,comment_id))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
