@@ -22,7 +22,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM posts WHERE  deleted_at IS NULL ORDER BY created_at DESC;"
+                sql = "SELECT * FROM Posts WHERE  deleted_at IS NULL ORDER BY created_at DESC;"
                 cur.execute(sql)
                 posts = cur.fetchall()
             return posts
@@ -39,7 +39,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO posts (user_id, content, study_time) VALUES (%s, %s, %s);"
+                sql = "INSERT INTO Posts (user_id, content, study_time) VALUES (%s, %s, %s);"
                 cur.execute(sql, (user_id, content, study_time))
                 conn.commit()
         except pymysql.Error as e:
@@ -54,7 +54,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE posts SET deleted_at = NOW() WHERE id = %s;"
+                sql = "UPDATE Posts SET deleted_at = NOW() WHERE id = %s;"
                 cur.execute(sql, (post_id,))
                 conn.commit()
         except pymysql.Error as e:
@@ -69,7 +69,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM posts WHERE id=%s AND deleted_at IS NULL;"
+                sql = "SELECT * FROM Posts WHERE id=%s AND deleted_at IS NULL;"
                 cur.execute(sql, (post_id,))
                 post = cur.fetchone()
             return post
@@ -86,7 +86,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE posts SET content = %s, study_time = %s  WHERE id = %s;"
+                sql = "UPDATE Posts SET content = %s, study_time = %s ,  updated_at = SYSDATE(6) WHERE id = %s;"
                 cur.execute(sql, (content ,study_time,post_id ))
                 conn.commit()
         except pymysql.Error as e:
@@ -104,7 +104,7 @@ class Post:
             with conn.cursor() as cur:
                 sql = """SELECT SUM(TIME_TO_SEC(study_time)) DIV 3600 AS hours,
                                 SUM(TIME_TO_SEC(study_time)) MOD 3600 DIV 60 AS minutes
-                                FROM posts WHERE user_id = %s;"""
+                                FROM Posts WHERE user_id = %s;"""
                 cur.execute(sql, (user_id))
                 all_study = cur.fetchone()
             return all_study
