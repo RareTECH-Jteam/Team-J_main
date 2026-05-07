@@ -29,10 +29,6 @@
             // メニューを閉じる
             hideElement(elements.menubutton);
 
-            // 元のテキストを保持
-            elements.contentbody.setAttribute('data-original', elements.contentbody.innerHTML);
-            const content = elements.contentbody.innerText;
-            
             // 投稿内容を非表示、編集エリアを表示
             hideElement(elements.contentbody);
             showElement(elements.editarea);
@@ -95,7 +91,7 @@
             return {
                 toggle : document.getElementById("toggleMenu"),
                 menubutton: document.getElementById(`menu-${postId}`),
-                contentbody: document.getElementById(`post-detalibody-${postId}`),
+                contentbody: document.getElementById(`post-detailbody-${postId}`),
                 editarea : document.getElementById(`edit-area-${postId}`),
                 edittextarea:document.getElementById(`edit-content-${postId}`),
                 csrfToken:document.querySelector('input[name="csrf_token"]')
