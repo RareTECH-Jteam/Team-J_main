@@ -86,7 +86,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE posts SET content = %s, study_time = %s  WHERE id = %s;"
+                sql = "UPDATE posts SET content = %s, study_time = %s  updated_at = SYSDATE(6) WHERE id = %s;"
                 cur.execute(sql, (content ,study_time,post_id ))
                 conn.commit()
         except pymysql.Error as e:
