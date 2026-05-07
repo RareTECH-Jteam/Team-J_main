@@ -34,12 +34,19 @@
                         </div>
                         <div class="post-time">{{ post.created_at }}</div>
                     </div>
+                    <div class="edit-completed">
+                        {% if post.created_at != post.updated_at %}
+                        （編集済み）
+                        {% else %}
+                        {% endif %}
+                    </div>
                     <div class="post-body" id="post-detailbody-{{ post.id }}">
                         {{ post.content }}
                     </div>
                     <div class="post-study-time">
                         勉強時間：{{ post.study_time }}
                     </div>
+
                     <!-- 編集エリア（非表示） -->
                     <section class="edit-post" id="edit-area-{{ post.id }}" style="display: none;">
                         <div class="edit-post-body">
@@ -56,8 +63,8 @@
                                     >
                                     分
                                 </label>
-                                <button class="btn-primary" onclick="saveEdit('{{ post.id }}')">保存</button>
-                                <button class="btn-primary" onclick="cancelEdit('{{ post.id }}')">キャンセル</button>
+                                <button class="btn-edit" onclick="saveEdit('{{ post.id }}')">保存</button>
+                                <button class="btn-edit" onclick="cancelEdit('{{ post.id }}')">キャンセル</button>
                             </div>
                         </div>
                     </section>
