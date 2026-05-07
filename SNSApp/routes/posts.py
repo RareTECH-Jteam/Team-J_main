@@ -31,7 +31,7 @@ def mypage_view():
 
 
     return render_template('post/mypage.html',
-                            name=username, 
+                            user_name=username, 
                             total_hours=total_study_time['hours'],
                             total_minutes=total_study_time['minutes'],
                             posts=all_posts
