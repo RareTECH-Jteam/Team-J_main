@@ -87,7 +87,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO Posts (user_id, content, study_time) VALUES (%s, %s, %s);"
+                sql = "INSERT INTO posts (user_id, content, study_time) VALUES (%s, %s, %s);"
                 cur.execute(sql, (user_id, content, study_time))
                 conn.commit()
         except pymysql.Error as e:
