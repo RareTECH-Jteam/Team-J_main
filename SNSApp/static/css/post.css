@@ -63,11 +63,13 @@
     position: relative;
     display: inline-block;
 }
+
 .menu-btn{
     transform: rotate(90deg);
     border: none;
     margin: 2px;
 }
+
 .menu-dropdown{
     position: absolute;
     top: 100%;
@@ -80,6 +82,7 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
 .menu-dropdown button{
     display: block;
     width: 100%;
@@ -89,9 +92,34 @@
     border: none;
     cursor: pointer;
 }
+
 .menu-dropdown button:hover{
     background-color: #f5f5f5;
 }
+
+.edit-post-footer {
+    position: absolute; /* 勉強時間入力スペースなどを枠に入れる */
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color:#F3F3F3
+}
+
+.btn-edit {
+    margin-right: 4px;
+    background-color:#00C3D0;
+    font-size: 12px;
+    padding: 8px 16px;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-color: #FFFFFF;
+    box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);    
+}
+
 .edit-post {
     text-align: center; 
 }
@@ -119,34 +147,23 @@
     padding: 8px;
     padding-bottom: 96px;
 }
+
 /* 勉強時間入力スペース周りの色や形状調整 */
 .edit-study-box {
-    margin-left: 175px;
+    min-width: 100px;
     text-align: left;
     background-color:#00C3D0;
-    padding: 8px 16px;
+    padding: 8px 8px;
     border-radius: 16px;
 }
 
 /* 勉強時間入力スペースの色や形状調整 */
 .edit-study-box input {
-    width: 60px;
+    width: 24px;
     background-color:#F3F3F3;
     padding: 4px 8px;
     border-radius: 8px;
     text-align: right;
-}
-
-.edit-post-footer {
-    position: absolute; /* 勉強時間入力スペースなどを枠に入れる */
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color:#F3F3F3
 }
 
 .new-post {
@@ -183,7 +200,7 @@
 .btn-primary {
     margin-right: 4px;
     background-color:#00C3D0;
-    font-size: 16px;
+    font-size: 12px;
     padding: 8px 16px;
     color: #FFFFFF;
     font-weight: 600;
