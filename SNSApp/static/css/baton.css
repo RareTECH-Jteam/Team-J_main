@@ -63,8 +63,12 @@
     margin-top: 16px;
     margin-bottom: 16px;
     background-color:#00C3D0;
-    font-size: 16px;
+    font-size: 12px;
     padding: 8px 24px;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-color: #FFFFFF;
+    box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);
 }
 
 .new-task-main {
@@ -103,8 +107,12 @@
     margin-top: 16px;
     margin-bottom: 16px;
     background-color:#00C3D0;
-    font-size: 16px;
-    padding: 8px;
+    font-size: 12px;
+    padding: 8px 8px;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-color: #FFFFFF;
+    box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);
 }
 
 .task-history {
