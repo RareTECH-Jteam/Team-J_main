@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="mypage">
+<div class="page">
     <!-- メイン -->
     <main>
         <div class="page-title">
@@ -27,7 +27,7 @@
             {% else %}
                 {{ total_minutes }}分
             {% endif %}            
-             <!-- 勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
+            <!-- 勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
             </div>
         </div>
         {% with messages = get_flashed_messages(with_categories=true) %} <!-- 一時的なメッセージあれば表示 -->
