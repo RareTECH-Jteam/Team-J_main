@@ -4,13 +4,20 @@
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/baton.css')}}">
+<link rel="stylesheet" href="../../static/css/base.css"> <!-- 仮 -->
+<link rel="stylesheet" href="../../static/css/baton.css"> <!-- 仮 -->
 {% endblock %}
 
 {% block content %}
 <div class="page">
     <main>
         <div class="page-title">
-            バトン
+            <div class="title-image">
+                <img src="{{ url_for('static', filename='img/Baton_rabbit.PNG')}}" alt="baton-rabbit">
+            </div>
+            <div class="title">
+                バトン
+            </div>
         </div>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -72,20 +79,53 @@
                     </option> <!-- プルダウン確認用の仮コード -->
                     {% endfor %}
                 </select>
-                <button class="send-task-btn" type="submit"
-                onclick="return confirm('このバトンを次の人に送りますか？');">次の人にバトンを渡す！</button>
+                <div class="send-task">
+                    <div class="send-task-image">
+                        <img src="{{ url_for('static', filename='img/Baton_pass_hachimaki.PNG')}}" alt="baton_pass">
+                    </div>
+
+                    <button class="send-task-btn" type="submit"
+                    onclick="return confirm('このバトンを次の人に送りますか？');">次の人にバトンを渡す！</button>
+                </div>
+
             </form>
         </section>
         
-        <
+        <!-- 完了もしくは失敗したタスク一覧を表示 -->
+        <section class="task-history">
+            <div class="complete">
+                <div class="complete-title">
+                    バトン完了！
+                </div>
+                <div class="content">
+                    {% if complete_tasks %}
+                        {% for complete_task in complete_tasks %}
+                        {{ task_body }}
+                        {% endfor %}
+                </div>
+                    {% else %}
+                    <div class="empty">
+                        <p>完了したバトンがないよ・・</p>
+                    </div>
+            </div>
+            <div class="fail">
+                <div class="fail-title">
+                    バトン失敗・・。
+                </div>
+                <div class="content">
+                    {% if fail_tasks %}
+                        {% for fail_task in fail_tasks %}
+                        {{ task_body }}
+                        {% endfor %}
+                </div>
+                    {% else %}
+                        <div class="empty">
+                            <p>まだ失敗してないぜ！</p>
+                        </div>
+                    {% endif %}
+            </div>
+        </section>
     </main>
     {% include 'common/footer_mypageback.html' %}
 </div>
 {% endblock %}
-
-
-<!-- バトン表示させるのに参照中
-              <form class="new-post-main" action="/posts/{{ post.id }}/comments" method="post">
-                    <textarea name="content" placeholder="どんなコメントで高め合う！？"></textarea>
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      -->

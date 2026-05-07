@@ -6,14 +6,50 @@
 }
 
 /* テキスト系をまとめてセンターアライン */
-.page-title {
+.page-title, .task-arrived, .new-task, .task-history {
     text-align: center; 
 }
 
-.page-title {
+.title-image {
+    min-height: 112px;
+}
+
+.title {
     height: 56px;
     font-size: 40px;
     font-weight: 700;
+}
+
+.task-arrived {
+    background-color: #FFCC00;
+}
+
+.mytask-content {
+    background-color: #FFCC00;
+    text-align: left;
+    font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
+}
+
+.mytask-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-sender {
+    font-weight: 600;    
+}
+
+.send-task {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.send-task-image {
+    min-height: 40px;
+}
+
+.complete {
+    text-align: left;
 }
 
 /* 投稿ボタンの色や形状調整 */
