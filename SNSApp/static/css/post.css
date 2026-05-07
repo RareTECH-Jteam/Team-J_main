@@ -16,45 +16,43 @@
     font-weight: 700;
 }
 
-.new-post {
-    margin-top: 16px;
+.post-card {
+    padding: 16px;
+    margin: 8px 16px; /* 箱の大きさ調整 */
+    background: #FFF;
 }
 
-/* formを縦並びにする */
-.new-post-main {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px; /* 間の余白 */
-    border-radius: 16px;
-    padding: 16px;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
+.post-content {
+    background: #FFF;
+    text-align: left;
+    font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
+}
+
+.post-header {
     display: flex;
     justify-content: space-between;
-    background-color:#FFF
 }
 
-.new-post textarea {
-    flex: 1; /* 残り幅全部使う */
-    min-height: 96px;
-    border: none;
-    resize: none;
-    font-size: 16px;
-    background: #FFF;
-    padding: 8px;
-    padding-bottom: 96px;
+.display-name {
+    font-weight: 600;
 }
 
-/* 投稿ボタンの色や形状調整 */
-.btn-primary {
-    margin-right: 4px;
-    background-color:#00C3D0;
-    font-size: 16px;
+.comment-card {
     padding: 8px 16px;
+    margin: 8px 32px; /* 箱の大きさ調整 */
+    background: #e2eba3; /* コメントの色を変えて、オリジナル投稿と区別 */
 }
 
+.comment-content {
+    background: #e2eba3; /* コメントの色を変えて、オリジナル投稿と区別 */
+    text-align: left;
+    font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+}
 
 /* 編集用デザイン 仮で作成 */
 .post-menu{
@@ -112,7 +110,7 @@
     min-height: 96px;
     border: none;
     resize: none;
-    font-size: 16px;
+    font-size: 12px;
     background: #FFF;
     padding: 8px;
     padding-bottom: 96px;
@@ -147,7 +145,54 @@
     background-color:#FFF
 }
 
+.new-post {
+    margin-top: 16px;
+}
+
+/* formを縦並びにする */
+.new-post-main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px; /* 間の余白 */
+    padding: 16px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    display: flex;
+    justify-content: space-between;
+    background-color:#FFF
+}
+
+.new-post textarea {
+    flex: 1; /* 残り幅全部使う */
+    min-height: 32px;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    background: #FFF;
+    padding: 8px;
+    padding-bottom: 32px;
+}
+
+/* 投稿ボタンの色や形状調整 */
+.btn-primary {
+    margin-right: 4px;
+    background-color:#00C3D0;
+    font-size: 16px;
+    padding: 8px 16px;
+}
+
 .edit-post-footer button {
     padding: 4px 12px;
     white-space: nowrap;  /* テキストが折り返さないようにする */
+}
+
+.new-post-main textarea{
+    font-size: 14px;
+}
+
+.new-post-footer {
+    display: flex;
+    justify-content: flex-end;
 }
