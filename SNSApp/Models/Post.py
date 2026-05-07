@@ -70,7 +70,7 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM Posts WHERE  deleted_at IS NULL ORDER BY created_at DESC;"
+                sql = "SELECT * FROM posts WHERE  deleted_at IS NULL ORDER BY created_at DESC;"
                 cur.execute(sql)
                 posts = cur.fetchall()
             return posts
