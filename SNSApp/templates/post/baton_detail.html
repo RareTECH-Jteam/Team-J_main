@@ -24,20 +24,60 @@
         {% endif %}
         {% endwith %}
 
+        <!-- もらったバトン表示 -->
         {% if baton %} <!-- 他の人からバトンが届いている場合、表示 -->
-        <section class="baton-arrived">
-            <div class="mybaton-card">
-                <div class="mybaton-header">
-                    {{ user_name }}さんからバトンが届きました！ <!-- ここの引数は何？ -->
-                    <div class="mybaton-contents">
-                        {{ baton }} <!-- ここの引数は何？ -->
+        <section class="task-arrived">
+            <div class="mytask-card">
+                <div class="mytask-content">
+                    <div class="mytask-header">
+                        <div class="task-sender">
+                            {{ sender_name }}さんからバトンが届きました！
+                        </div>
+                        <div class="task-send-time">{{ created_at }}</div>
                     </div>
-<!-- ここにformアクション必要かな？？ -->
-                    <button class="complete" type="submit"
-                        onclick="return confirmation('このバトンを完了しますか？');">完了</button>
+                    <div class="task-body" id="task-detailbody-{{ task_id }}">
+                        {{ task.content }}
+                    </div>
+                </div>
+                <form action="taskupdate" method="post">
+                    <input type="hidden" name="task_id" value="{{ task_id }}">
+                    <input type="hidden" name="is_done" value="1">
+                    <button type="submit"
+                    onclick="return confirmation('このバトンを完了しますか？');">
+                    完了
+                    </button>
+                </form>
                 </div>
             </div>
         </section>
+        {% else %}
+        <div class="empty">
+            <p>バトンはありません。</p>
+        </div>
+        {% endif %}
+
+        <!-- バトンを作成フォーム -->
+
+        <section class="new-task">
+            <form class="new-task-main" action="/posts" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> <!-- なりすましリクエスト防止（CSRF対策） -->
+                <label for="select-task">バトンを選ぶ</label>
+                <select name="select-task" id="select-task"> <!-- プルダウンリストからタスクを選ぶ -->
+                    {% for task in tasks}
+                    <option class="task">
+                        {{ task }}
+                    </option>
+                    <option class="task"> <!-- プルダウン確認用の仮コード -->
+                        今の気分で一番マシな教科に1秒触れろ（開くだけOK） <!-- プルダウン確認用の仮コード -->
+                    </option> <!-- プルダウン確認用の仮コード -->
+                    {% endfor %}
+                </select>
+                <button class="send-task-btn" type="submit"
+                onclick="return confirm('このバトンを次の人に送りますか？');">次の人にバトンを渡す！</button>
+            </form>
+        </section>
+        
+        <
     </main>
     {% include 'common/footer_mypageback.html' %}
 </div>
