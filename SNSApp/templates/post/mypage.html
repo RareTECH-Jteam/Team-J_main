@@ -18,7 +18,16 @@
         <div class="total-study-time">
         {{ user_name }}さんのトータル勉強時間：<br>
             <div class="study-time-number">
-            {{ total_hours }}時間{{ total_minutes }}分 <!-- 勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
+            {% if not total_hours and not total_minutes %}
+                まだ勉強記録がありません
+            {% elif total_hours and total_minutes %}
+                {{ total_hours }}時間{{ total_minutes }}分
+            {% elif total_hours %}
+                {{ total_hours }}時間
+            {% else %}
+                {{ total_minutes }}分
+            {% endif %}            
+             <!-- 勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
             </div>
         </div>
         {% with messages = get_flashed_messages(with_categories=true) %} <!-- 一時的なメッセージあれば表示 -->

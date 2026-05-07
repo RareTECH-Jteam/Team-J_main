@@ -23,8 +23,8 @@ def mypage_view():
     # 総勉強時間取得
     total_study_time = Post.get_total_study_time(user_id)
 
-    total_hours = total_study_time['hours'] or "00"
-    total_minutes = total_study_time['minutes'] or "00"
+    total_hours = total_study_time['hours'] or 0
+    total_minutes = total_study_time['minutes'] or 0
 
     # 投稿一覧
     all_posts = Post.get_all()
@@ -163,13 +163,23 @@ def post_detail_view(post_id):
     post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
     post['user_name'] = User.get_name_by_id(post['user_id'])
 
+    #分に換算
+    study_minutes =  Post.time_to_minutes(post['study_time']) 
+    hours = study_minutes // 60
+    minutes = study_minutes % 60
+
     # 投稿に対するコメント取得
     comments = Comment.get_by_post_id(post_id)
     for comment in comments:
         comment['created_at'] = comment['created_at'].strftime('%Y-%m-%d %H:%M')
         comment['user_name'] = User.get_name_by_id(comment['user_id'])
 
-    return render_template('post/post_detail.html', post=post, comments=comments, user_id=user_id)
+    return render_template('post/post_detail.html'
+                           , post=post
+                           , comments=comments
+                           , user_id=user_id
+                           , hours=hours
+                           , minutes=minutes)
 
 
 # コメント処理

@@ -1,6 +1,7 @@
 from flask import abort
 import pymysql
 from util.DB import DB
+from datetime import datetime
 
 # 初期起動時にコネクションプールを作成し接続を確立
 db_pool = DB.init_db_pool()
@@ -15,6 +16,12 @@ class Post:
         m = minutes % 60
 
         return f"{h:02}:{m:02}:00"
+
+    @staticmethod
+    # 00:00:00の形式 → 分に変換
+    def time_to_minutes(study_time):
+        total_seconds = int(study_time.total_seconds())
+        return total_seconds // 60
 
     @staticmethod
     def validate_content(content):
@@ -40,7 +47,6 @@ class Post:
             return '勉強時間は3桁以下で入力してください'
         
         return None
-    
 
     @classmethod
     def get_all(cls):
