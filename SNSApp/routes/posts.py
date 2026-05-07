@@ -62,7 +62,7 @@ def create_post():
         return redirect(url_for('posts.mypage_view'))
     
     #勉強時間取得
-    req_study_time = request.form.get('study-time','')
+    req_study_time = request.form.get('study_time','')
 
     # 勉強時間が不正の場合
     errors = Post.validate_minutes(req_study_time)
