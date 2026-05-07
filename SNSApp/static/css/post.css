@@ -16,6 +16,11 @@
     font-weight: 700;
 }
 
+.comment-list {
+    max-height: 200px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
+    overflow-y: auto;
+}
+
 .post-card {
     padding: 16px;
     margin: 8px 16px; /* 箱の大きさ調整 */
@@ -138,13 +143,13 @@
 
 .edit-post textarea {
     flex: 1; /* 残り幅全部使う */
-    min-height: 64px;
+    min-height: 56px;
     border: none;
     resize: none;
     font-size: 12px;
     background-color: #F3F3F3;
     padding: 8px;
-    padding-bottom: 96px;
+    padding-bottom: 56px;
 }
 
 /* 勉強時間入力スペース周りの色や形状調整 */

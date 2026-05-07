@@ -1,5 +1,5 @@
 /*とりあえずページを中央揃えに */
-.mypage {
+.page {
     max-width: 600px; /* 横幅制限（スマホ想定） */
     margin: 0 auto; /*　全体を中央寄せに */
     padding: 0 16px; /* 端の余白（スマホで詰まりすぎを防ぐ） */
@@ -24,6 +24,11 @@
 
 .study-time-number {
     color: #f7c6bd;
+}
+
+.post-list {
+    max-height: 240px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
+    overflow-y: auto;
 }
 
 .post-card {
@@ -73,13 +78,13 @@
 
 .new-post textarea {
     flex: 1; /* 残り幅全部使う */
-    min-height: 80px;
+    min-height: 56px;
     border: none;
     resize: none;
-    font-size: 14px;
+    font-size: 12px;
     background-color: #F3F3F3;
     padding: 8px;
-    padding-bottom: 80px;
+    padding-bottom: 64px;
 }
 
 .post-image {
