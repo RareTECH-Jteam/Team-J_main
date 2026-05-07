@@ -33,59 +33,40 @@
             elements.contentbody.setAttribute('data-original', elements.contentbody.innerHTML);
             const content = elements.contentbody.innerText;
             
-            // HTML作成
-            elements.contentbody.innerHTML = createEditArea(postId , content);
-
-            // objに保存
-            elements.textarea = document.getElementById(`edit-content-${postId}`)
-            elements.saveBtn = document.getElementById(`save-btn-${postId}`)
-        }
-
-        function createEditArea(postId, content){
-            return  `<section class="edit-post">
-                        <div class="edit-post-body">
-                            <textarea id="edit-content-${postId}" name="content">${content}</textarea> 
-                            <div class="edit-post-footer">
-                                <label class="edit-study-box">勉強時間：
-                                    <input 
-                                        type="text"
-                                        name="study-time"
-                                        inputmode="numeric" 
-                                        pattern="[0-9]{1,3}"
-                                        maxlength="3"
-                                        value="0"
-                                    >
-                                    分
-                                </label>
-                                <button class="btn-primary" onclick="saveEdit('${postId}')">保存</button>
-                                <button class="btn-primary" onclick="cancelEdit('${postId}')">キャンセル</button>
-                            </div>
-                        </div>
-                    </section>`
+            // 投稿内容を非表示、編集エリアを表示
+            hideElement(elements.contentbody);
+            showElement(elements.editarea);
         }
 
         // -- 保存ボタン --
         function saveEdit(postId){
+            const elements = getElements(postId);
             const textarea = document.getElementById(`edit-content-${postId}`);
 
             // テキストエリアの値を取得
-            const content = textarea.value;
+            const content = elements.edittextarea.value;
 
             // リクエスト
             UpdateProcess(postId,content);
         }
 
+        // flask側にリクエストを飛ばす
         function UpdateProcess(postId,content){
-            const csrfToken = document.querySelector('input[name="csrf_token"]').value
+            const elements = getElements(postId);
             
+            // csrfトークン取得
+            const csrfToken = elements.csrfToken.value
+            
+            
+            // -- fetchリクエスト --
             fetch(`/posts/${postId}/update`,{
-                method: "post",
-                credentials:"same-origin",
+                method: "post",                                         // postリクエスト
+                credentials:"same-origin",                              // 資格情報
                 headers:{
-                    "Content-Type" : "application/json",
-                    "X-CSRF-Token" : `${csrfToken}`
+                    "Content-Type" : "application/json",                // JSON形式で
+                    "X-CSRF-Token" : `${csrfToken}`                     // csrfトークン設定
                 },
-                body:JSON.stringify({content:content,study_time:"80"})
+                body:JSON.stringify({content:content,study_time:"80"})  // 投稿内容、勉強時間
             })
             .then(response => {
                 if(response.ok){
@@ -103,11 +84,10 @@
         // -- 編集キャンセル -- 
         function cancelEdit(postId){
             const elements = getElements(postId);
-
-            // 元のHTML情報取得
-            const originalContent = elements.contentbody.getAttribute("data-original");
             
-            elements.contentbody.innerHTML = originalContent;
+            // 編集エリア非表示、投稿内容表示
+            hideElement(elements.editarea);
+            showElement(elements.contentbody);
         }
 
 
@@ -115,7 +95,10 @@
             return {
                 toggle : document.getElementById("toggleMenu"),
                 menubutton: document.getElementById(`menu-${postId}`),
-                contentbody: document.getElementById(`post-detalibody-${postId}`)
+                contentbody: document.getElementById(`post-detalibody-${postId}`),
+                editarea : document.getElementById(`edit-area-${postId}`),
+                edittextarea:document.getElementById(`edit-content-${postId}`),
+                csrfToken:document.querySelector('input[name="csrf_token"]')
                 }
         }
 
