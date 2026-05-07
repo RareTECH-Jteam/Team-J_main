@@ -41,18 +41,18 @@
 
             // テキストエリアの値を取得
             const content = elements.edittextarea.value;
+            const studytime = elements.editstudytime.value;
 
             // リクエスト
-            UpdateProcess(postId,content);
+            UpdateProcess(postId,content,studytime);
         }
 
         // flask側にリクエストを飛ばす
-        function UpdateProcess(postId,content){
+        function UpdateProcess(postId,content,studytime){
             const elements = getElements(postId);
             
             // csrfトークン取得
-            const csrfToken = elements.csrfToken.value
-            
+            const csrfToken = elements.csrfToken.value;
             
             // -- fetchリクエスト --
             fetch(`/posts/${postId}/update`,{
@@ -62,7 +62,7 @@
                     "Content-Type" : "application/json",                // JSON形式で
                     "X-CSRF-Token" : `${csrfToken}`                     // csrfトークン設定
                 },
-                body:JSON.stringify({content:content,study_time:"80"})  // 投稿内容、勉強時間
+                body:JSON.stringify({content:content,study_time:studytime})  // 投稿内容、勉強時間
             })
             .then(response => {
                 if(response.ok){
@@ -94,6 +94,7 @@
                 contentbody: document.getElementById(`post-detailbody-${postId}`),
                 editarea : document.getElementById(`edit-area-${postId}`),
                 edittextarea:document.getElementById(`edit-content-${postId}`),
+                editstudytime:document.getElementById(`edit-study-time-input-${postId}`),
                 csrfToken:document.querySelector('input[name="csrf_token"]')
                 }
         }

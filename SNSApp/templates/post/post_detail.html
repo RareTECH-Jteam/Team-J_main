@@ -37,7 +37,7 @@
                     <div class="post-body" id="post-detailbody-{{ post.id }}">
                         {{ post.content }}
                     </div>
-                    <div class="post-study-time" data-minutes="{{ hours * 60 + minutes }}">
+                    <div class="post-study-time"  id="post-study-time-{{post.id}}">
                         勉強時間：
                         {% if hours and minutes %}
                             {{ hours }}時間{{ minutes }}分
@@ -54,12 +54,13 @@
                             <div class="edit-post-footer">
                                 <label class="edit-study-box">勉強時間：
                                     <input 
+                                        id="edit-study-time-input-{{post.id}}"
                                         type="text"
                                         name="study-time"
                                         inputmode="numeric" 
                                         pattern="[0-9]{1,3}"
                                         maxlength="3"
-                                        value="0"
+                                        value="{{ hours * 60 + minutes }}"
                                     >
                                     分
                                 </label>
