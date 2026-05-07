@@ -53,12 +53,24 @@ def create_post():
     content = request.form.get('content', '').strip()
     
     # 投稿内容が空の場合
-    if content == '':
-        flash('投稿内容が空です','error')
+    errors = Post.validate_content(content)
+    if errors:
+        flash(errors,'error')
         return redirect(url_for('posts.mypage_view'))
     
+    #勉強時間取得
+    req_study_time = request.form.get('study-time','').strip()
+
+    # 勉強時間が不正の場合
+    errors = Post.validate_minutes(req_study_time)
+    if errors:
+        flash(errors,'error')   
+        return redirect(url_for('posts.mypage_view'))
+    
+    study_time = Post.minutes_to_time(req_study_time)
+
     # 投稿情報作成
-    Post.create(user_id, content)
+    Post.create(user_id, content, study_time)
     flash('投稿が完了しました','success')
     return redirect(url_for('posts.mypage_view'))
 
@@ -71,21 +83,29 @@ def update_post(post_id):
         # ログインページ表示
         return redirect(url_for('auth.login_view'))
 
-    # JSONを取得
+    # JSON取得
     data = request.get_json()
     
     # 投稿内容
     content = data['content']
-    if content.strip() == '':
-        flash('投稿内容が空です','error')
+    
+    # 投稿内容が空の場合
+    errors = Post.validate_content(content)
+    if errors:
+        flash(errors,'error')
         return {'message': 'error'}, 400
 
     # 勉強時間
     minutes = data['study_time']
-    if int(minutes) < 0:
-        flash('勉強時間が不正です','error')
+
+    # 勉強時間が不正の場合
+    errors = Post.validate_minutes(minutes)
+    if errors:
+        flash(errors,'error')
+        # JSにレスポンス
         return {'message': 'error'}, 400
    
+   # 分をTIME型の書式に合わせる
     study_time = Post.minutes_to_time(minutes)
     Post.update(post_id,content,study_time)
 

@@ -15,6 +15,31 @@ class Post:
         m = minutes % 60
 
         return f"{h:02}:{m:02}:00"
+
+    @staticmethod
+    def validate_content(content):
+        # 空白かどうか
+        if not content or content.strip() == '':
+            return '投稿内容を入力してください'
+
+        return None
+
+    @staticmethod
+    def validate_minutes(minutes):
+        # 空白かどうか
+        if not minutes or minutes.strip() == '':
+            return '勉強時間を入力してください'
+
+        # 数値かどうか
+        if not minutes.isnumeric():
+            return '勉強時間は数値または、0以上で入力してください'
+        
+        # 3桁以上の場合
+        if minutes > 999:
+            return '勉強時間は3桁以下で入力してください'
+        
+        return None
+
     
     @classmethod
     def get_all(cls):
@@ -104,8 +129,8 @@ class Post:
             with conn.cursor() as cur:
                 sql = """SELECT SUM(TIME_TO_SEC(study_time)) DIV 3600 AS hours,
                                 SUM(TIME_TO_SEC(study_time)) MOD 3600 DIV 60 AS minutes
-                                FROM Posts WHERE user_id = %s;"""
-                cur.execute(sql, (user_id))
+                                FROM posts WHERE user_id = %s;"""
+                cur.execute(sql, (user_id,))
                 all_study = cur.fetchone()
             return all_study
         except pymysql.Error as e:
