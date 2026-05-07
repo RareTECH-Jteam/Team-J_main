@@ -101,10 +101,8 @@
     position: absolute; /* 勉強時間入力スペースなどを枠に入れる */
     bottom: 8px;
     left: 8px;
-    right: 8px;
-
     display: flex;
-    justify-content: space-between;
+
     align-items: center;
     background-color:#F3F3F3
 }
@@ -113,7 +111,7 @@
     margin-right: 4px;
     background-color:#00C3D0;
     font-size: 12px;
-    padding: 8px 16px;
+    padding: 8px 8px;
     color: #FFFFFF;
     font-weight: 600;
     border-color: #FFFFFF;
@@ -137,9 +135,10 @@
     width: 100%;
     background-color: #F3F3F3;
 }
+
 .edit-post textarea {
     flex: 1; /* 残り幅全部使う */
-    min-height: 96px;
+    min-height: 64px;
     border: none;
     resize: none;
     font-size: 12px;
@@ -155,6 +154,7 @@
     background-color:#00C3D0;
     padding: 8px 8px;
     border-radius: 16px;
+    margin-right: 8px;
 }
 
 /* 勉強時間入力スペースの色や形状調整 */
