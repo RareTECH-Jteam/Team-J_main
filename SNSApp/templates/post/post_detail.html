@@ -37,6 +37,9 @@
                     <div class="post-body" id="post-detailbody-{{ post.id }}">
                         {{ post.content }}
                     </div>
+                    <div class="post-study-time">
+                        勉強時間：{{ post.study_time }}
+                    </div>
                     <!-- 編集エリア（非表示） -->
                     <section class="edit-post" id="edit-area-{{ post.id }}" style="display: none;">
                         <div class="edit-post-body">
@@ -71,18 +74,18 @@
                                     <button onclick="deletePost('{{ post.id }}')">削除</button>
                                 </div>
                             </div>                          
-                            <form action="/posts/{{ post.id }}/edit" method="post">
+                            <!-- <form action="/posts/{{ post.id }}/edit" method="post">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button class="post-btn post-btn-edit" type="submit"
                                     onclick="return confirm('この投稿を編集しますか？');">編集</button>
-                            </form>
+                            </form> -->
 
                             <!-- 投稿削除 -->
-                            <form action="/posts/{{ post.id }}/delete" method="post">
+                            <!-- <form action="/posts/{{ post.id }}/delete" method="post">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button class="post-btn post-btn-delete" type="submit"
                                     onclick="return confirm('この投稿を削除しますか？');">削除</button>
-                            </form>
+                            </form> -->
                             {% endif %}
                         </div>
                     </div>
