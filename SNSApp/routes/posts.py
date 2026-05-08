@@ -122,7 +122,8 @@ def delete_post(post_id):
     if not SM.is_live_session():
         # ログインページ表示
         return redirect(url_for('auth.login_view'))
-
+    
+    # ユーザーID設定
     user_id = SM.get_user_id()
 
     # 投稿内容取得
@@ -134,13 +135,18 @@ def delete_post(post_id):
 
     # 自分以外の投稿を削除しようとした場合
     if post['user_id'] != user_id:
-        flash('この投稿を削除することはできません', 'error')
-        return redirect(url_for('posts.mypage_view'))
+        return {'message': 'error', 'text': 'この投稿を削除することはできません'}, 400
 
     # 投稿削除
-    Post.delete(post_id)
-    flash('投稿が削除されました','success')
-    return redirect(url_for('posts.mypage_view'))
+    try:
+        Post.delete(post_id)
+    except Exception:
+        return {'message': 'error', 'text': '削除に失敗しました'}, 500
+    
+    flash('投稿が削除されました', 'success')
+    
+    # JS側にレスポンス
+    return {'message': 'success'}, 200
 
 
 # 投稿詳細ページの表示

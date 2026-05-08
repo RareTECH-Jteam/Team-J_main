@@ -76,6 +76,17 @@
                             </div>
                         </div>
                     </section>
+                    <div id="deleteconfirm-{{post.id}}" class="confirm_box_container" style="display: none;">
+                        <div class="confirm_box">
+                            <h2 class="confirm_box_title"><span class="confirm-warging">&#x26a0;</span> 警告</h2>
+                            <p class="confirm_box_message">本当に削除しますか？</p>
+                            <p id="confirm_error_message-{{post.id}}" class="confirm_error_message"></p>
+                            <div class="confirm_button_container">
+                                <button class="cancel_button" onclick="cancelDelete('{{ post.id }}')">いいえ</button>
+                                <button class="confirm_button" onclick="confirmDelete('{{ post.id }}')">はい</button>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="post-footer">
                         <div class="post-actions">
