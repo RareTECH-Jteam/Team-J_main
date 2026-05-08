@@ -1,9 +1,12 @@
 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}">
 
-<footer>                    <!--css➞footer全体のサイズを指定する-->
-    <div>                   <!--css➞ロゴとリンクの位置を指定する-->
-        <img src="" alt="マイページ画像">
-        <a href="">マイページに戻る</a>     <!--css➞それぞれの余白を指定する-->
+<footer>                 <!--css➞footer全体のサイズを指定する-->
+    <div class="footer-container">
+        <div class="footer-content">                   <!--css➞ロゴとリンクの位置を指定する-->
+            <img class="footer-img" src="{{ url_for('static', filename='img/Studying_rabbit.PNG')}}" alt="Studying_rabbit">
+            <a class="footer-botton" href="{{url_for('posts.mypage_view')}}">マイページに戻る</a>
+        </div>
     </div>
 </footer>
 
