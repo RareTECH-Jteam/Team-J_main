@@ -21,30 +21,41 @@
         <p class="auth-subtitle">ユーザー情報を入力して新規登録してください。</p>
 
         <!-- フラッシュメッセージを設定する -->
+                 {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">
+                {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
 
         <!--フォーム入力-->
         <form class="auth-form" action="{{url_for('auth.signup_process')}}" method="post">
             <input type="hidden" name="csrf_token" value="{{csrf_token()}}">  <!--暗号トークンをform送信-->
             <!--ユーザー名入力-->
-            <div>
+            <div class="user-info">
                 <label>ユーザー名</label>
                 <input type="text" name="username" placeholder="ユーザー名" required>
             </div>
 
             <!--メールアドレス入力-->
-            <div>
+            <div class="user-info">
                 <label>メールアドレス</label>
                 <input type="text" name="email" placeholder="メールアドレス" required>
             </div>
             
             <!--パスワード入力-->
-            <div>
+            <div class="user-info">
                 <label>パスワード</label>
                 <input type="password" name="password" placeholder="パスワード" required>
             </div>
 
             <!--パスワード（確認用）入力-->
-            <div class="confirm-password">
+            <div class="confirm-password user-info">
                 <label>パスワード（確認用）</label>
                 <input type="password" name="password_confirmation" placeholder="パスワード（確認用）" required>
             </div>
