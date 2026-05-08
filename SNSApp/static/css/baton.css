@@ -3,6 +3,14 @@
     max-width: 600px; /* 横幅制限（スマホ想定） */
     margin: 0 auto; /*　全体を中央寄せに */
     padding: 0 16px; /* 端の余白（スマホで詰まりすぎを防ぐ） */
+
+    min-height: 100vh; /* vhはviewport height、今回使う高さの最低値を画面の高さに指定 */
+    display: flex;
+    flex-direction: column; /* mainとfooterを縦並びにしてfooterを最下部に押し出すため */
+}
+
+.main {
+    flex: 1; /*　headerとfooterで使った余りの高さ方向のスペースをmainが全部使う */
 }
 
 /* テキスト系をまとめてセンターアライン */
@@ -21,7 +29,7 @@
 .title-image {
     min-height: 112px;
     position: absolute; /* 画像だけアライメントしないで絶対値で位置決める */
-    left: 120px; /* .page-title の左から120px となる */
+    left: 16px; /* .page-title の左から120px となる */
     margin-right: 12px
 }
 
@@ -42,13 +50,13 @@
     font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
 }
 
-.mytask-header {
-    display: flex;
-    justify-content: space-between;
+.task-sender {
+    font-size: 14px;
+    font-weight: 600;    
 }
 
-.task-sender {
-    font-weight: 600;    
+.task-send-time {
+    color: red;
 }
 
 /* 完了ボタンを右寄せにするため、親のformでflex指定 */
@@ -73,21 +81,27 @@
 
 .new-task-main {
     text-align: left;
-    max-width: 600px;
+    max-width: 393px;
     min-height: 100px;
     margin: 0 auto;
+    padding: 8px 8px; /* ”バトンを選ぶ”の文字列との距離を空けるため */
     background-color:#F3F3F3;
+    gap: 16px;
 }
 
 .select-title {
-    padding: 16px 16px;
+    font-size: 14px;
 }
 
 .select-task{
-    min-width: 240px; /* プルダウンメニューの幅を広くする */
-    margin-left: 16px;
-    padding: 8px 16px;
+    min-width: 200px;
+    max-width: 370px; /* プルダウンメニューの幅を広くする・・プルダウンだと選択したテキストが改行されないのが辛い・・ */
+    min-height: 40px;
+    margin-left: 4px;
     border-radius: 8px;
+    color: chocolate;
+    font-weight: 600;
+    font-size: 14px;
 }
 
 .send-task {
@@ -117,7 +131,7 @@
 
 .task-history {
     text-align: left;
-    max-width: 600px;
+    max-width: 393px;
     min-height: 100px;
     margin: 16px auto;
     padding: 8px 16px;

@@ -35,7 +35,6 @@
         <!-- もらったバトン表示 -->
 
         <section class="task-arrived">
-            
             <div class="mytask-card">
                 <div class="mytask-content">
                     {% if baton %} <!-- 他の人からバトンが届いている場合、表示 -->
@@ -58,26 +57,21 @@
                     <input type="hidden" name="task_id" value="{{ task_id }}">
                     <input type="hidden" name="is_done" value="1">
                     <button class="mytask-complete" type="submit"
-                    onclick="return confirmation('このバトンを完了しますか？');"> <!-- バトンあり　のフラグが立った時だけ表示させたい -->
+                    onclick="return confirm('このバトンを完了しますか？');"> <!-- バトンあり　のフラグが立った時だけ表示させたい -->
                     完了
                     </button>
                 </form>
-                </div>
             </div>
-
-
         </section>
 
-
         <!-- バトンを作成フォーム -->
-
         <section class="new-task">
             <form class="new-task-main" action="/posts" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> <!-- なりすましリクエスト防止（CSRF対策） -->
-                <label for="select-task" class="select-title">バトンを選ぶ</label>
+                <label for="select-task" class="select-title">バトンを選ぶ</label> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
                 <select name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ -->
                     {% for task in tasks}
-                    <option class="task">
+                    <option class="task"> <!-- プルダウンメニューで選択後、改行できない（横幅限られているので途中までしか表示できない）ため、タスクはMax25文字で！！ -->
                         {{ task }}
                     </option>
                     <option class="task"> <!-- プルダウン確認用の仮コード -->
@@ -104,13 +98,14 @@
                 <div class="content">
                     {% if complete_tasks %}
                         {% for complete_task in complete_tasks %}
-                        {{ task_body }}
+                            {{ task_body }}
                         {% endfor %}
-                </div>
                     {% else %}
-                    <div class="empty">
-                        <p>完了したバトンがないよ・・</p>
-                    </div>
+                        <div class="empty">
+                            <p>完了したバトンがないよ・・</p>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
             <div class="fail">
                 <div class="fail-title">
@@ -119,14 +114,14 @@
                 <div class="content">
                     {% if fail_tasks %}
                         {% for fail_task in fail_tasks %}
-                        {{ task_body }}
+                            {{ task_body }}
                         {% endfor %}
-                </div>
                     {% else %}
                         <div class="empty">
                             <p>まだ失敗してないぜ！</p>
                         </div>
                     {% endif %}
+                </div>
             </div>
         </section>
     </main>
