@@ -52,6 +52,10 @@
     font-weight: 600;
 }
 
+.post-study-time {
+    color: chocolate;
+}
+
 .new-post {
     margin-top: 8px;
 }
@@ -111,7 +115,7 @@
 
 /* 勉強時間入力スペースの色や形状調整 */
 .study-box input {
-    width: 40px;
+    width: 24px;
     background-color:#F3F3F3;
     padding: 4px 8px;
     border-radius: 8px;

@@ -56,6 +56,16 @@
                     <div class="post-body">
                         {{ post.content }}
                     </div>
+                    <div class="post-study-time"  id="post-study-time-{{post.id}}">
+                        勉強時間：
+                        {% if hours and minutes %}
+                            {{ hours }}時間{{ minutes }}分
+                        {% elif hours %}
+                            {{ hours }}時間
+                        {% else %}
+                            {{ minutes }}分
+                        {% endif %}      
+                    </div>
                     <div class="post-footer">
                         <div class="post-actions">
                             <!-- 詳細・コメント画面へ（GET / posts/{post.id}） -->

@@ -5,12 +5,11 @@
 
 body {
     background-color: #00C3D0;
-    width: 393px;       /*iphone16の横幅*/
-    height: 852px;      /*iphone16の縦幅*/
     margin: 0% auto;
 }
 
 main{
+    max-width: 393px;       /*iphone16の横幅、bodyではなくmainに、かつ固定値にはしないでおく*/
     width: 90%;
     height: 80%;
     margin: 5% auto;
