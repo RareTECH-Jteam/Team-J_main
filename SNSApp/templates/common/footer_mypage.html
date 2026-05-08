@@ -1,17 +1,16 @@
-<!-- ↓画面確認用、アプリ完成時は消します -->
-<link rel="stylesheet" href="../../static/css/base.css"> 
-<link rel="stylesheet" href="../../static/css/footer.css">
 
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}">
 
 <footer>                 <!--css➞footer全体のサイズを指定する-->
     <div class="footer-container">                 <!--css➞２つのロゴとリンクの位置を指定する-->
         <div class="footer-content">             <!--css➞行間を指定する-->
-            <img class="footer-img" src="../img/Studying_rabbit.PNG" alt="ランキング">
+            <img class="footer-img" src="{{ url_for('static', filename='img/Running_cat.PNG')}}" alt="Running_cat">
             <a class="footer-botton" href="">ランキングを見る</a>
         </div>
 
         <div class="footer-content">
-            <img class="footer-img" src="../img/Baton_rabbit.PNG" alt="バトンウサギ">
+            <img class="footer-img" src="{{ url_for('static', filename='img/Baton_rabbit.PNG')}}" alt="Baton_rabbit">
             <a class="footer-botton" href="">バトンを見る</a>
         </div>
     </div>
