@@ -3,11 +3,19 @@
     max-width: 600px; /* 横幅制限（スマホ想定） */
     margin: 0 auto; /*　全体を中央寄せに */
     padding: 0 16px; /* 端の余白（スマホで詰まりすぎを防ぐ） */
+
+    min-height: 100vh; /* vhはviewport height、今回使う高さの最低値を画面の高さに指定 */
+    display: flex;
+    flex-direction: column; /* mainとfooterを縦並びにしてfooterを最下部に押し出すため */
 }
 
 /* テキスト系をまとめてセンターアライン */
 .page-title, .post-detail, .comment-list, .empty, .flash-messages, .new-post {
     text-align: center; 
+}
+
+.main {
+    flex: 1; /*　headerとfooterで使った余りの高さ方向のスペースをmainが全部使う */
 }
 
 .page-title {
