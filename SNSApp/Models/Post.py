@@ -91,7 +91,7 @@ class Post:
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
-            abort(500)
+            raise
         finally:
             db_pool.release(conn)
 
