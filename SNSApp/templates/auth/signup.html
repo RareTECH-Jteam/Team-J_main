@@ -9,46 +9,53 @@
 
 
 <!--bpdyタグ内のコード-->
-{% block page_title %}新規登録{% endblock %}
+{#{% block page_title %}新規登録{% endblock %}#}
 
 
 {% block content %}
-    <p class="auth-subtitle">ユーザー情報を入力して新規登録してください。</p>
+<div class="page">
+    <!-- メイン -->
+    <main>
+        <div class="page-title">新規登録</div>
 
-    <!-- フラッシュメッセージを設定する -->
+        <p class="auth-subtitle">ユーザー情報を入力して新規登録してください。</p>
 
-    <!--フォーム入力-->
-    <form class="auth-form" action="{{url_for('auth.signup_process')}}" method="post">
-        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">  <!--暗号トークンをform送信-->
-        <!--ユーザー名入力-->
-        <div>
-            <label>ユーザー名</label>
-            <input type="text" name="username" placeholder="ユーザー名" required>
-        </div>
+        <!-- フラッシュメッセージを設定する -->
 
-        <!--メールアドレス入力-->
-        <div>
-            <label>メールアドレス</label>
-            <input type="text" name="email" placeholder="メールアドレス" required>
-        </div>
-        
-        <!--パスワード入力-->
-        <div>
-            <label>パスワード</label>
-            <input type="password" name="password" placeholder="パスワード" required>
-        </div>
+        <!--フォーム入力-->
+        <form class="auth-form" action="{{url_for('auth.signup_process')}}" method="post">
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">  <!--暗号トークンをform送信-->
+            <!--ユーザー名入力-->
+            <div>
+                <label>ユーザー名</label>
+                <input type="text" name="username" placeholder="ユーザー名" required>
+            </div>
 
-        <!--パスワード（確認用）入力-->
-        <div class="confirm-password">
-            <label>パスワード（確認用）</label>
-            <input type="password" name="password_confirmation" placeholder="パスワード（確認用）" required>
-        </div>
-        
-        <!--ログイン・画面遷移ボタン-->
-        <div class="auth-botton-container">
-            <button class="auth-botton" type="submit">登録</button>
-            <a class="switch-auth-mode" href="{{url_for('auth.login_view')}}">ログインはこちら</a>
-        </div>
+            <!--メールアドレス入力-->
+            <div>
+                <label>メールアドレス</label>
+                <input type="text" name="email" placeholder="メールアドレス" required>
+            </div>
+            
+            <!--パスワード入力-->
+            <div>
+                <label>パスワード</label>
+                <input type="password" name="password" placeholder="パスワード" required>
+            </div>
 
-    </form>
+            <!--パスワード（確認用）入力-->
+            <div class="confirm-password">
+                <label>パスワード（確認用）</label>
+                <input type="password" name="password_confirmation" placeholder="パスワード（確認用）" required>
+            </div>
+            
+            <!--ログイン・画面遷移ボタン-->
+            <div class="auth-botton-container">
+                <button class="auth-botton" type="submit">登録</button>
+                <a class="switch-auth-mode" href="{{url_for('auth.login_view')}}">ログインはこちら</a>
+            </div>
+
+        </form>
+    </main>
+</div>
 {% endblock %} 
