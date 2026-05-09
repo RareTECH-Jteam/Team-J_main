@@ -9,9 +9,10 @@
     flex-direction: column; /* mainとfooterを縦並びにしてfooterを最下部に押し出すため */
 }
 
-.main {
-    flex: 1; /*　headerとfooterで使った余りの高さ方向のスペースをmainが全部使う */
-}
+/*　headerとfooterで使った余りの高さ方向のスペースをmainが全部使う..がこれがあるとfooterが下に行き過ぎる */
+/* main {
+    flex: 1; 
+} */
 
 /* テキスト系をまとめてセンターアライン */
 .page-title, .task-arrived, .new-task-main, .task-history {
@@ -29,8 +30,12 @@
 .title-image {
     min-height: 112px;
     position: absolute; /* 画像だけアライメントしないで絶対値で位置決める */
-    left: 16px; /* .page-title の左から120px となる */
+    left: -48px; /* .page-title の左から120px となる */
     margin-right: 12px
+}
+
+.title-image img {
+    height: 112px;
 }
 
 .title {
@@ -83,14 +88,14 @@
     text-align: left;
     max-width: 393px;
     min-height: 100px;
-    margin: 0 auto;
+    margin: 16px auto;
     padding: 8px 8px; /* ”バトンを選ぶ”の文字列との距離を空けるため */
     background-color:#F3F3F3;
     gap: 16px;
 }
 
 .select-title {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .select-task{
@@ -157,7 +162,7 @@
 
 .fail {
     text-align: left;
-    margin: 8px auto;
+    margin: 8px auto 0px auto;
     background-color:#F3F3F3;
     padding: 8px 16px;
     max-height: 100px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */

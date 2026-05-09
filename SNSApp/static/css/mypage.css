@@ -14,9 +14,10 @@
     text-align: center; 
 }
 
-.main {
-    flex: 1; /*　headerとfooterで使った余りの高さ方向のスペースをmainが全部使う */
-}
+/*　headerとfooterで使った余りの高さ方向のスペースをmainが全部使う..がこれがあるとバトン画面のfooterが下に行き過ぎる */
+/* main {
+    flex: 1; 
+} */
 
 .page-title {
     height: 56px;
