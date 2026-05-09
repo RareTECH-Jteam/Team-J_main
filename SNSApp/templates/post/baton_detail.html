@@ -3,8 +3,7 @@
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/baton.css')}}">
-<link rel="stylesheet" href="../../static/css/base.css"> <!-- 仮（flaskを起動する際は不要なので消しても大丈夫です！） -->
-<link rel="stylesheet" href="../../static/css/baton.css"> <!-- 仮 -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}">
 {#<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}"> -->#}   <!--本実装時に両端の{##}とコメントアウトを消していただければOKです！-->
 {% endblock %}
 
@@ -13,8 +12,7 @@
     <main>
         <div class="page-title">
             <div class="title-image">
-                <!-- <img src="{{ url_for('static', filename='img/Baton_rabbit.PNG')}}" alt="baton-rabbit"> -->
-                <img class="send-task-image" src="../../static/img/Baton_rabbit.PNG" alt="baton-rabbit"> <!-- 仮！！ -->
+                <img src="{{ url_for('static', filename='img/Baton_rabbit.PNG')}}" alt="baton-rabbit">
             </div>
             <div class="title">
                 バトン
@@ -66,13 +64,13 @@
 
         <!-- バトンを作成フォーム -->
         <section class="new-task">
-            <form class="new-task-main" action="/posts" method="post">
+            <form class="new-task-main" action="/baton" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> <!-- なりすましリクエスト防止（CSRF対策） -->
                 <label for="select-task" class="select-title">バトンを選ぶ</label> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
                 <select name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ -->
                     {% for task in tasks %}
-                    <option class="task"> <!-- プルダウンメニューで選択後、改行できない（横幅限られているので途中までしか表示できない）ため、タスクはMax25文字で！！ -->
-                        {{ task }}
+                    <option class="task" value="{{ task.id }}"> <!-- プルダウンメニューで選択後、改行できない（横幅限られているので途中までしか表示できない）ため、タスクはMax25文字で！！ -->
+                        {{ task.content }}
                     </option>
                     <option class="task"> <!-- プルダウン確認用の仮コード -->
                         今の気分で一番マシな教科に1秒触れろ（開くだけOK） <!-- プルダウン確認用の仮コード -->
@@ -80,8 +78,7 @@
                     {% endfor %}
                 </select>
                 <div class="send-task">
-                        <!-- <img class="send-task-image" src="{{ url_for('static', filename='img/Baton_pass_hachimaki.PNG')}}" alt="baton_pass"> -->
-                        <img class="send-task-image" src="../../static/img/Baton_pass_hachimaki.PNG" alt="baton_pass"> <!-- 仮！！ -->
+                        <img class="send-task-image" src="{{ url_for('static', filename='img/Baton_pass_hachimaki.PNG')}}" alt="baton_pass">
                     <button class="send-task-btn" type="submit"
                     onclick="return confirm('このバトンを次の人に送りますか？');">次の人にバトンを渡す！</button>
                 </div>
