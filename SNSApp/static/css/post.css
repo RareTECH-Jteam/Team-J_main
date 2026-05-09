@@ -29,9 +29,15 @@
     overflow-y: auto;
 }
 
+.post-detail {
+    display: flex;
+    flex-direction: column; /*　これで三点ボタンと投稿枠を縦に並べる */
+}
+
 .post-card {
+    flex: 1;
     padding: 16px;
-    margin: 8px 16px; /* 箱の大きさ調整 */
+    margin: 4px 16px 8px 16px; /* トグルと近づけるため、topのマージンを4に。ちなみに順番は上右した左。 */
     background-color: #F3F3F3;
 }
 
@@ -71,29 +77,34 @@
     justify-content: space-between;
 }
 
-/* 編集用デザイン 仮で作成 */
+/* 投稿コメント編集用三点ボタン */
 .post-menu{
-    position: relative;
-    display: inline-block;
+    position: relative; /*　これがないとボタンが反応しない・・ */
+    /* display: inline-block; */ /*　これはなくても大丈夫そう */
+    display: flex;
+    justify-content: flex-end; /* これで右側に寄せる */
+    margin-right: 15px ; /* 投稿の枠右端に手動で無理矢理合わせてます！ */
 }
 
 .menu-btn{
+    width: 32px;
+    height: 32px;
     transform: rotate(90deg);
-    border: none;
-    margin: 2px;
+    background-color:#F3F3F3;
+    border: 1px solid #b4c1d1;
+    font-size: 16px;
 }
 
 .menu-dropdown{
-    position: absolute;
-    top: 100%;
+    position: absolute; /* .post-menuを基準に自由配置する */
+    right: 0; /* dropdownの右端を親要素の .menu-btnにピッタリ合わせる */
+    top: 100%; /* drowdownの上端を、親要素の .menu-btnの高さ100%（真下）に配置 */
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 100;
+    z-index: 100; /* 他の要素より前面に表示：dropdownが下に潜るのを防ぐ */
     min-width: 150px;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 .menu-dropdown button{
@@ -193,7 +204,7 @@
     bottom: 8px;
     left: 8px;
     right: 8px;
-    display: flex;
+    margin: 8px 16px; /* 箱の大きさ調整 */
     justify-content: space-between;
     background-color:#F3F3F3
 }

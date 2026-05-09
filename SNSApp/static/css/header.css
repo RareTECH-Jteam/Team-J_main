@@ -19,9 +19,13 @@
         height: auto;
     }
 
-.logout {
+/* logoutの行がまるっとリンクにならないように、一つ上の階層をり、そこで .logout の入る場所を制御 */
+.logout-area {
     display: flex;
-    justify-content: right; /* 空白がある場合、右揃え */
+    justify-content: flex-end; /* これで中の .logout を右端に配置できる */
+}
+
+.logout {
     font-size: 16px;
     color: #FFFFFF;
     padding: 0 32px; /* 左右の余白 */
