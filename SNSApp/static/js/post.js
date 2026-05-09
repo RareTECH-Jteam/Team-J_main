@@ -50,9 +50,10 @@
             const elements = getElements(postId);
             
             // 編集開始時の値を保存
-            elements.editstudytime.setAttribute('data-original', elements.editstudytime.value);
+            elements.edittextarea.setAttribute('data-original', elements.edittextarea.value.trim())
+            elements.editstudytime.setAttribute('data-original', elements.editstudytime.value)
 
-            // トグルのDiv全体を非表示
+            // トグルを非表示
             hideElement(elements.postmenu);
             // メニューを閉じる
             hideElement(elements.menubutton);
@@ -120,9 +121,11 @@
             const elements = getElements(postId)
 
             // -- 編集内容上で投稿内容が削除された時に復元する --
-            elements.edittextarea.value = elements.originalcontentbody.textContent.trim();
-            // data-original → 編集クリック時に設定
+            elements.edittextarea.value = elements.edittextarea.getAttribute('data-original')
             elements.editstudytime.value = elements.editstudytime.getAttribute('data-original')
+
+            // モーダルを開く前にエラーをリセット
+            hideElement(elements.editdErrormessage);
 
             // 編集エリア非表示
             hideElement(elements.editarea);
