@@ -1,14 +1,36 @@
+        // -- 要素取得 --
+        function getElements(postId) {
+            return {
+                postmenu: document.getElementById(`post-menu-${postId}`),
+                toggle : document.getElementById("toggleMenu"),
+                menubutton: document.getElementById(`menu-${postId}`),
+                originalcontentbody: document.getElementById(`post-detailbody-${postId}`),
+                editarea : document.getElementById(`edit-area-${postId}`),
+                editdErrormessage:document.getElementById(`edit_error_message-${postId}`),
+                edittextarea:document.getElementById(`edit-content-${postId}`),
+                editstudytime:document.getElementById(`edit-study-time-input-${postId}`),
+                deleteconfirm:document.getElementById(`deleteconfirm-${postId}`),
+                deleteErrormessage:document.getElementById(`confirm_error_message-${postId}`),
+                csrfToken:document.querySelector('input[name="csrf_token"]')
+                }
+        }
+
         document.addEventListener("click", function(event) {
+            // トグルと編集エリア以外の枠外をクリックしたとき
             if (!event.target.closest('.post-menu')) {
+                // メニューを閉じる
                 document.querySelectorAll('.menu-dropdown').forEach(menu => {
-                    menu.style.display = "none"
-                })
+                    menu.style.display = "none";
+                });
             }
-        })      
+        });
         
         function toggleMenu(postId){
             const elements = getElements(postId);
         
+            // モーダルを開く前にエラーをリセット
+            hideElement(elements.editdErrormessage);
+
             // 再表示
             if(elements.menubutton.style.display == "none"){
                 showElement(elements.menubutton);
@@ -20,20 +42,22 @@
                 hideElement(elements.menubutton);
                 return;
             }
+            
         }
 
          // -- 編集ボタン押下時 --
         function enableEdit(postId){
             const elements = getElements(postId);
             
+            // 編集開始時の値を保存
+            elements.editstudytime.setAttribute('data-original', elements.editstudytime.value);
+
+            // トグルのDiv全体を非表示
+            hideElement(elements.postmenu);
             // メニューを閉じる
             hideElement(elements.menubutton);
-
-            // モーダルを開く前にエラーをリセット
-            hideElement(elements.editdErrormessage);
-
             // 投稿内容を非表示
-            hideElement(elements.contentbody);
+            hideElement(elements.originalcontentbody);
 
             // 編集エリアを表示
             showElement(elements.editarea);
@@ -48,9 +72,6 @@
             const content = elements.edittextarea.value;
             const studytime = elements.editstudytime.value;
 
-            console.log("content" + content)
-            console.log("studytime" + studytime)
-            
             // リクエスト(UPDATE)
             UpdateProcess(postId,content,studytime);
         }
@@ -91,13 +112,27 @@
         // -- 編集キャンセル -- 
         function cancelEdit(postId){
             const elements = getElements(postId);
-            
+        
+            resetEditArea(postId);
+        }
+
+        function resetEditArea(postId) {
+            const elements = getElements(postId)
+
+            // -- 編集内容上で投稿内容が削除された時に復元する --
+            elements.edittextarea.value = elements.originalcontentbody.textContent.trim();
+            // data-original → 編集クリック時に設定
+            elements.editstudytime.value = elements.editstudytime.getAttribute('data-original')
+
             // 編集エリア非表示
             hideElement(elements.editarea);
-            
+
+            // トグルのdiv全体を非表示
+            showElement(elements.postmenu, "flex");
             // 投稿内容表示
-            showElement(elements.contentbody);
+            showElement(elements.originalcontentbody);
         }
+
 
 
         function deletePost(postId){
@@ -164,23 +199,7 @@
 
             // 削除エリア非表示、投稿内容表示
             hideElement(elements.deleteconfirm);
-            showElement(elements.contentbody,"flex");
-        }
-
-        // -- 要素取得 --
-        function getElements(postId) {
-            return {
-                toggle : document.getElementById("toggleMenu"),
-                menubutton: document.getElementById(`menu-${postId}`),
-                contentbody: document.getElementById(`post-detailbody-${postId}`),
-                editarea : document.getElementById(`edit-area-${postId}`),
-                editdErrormessage:document.getElementById(`edit_error_message-${postId}`),
-                edittextarea:document.getElementById(`edit-content-${postId}`),
-                editstudytime:document.getElementById(`edit-study-time-input-${postId}`),
-                deleteconfirm:document.getElementById(`deleteconfirm-${postId}`),
-                deleteErrormessage:document.getElementById(`confirm_error_message-${postId}`),
-                csrfToken:document.querySelector('input[name="csrf_token"]')
-                }
+            showElement(elements.originalcontentbody,"flex");
         }
 
         // -- POSTリクエスト --
