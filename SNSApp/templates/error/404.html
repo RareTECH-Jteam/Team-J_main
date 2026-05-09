@@ -11,6 +11,19 @@
 {% block content %}
 <div class="error-wrapper">
     <div>
+        {% with messages = get_flashed_messages(with_categories=true) %} <!-- 一時的なメッセージあれば表示 -->
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+    <div>
         <p class="error-num">4 0 4</p>
 
         <div class="error-description">

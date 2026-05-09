@@ -2,8 +2,8 @@
 
 {% block title %}500エラー{% endblock %}
 
-{% block content %}
-<link rel="stylesheet" href="{{ url_for('statice', filename='css/error.css') }}">
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
 <link rel="stylesheet" href="../../static/css/base.css"> <!-- 仮 -->
 <link rel="stylesheet" href="../../static/css/error.css"> <!-- 仮 -->
 {% endblock %}
