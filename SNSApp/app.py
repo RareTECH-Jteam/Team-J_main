@@ -3,6 +3,7 @@ from flask_wtf.csrf import CSRFProtect
 from datetime import timedelta
 from routes.auth import auth
 from routes.posts import posts
+from routes.baton import baton
 from util.SessionManager import SessionManager as SM
 import uuid
 import os
@@ -27,6 +28,9 @@ app.register_blueprint(auth)
 
 # 投稿系（投稿一覧・作成・削除）
 app.register_blueprint(posts)
+
+#バトン系
+app.register_blueprint(baton)
 
 # ルートページのリダイレクト処理
 @app.route('/', methods=['GET'])
