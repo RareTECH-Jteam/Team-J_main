@@ -29,7 +29,7 @@
             const elements = getElements(postId);
         
             // モーダルを開く前にエラーをリセット
-            hideElement(elements.editdErrormessage);
+            hideVisibility(elements.editdErrormessage);
 
             // 再表示
             if(elements.menubutton.style.display == "none"){
@@ -50,8 +50,8 @@
             const elements = getElements(postId);
             
             // 編集開始時の値を保存
-            elements.edittextarea.setAttribute('data-original', elements.edittextarea.value.trim())
-            elements.editstudytime.setAttribute('data-original', elements.editstudytime.value)
+            elements.edittextarea.setAttribute('data-original-content', elements.edittextarea.value.trim())
+            elements.editstudytime.setAttribute('data-original-studytime', elements.editstudytime.value)
 
             // トグルを非表示
             hideElement(elements.postmenu);
@@ -99,14 +99,14 @@
                 if(!response.ok){
                     console.log(data);
                     // エラーメッセージ表示
-                    showElement(elements.editdErrormessage);
+                    showVisibility(elements.editdErrormessage);
                     elements.editdErrormessage.textContent = data.text;
                 }
 
 
             }catch(error){
                 console.log(error);
-                showElement(elements.editdErrormessage);
+                showVisibility(elements.editdErrormessage);
             }
         }
         
@@ -121,11 +121,11 @@
             const elements = getElements(postId)
 
             // -- 編集内容上で投稿内容が削除された時に復元する --
-            elements.edittextarea.value = elements.edittextarea.getAttribute('data-original')
-            elements.editstudytime.value = elements.editstudytime.getAttribute('data-original')
+            elements.edittextarea.value = elements.edittextarea.getAttribute('data-origina-content');
+            elements.editstudytime.value = elements.editstudytime.getAttribute('data-original-studytime');
 
             // モーダルを開く前にエラーをリセット
-            hideElement(elements.editdErrormessage);
+            hideVisibility(elements.editdErrormessage);
 
             // 編集エリア非表示
             hideElement(elements.editarea);
@@ -237,3 +237,12 @@
         function hideElement(element){
             element.style.display = "none";
         }
+
+        // -- エラーメッセージ用 (高さそのまま確保) --
+        function hideVisibility(element){
+            element.style.visibility = "hidden";
+        }
+
+        function showVisibility(element){
+            element.style.visibility = "visible";
+        }        
