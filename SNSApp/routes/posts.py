@@ -88,30 +88,35 @@ def update_post(post_id):
 
     # JSON取得
     data = request.get_json()
-    
+    print(data) 
     # 投稿内容
-    content = data['content']
+    content = data.get('content', '')
     
     # 投稿内容が空の場合
     errors = Post.validate_content(content)
-    if errors:
-        flash(errors,'error')
-        return {'message': 'error'}, 400
+    if errors:        
+        # JSにレスポンス
+        return {'message': 'error', 'text': errors}, 400
 
     # 勉強時間
-    minutes = data['study_time']
-
+    minutes = data.get('study_time', '')
+    print(minutes);
     # 勉強時間が不正の場合
     errors = Post.validate_minutes(minutes)
     if errors:
-        flash(errors,'error')
+        # flash(errors,'error')
         # JSにレスポンス
-        return {'message': 'error'}, 400
+        return {'message': 'error', 'text': errors}, 400
    
-   # 分をTIME型の書式に合わせる
+    # 分をTIME型の書式に合わせる
     study_time = Post.minutes_to_time(minutes)
-    Post.update(post_id,content,study_time)
-
+    
+    # 編集 
+    try:
+        Post.update(post_id,content,study_time)
+    except Exception:
+        return {'message': 'error', 'text': '編集に失敗しました'}, 500
+        
     return {'message' : 'success'} , 200
 
 
