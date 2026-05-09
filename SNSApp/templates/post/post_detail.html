@@ -31,7 +31,7 @@
             <div class="post-actions">
                 {% if post.user_id == user_id %}
 
-                <div class="post-menu">
+                <div class="post-menu" id="post-menu-{{post.id}}">
                     <button class="menu-btn" onclick="toggleMenu('{{ post.id }}')">︙</button>
                     <div class="menu-dropdown" id="menu-{{ post.id }}" style="display:none;">
                         <button onclick="enableEdit('{{ post.id }}')">編集</button>
@@ -41,7 +41,8 @@
                 {% endif %}
             </div>
             <!-- 編集ボタンによる編集エリア（非表示） -->
-            <section class="edit-post" id="edit-area-{{ post.id }}" style="display: none;">
+            <section class="edit-post" data-post-id="{{post.id}}" 
+                      id="edit-area-{{ post.id }}" style="display: none;">
                 <div class="edit-post-body">
                     <textarea id="edit-content-{{ post.id }}" name="content">{{ post.content }}</textarea> 
                     <div class="edit-post-footer">
