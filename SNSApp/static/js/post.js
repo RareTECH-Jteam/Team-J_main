@@ -121,7 +121,7 @@
             const elements = getElements(postId)
 
             // -- 編集内容上で投稿内容が削除された時に復元する --
-            elements.edittextarea.value = elements.edittextarea.getAttribute('data-origina-content');
+            elements.edittextarea.value = elements.edittextarea.getAttribute('data-original-content');
             elements.editstudytime.value = elements.editstudytime.getAttribute('data-original-studytime');
 
             // モーダルを開く前にエラーをリセット
