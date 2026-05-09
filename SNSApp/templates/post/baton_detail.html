@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}投稿詳細{% endblock %} <!-- タブへの表示内容  -->
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/baton.css')}}">
-<link rel="stylesheet" href="../../static/css/base.css"> <!-- 仮 -->
+<link rel="stylesheet" href="../../static/css/base.css"> <!-- 仮（flaskを起動する際は不要なので消しても大丈夫です！） -->
 <link rel="stylesheet" href="../../static/css/baton.css"> <!-- 仮 -->
+{#<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}"> -->#}   <!--本実装時に両端の{##}とコメントアウトを消していただければOKです！-->
 {% endblock %}
 
 {% block content %}
