@@ -29,6 +29,9 @@
             // メニューを閉じる
             hideElement(elements.menubutton);
 
+            // モーダルを開く前にエラーをリセット
+            hideElement(elements.editdErrormessage);
+
             // 投稿内容を非表示
             hideElement(elements.contentbody);
 
@@ -45,42 +48,44 @@
             const content = elements.edittextarea.value;
             const studytime = elements.editstudytime.value;
 
+            console.log("content" + content)
+            console.log("studytime" + studytime)
+            
             // リクエスト(UPDATE)
             UpdateProcess(postId,content,studytime);
         }
 
         // flask側にリクエストを飛ばす
-        function UpdateProcess(postId,content,studytime){
+        async function UpdateProcess(postId,content,studytime){
             const elements = getElements(postId);
             
             // csrfトークン取得
             const csrfToken = elements.csrfToken.value;
-            
-            // -- fetchリクエスト --
-            fetch(`/posts/${postId}/update`,{
-                method: "post",                                         // postリクエスト
-                credentials:"same-origin",                              // 資格情報
-                headers:{
-                    "Content-Type" : "application/json",                // JSON形式で
-                    "X-CSRF-Token" : `${csrfToken}`                     // csrfトークン設定
-                },
-                body:JSON.stringify({content:content,study_time:studytime})  // 投稿内容、勉強時間
-            })
-            .then(response => {
-                // 成功時
+
+            const body = {content:content,study_time:studytime}
+
+            try{
+                const {response, data} = await postRequest(`/posts/${postId}/update`,csrfToken,body)
+
+
+                // -- 成功 --
                 if(response.ok){
-                    //ページをリロード
-                    location.reload(); 
+                    location.reload();
+                }
+                
+                // -- 失敗 --
+                if(!response.ok){
+                    console.log(data);
+                    // エラーメッセージ表示
+                    showElement(elements.editdErrormessage);
+                    elements.editdErrormessage.textContent = data.text;
                 }
 
-                // 失敗時
-                if(!response.ok){
-                    location.href = `/posts/${postId}`
-                }
-            })
-            .catch(error => {
-                alert(error)
-            })
+
+            }catch(error){
+                console.log(error);
+                showElement(elements.editdErrormessage);
+            }
         }
         
         // -- 編集キャンセル -- 
@@ -102,7 +107,7 @@
             hideElement(elements.menubutton);
 
             // モーダルを開く前にエラーをリセット
-            hideElement(elements.errormessage);
+            hideElement(elements.deleteErrormessage);
 
             // 削除確認モーダル 表示
             showElement(elements.deleteconfirm,"flex");
@@ -118,45 +123,34 @@
         }
 
         // flask側にリクエストを飛ばす
-        function DeleteProcess(postId){
+        async function DeleteProcess(postId){
             const elements = getElements(postId);
             
             // csrfトークン取得
             const csrfToken = elements.csrfToken.value;
-            
-            // -- fetchリクエスト --
-            fetch(`/posts/${postId}/delete`,{
-                method: "post",                                         // postリクエスト
-                credentials:"same-origin",                              // 資格情報
-                headers:{
-                    "Content-Type" : "application/json",                // JSON形式で
-                    "X-CSRF-Token" : `${csrfToken}`                     // csrfトークン設定
-                }
-            })
-            .then(async response => {
-                // レスポンス取得
-                const data = await response.json();
-                
+
+            try{
+                const {response, data} = await postRequest(`/posts/${postId}/delete`,csrfToken)
+
+
                 // -- 成功 --
                 if(response.ok){
-                    // セッションストレージに成功メッセージ格納
-                    sessionStorage.setItem('flashMessage', data.text);
-                    location.reload(); //ページをリロード
+                    location.reload();
                 }
+                
                 // -- 失敗 --
                 if(!response.ok){
                     
-                    showElement(elements.errormessage);
-
                     // エラーメッセージ表示
-                    elements.errormessage.textContent = data.text;
+                    showElement(elements.deleteErrormessage);
+                    elements.deleteErrormessage.textContent = data.text;
                 }
 
-            })
-            .catch(error => {
+
+            }catch(error){
                 console.log(error);
-                showElement(elements.errormessage);
-            })
+                showElement(elements.deleteErrormessage);
+            }
         }
         
         // -- エラーメッセージ表示 --
@@ -180,12 +174,36 @@
                 menubutton: document.getElementById(`menu-${postId}`),
                 contentbody: document.getElementById(`post-detailbody-${postId}`),
                 editarea : document.getElementById(`edit-area-${postId}`),
+                editdErrormessage:document.getElementById(`edit_error_message-${postId}`),
                 edittextarea:document.getElementById(`edit-content-${postId}`),
                 editstudytime:document.getElementById(`edit-study-time-input-${postId}`),
                 deleteconfirm:document.getElementById(`deleteconfirm-${postId}`),
-                errormessage:document.getElementById(`confirm_error_message-${postId}`),
+                deleteErrormessage:document.getElementById(`confirm_error_message-${postId}`),
                 csrfToken:document.querySelector('input[name="csrf_token"]')
                 }
+        }
+
+        // -- POSTリクエスト --
+        async function postRequest(url, csrfToken, body=null) {
+            const options ={
+                method: "post",                                         // postリクエスト
+                credentials:"same-origin",                              // 資格情報
+                headers:{
+                    "Content-Type" : "application/json",                // JSON形式で
+                    "X-CSRF-Token" : `${csrfToken}`                     // csrfトークン設定
+                }                
+            }
+            // bodyがある場合のみ
+            if(body){
+                options.body = JSON.stringify(body);
+            }
+
+            console.log("fetchオプション:", options); // bodyキーがあるか確認
+
+            const response =  await fetch(url,options)
+            const data = await response.json();
+
+            return {response, data};   
         }
 
         // -- 表示 --
