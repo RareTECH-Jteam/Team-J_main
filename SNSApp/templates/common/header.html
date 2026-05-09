@@ -6,7 +6,9 @@
     </div>
 
         {% if session.get('user_id') %}
-        <a class="logout" href="{{ url_for('auth.logout')}}">ログアウト</a>
+        <div class="logout-area">
+            <a class="logout" href="{{ url_for('auth.logout')}}">ログアウト</a>
+        </div>
         {% endif %}
 
 </header>
