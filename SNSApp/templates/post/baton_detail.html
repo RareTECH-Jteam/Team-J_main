@@ -70,7 +70,7 @@
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> <!-- なりすましリクエスト防止（CSRF対策） -->
                 <label for="select-task" class="select-title">バトンを選ぶ</label> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
                 <select name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ -->
-                    {% for task in tasks}
+                    {% for task in tasks %}
                     <option class="task"> <!-- プルダウンメニューで選択後、改行できない（横幅限られているので途中までしか表示できない）ため、タスクはMax25文字で！！ -->
                         {{ task }}
                     </option>
