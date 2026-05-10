@@ -5,6 +5,10 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}">
 {% endblock %}
 
+{% block scripts %}
+<script src="{{url_for('static', filename='js/post.js')}}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="page">
     <main>
