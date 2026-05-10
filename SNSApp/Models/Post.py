@@ -137,7 +137,7 @@ class Post:
             with conn.cursor() as cur:
                 sql = """SELECT SUM(TIME_TO_SEC(study_time)) DIV 3600 AS hours,
                                 SUM(TIME_TO_SEC(study_time)) MOD 3600 DIV 60 AS minutes
-                                FROM posts WHERE user_id = %s;"""
+                                FROM posts WHERE user_id = %s AND deleted_at IS NULL;"""
                 cur.execute(sql, (user_id,))
                 all_study = cur.fetchone()
             return all_study
