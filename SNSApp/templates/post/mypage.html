@@ -56,12 +56,12 @@
                     </div>
                     <div class="post-study-time"  id="post-study-time-{{post.id}}">
                         勉強時間：
-                        {% if hours and minutes %}
-                            {{ hours }}時間{{ minutes }}分
-                        {% elif hours %}
-                            {{ hours }}時間
+                        {% if post.hours and post.minutes %}
+                            {{ post.hours }}時間{{ post.minutes }}分
+                        {% elif post.hours %}
+                            {{ post.hours }}時間
                         {% else %}
-                            {{ minutes }}分
+                            {{ post.minutes }}分
                         {% endif %}      
                     </div>
                     <div class="post-footer">
