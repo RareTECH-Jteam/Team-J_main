@@ -37,8 +37,8 @@
 
 .post-card {
     flex: 1;
-    padding: 16px;
-    margin: 4px 16px 8px 16px; /* トグルと近づけるため、topのマージンを4に。ちなみに順番は上右した左。 */
+    padding: 8px 16px;
+    margin: 4px 8px 8px 8px; /* トグルと近づけるため、topのマージンを4に。ちなみに順番は上右した左。 */
     background-color: #F3F3F3;
 }
 
@@ -84,7 +84,7 @@
     /* display: inline-block; */ /*　これはなくても大丈夫そう */
     display: flex;
     justify-content: flex-end; /* これで右側に寄せる */
-    margin-right: 15px ; /* 投稿の枠右端に手動で無理矢理合わせてます！ */
+    margin-right: 7px ; /* 投稿の枠右端に手動で無理矢理合わせてます！ */
 }
 
 .menu-btn{
@@ -201,13 +201,13 @@
     flex-direction: column;
     align-items: stretch;
     gap: 12px; /* 間の余白 */
-    padding: 16px;
+    padding: 8px 16px;
     bottom: 8px;
     left: 8px;
     right: 8px;
-    margin: 8px 16px; /* 箱の大きさ調整 */
+    margin: 8px 8px; /* 箱の大きさ調整 */
     justify-content: space-between;
-    background-color:#F3F3F3
+    background-color:#F3F3F3;
 }
 
 .new-post textarea {
@@ -215,9 +215,8 @@
     min-height: 32px;
     border: none;
     resize: none;
-    font-size: 16px;
+    font-size: 12px;
     background-color: #F3F3F3;
-    padding: 8px;
     padding-bottom: 32px;
 }
 
