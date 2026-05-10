@@ -30,7 +30,7 @@
 .title-image {
     min-height: 112px;
     position: absolute; /* 画像だけアライメントしないで絶対値で位置決める */
-    left: -48px; /* .page-title の左から120px となる */
+    left: -40px; /* .page-title の左から120px となる */
     margin-right: 12px
 }
 
@@ -45,6 +45,7 @@
 }
 
 .task-arrived {
+    margin: 0px 8px;
     background-color: #FFCC00;
 }
 
@@ -88,7 +89,7 @@
     text-align: left;
     max-width: 393px;
     min-height: 100px;
-    margin: 16px auto;
+    margin: 16px 8px;
     padding: 8px 8px; /* ”バトンを選ぶ”の文字列との距離を空けるため */
     background-color:#F3F3F3;
     gap: 16px;
@@ -122,7 +123,7 @@
 
 /* バトン送信ボタンの色や形状調整 */
 .send-task-btn {
-    margin-right: 16px;
+    margin-right: 8px; /* バトン完了ボタンと右端揃える。.new-task-mainのpaddingの分、これが必要になった */
     margin-top: 16px;
     margin-bottom: 16px;
     background-color:#00C3D0;
