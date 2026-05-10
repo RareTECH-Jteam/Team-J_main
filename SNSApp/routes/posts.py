@@ -31,17 +31,15 @@ def mypage_view():
     for post in all_posts:
         post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
         post['user_name'] = User.get_name_by_id(post['user_id'])
-        
-        if post['study_time']: # 勉強時間が入力されている場合　(投稿には必ずつけるかな…？)
-            post_time = post['study_time'].total_seconds() # 入力された勉強時間を秒数にする
-            post_hours = int(post_time // 3600) #時間に直す
-            post_minutes = int((post_time % 3600) // 60) #余ったものを分にする
-            post['hours'] = post_hours # hoursに時間を
-            post['minutes'] = post_minutes # minutesに分を
-        else: # 勉強時間が入力されずに投稿されたときの対策
-            post['hours'] = 0 
-            post['minutes'] = 0
+        study_time = Post. time_to_minutes(post['study_time'])
+        post['hours'] =   study_time // 60
+        post['minutes'] = study_time % 60
 
+        # post_time = post['study_time'].total_seconds() # 入力された勉強時間を秒数にする
+        # post_hours = int(post_time // 3600) #時間に直す
+        # post_minutes = int((post_time % 3600) // 60) #余ったものを分にする
+        # post['hours'] = post_hours # hoursに時間を
+        # post['minutes'] = post_minutes # minutesに分を
 
     return render_template('post/mypage.html',
                             user_name=username, 
