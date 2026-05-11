@@ -23,12 +23,17 @@
 
     socket.on('connect', function() {
         // 接続完了後にサーバーに未読確認を依頼
-        socket.emit('check_unread');
+        //socket.emit('check_unread');
     });
 
 
     // サーバーからお知らせがあったら、表示する
     socket.on('notification', function(data) {
         notyf.open({type: 'info', message: data.message});
-    });    
+
+        // 文字列ではなく、オブジェクトとして送る
+        // socket.emit('notification_received', {
+        //     baton_id: data.baton_id
+        // });
+    });
 

@@ -57,23 +57,20 @@ def on_connect():
     user_id = SM.get_user_id()
     join_room(str(user_id))
 
-
-# クライアントから「未読確認（check_unread）」がリクエストされた場合
-@socketio.on('check_unread')
-def check_unread():
-    # 下記テスト用 最終的にはBatonのbatonappを見て、自分に届いたバトンで未通知のものを取得するようにする
-    
-    """
-    クライアントからの未読確認リクエストを処理
-    1. セッションから現在のユーザーIDを取得
-    2. 対象ユーザー専用のルーム（Room）に対して通知を送信
-    """
-
-    # ログイン中のユーザーIDを取得
-    user_id = SM.get_user_id()
-    
     # クライアントにお知らせを投げ返す
-    socketio.emit('notification', {'message': 'バトンが渡されました！\r\n確認してみよう！'}, room=str(user_id))
+    socketio.emit('notification'
+                  , {'message': 'バトンが渡されました！\r\n確認してみよう！'}
+                  , room=str(user_id))    
+
+
+
+# -- 通知が届いた場合、Batonを通知済みにする --
+# @socketio.on('notification_received')
+# def notification_received(data):
+#     baton_idが本当にユーザーIDのものなのか、チェックすること
+#     baton_id = data.get('batonid')
+#     if baton_id:
+        # Baton.mark_as_read(data['batonid'])
 
 
 @app.errorhandler(400)
