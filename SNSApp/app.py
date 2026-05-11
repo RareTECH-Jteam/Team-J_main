@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, render_template, session, url_for
-from flask_socketio import join_room
+from flask_socketio import join_room,emit
 from extensions import socketio
 from flask_wtf.csrf import CSRFProtect
 from datetime import timedelta
@@ -58,10 +58,29 @@ def on_connect():
     join_room(str(user_id))
 
     # クライアントにお知らせを投げ返す
-    socketio.emit('notification'
-                  , {'message': 'バトンが渡されました！\r\n確認してみよう！'}
-                  , room=str(user_id))    
+    emit('notification'
+        , {'message': 'バトンが渡されました！\r\n確認してみよう！'}
+        , room=str(user_id))    
 
+
+# クライアントから「未読確認（check_unread）」がリクエストされた場合
+# @socketio.on('check_unread')
+# def check_unread():
+#     # 下記テスト用 最終的にはBatonのbatonappを見て、自分に届いたバトンで未通知のものを取得するようにする
+    
+#     """
+#     クライアントからの未読確認リクエストを処理
+#     1. セッションから現在のユーザーIDを取得
+#     2. 対象ユーザー専用のルーム（Room）に対して通知を送信
+#     """
+
+#     # ログイン中のユーザーIDを取得
+#     user_id = SM.get_user_id()
+    
+#     # クライアントにお知らせを投げ返す
+#     socketio.emit('notification'
+#                   , {'message': 'バトンが渡されました！\r\n確認してみよう！'}
+#                   , room=str(user_id))
 
 
 # -- 通知が届いた場合、Batonを通知済みにする --
@@ -71,6 +90,8 @@ def on_connect():
 #     baton_id = data.get('batonid')
 #     if baton_id:
         # Baton.mark_as_read(data['batonid'])
+
+
 
 
 @app.errorhandler(400)
