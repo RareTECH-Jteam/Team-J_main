@@ -40,7 +40,6 @@ def baton_send():
     
     sender_id = SM.get_user_id()
     task_id = request.form.get('task_id')
-    content = request.form.get('content')
 
     #自分以外のユーザID取得
     users = Baton.get_receiver(sender_id)
@@ -54,5 +53,5 @@ def baton_send():
     receiver_id = receiver['id']
 
     #バトン作成
-    Baton.create(sender_id, receiver_id, task_id, content)
+    Baton.create(sender_id, receiver_id, task_id,)
     return '', 204  # 何も返さない（画面遷移なし）
