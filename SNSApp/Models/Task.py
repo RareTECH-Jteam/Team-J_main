@@ -24,3 +24,25 @@ class Task:
 
         finally: #何があっても最後に実行する
             db_pool.release(conn) #借りたものをプールに返却
+
+
+    @classmethod
+    #未完バトン取得
+    def get_content_by_id(cls, task_id):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = """ SELECT  content 
+                          FROM tasks
+                          WHERE 1 = 1
+                          AND id = %s;
+                """
+                cur.execute(sql, (task_id,))
+                task = cur.fetchone()
+                return task['content']
+        except pymysql.Error as e:
+            print(f"エラーが発生:{e}")
+            abort(500)
+        finally:
+            db_pool.release(conn)
