@@ -94,7 +94,7 @@ class Baton:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = """SELECT users.id FROM LEFT JOIN Baton ON users.id = Baton.receiver_id AND status = 1 
+                sql = """SELECT users.id FROM users LEFT JOIN Baton ON users.id = Baton.receiver_id AND status = 1 
                          WHERE users.id != %s AND Baton.receiver_id IS NULL;"""
                 cur.execute(sql,(user_id,))
                 return cur.fetchall()
