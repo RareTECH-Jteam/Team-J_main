@@ -40,10 +40,14 @@
                         <div class="task-sender">
                             {{ sender_name }}さんからバトンが届いたよ！
                         </div>
-                        <div class="task-send-time">{{ created_at }}</div>
+                        <div class="mytask-time">
+                            <div class="task-send-time">{{ created_at }}</div>
+                            <div class="task-limit">★締め切りまであと23時間09分{{ task_limit }}!!★ </div> 
+                        </div>
+                        
                     </div>
                     <div class="task-body" id="task-detailbody-{{ task_id }}">
-                        {{ task.content }}
+                        「 {{ task.content }} 」
                     </div>
                     {% else %}
                     <div class="empty">
@@ -66,7 +70,7 @@
         <section class="new-task">
             <form class="new-task-main" action="/baton" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> <!-- なりすましリクエスト防止（CSRF対策） -->
-                <label for="select-task" class="select-title">バトンを選ぶ</label> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
+                <label for="select-task" class="select-title">バトンを選ぶ</label><br> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
                 <select name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ -->
                     {% for task in tasks %}
                     <option class="task" value="{{ task.id }}"> <!-- プルダウンメニューで選択後、改行できない（横幅限られているので途中までしか表示できない）ため、タスクはMax25文字で！！ -->
