@@ -14,8 +14,8 @@ class Baton:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql =  "INSERT INTO Batons (sender_id, receiver_id, task_id, content) VALUES (%s, %s, %s, %s);"
-                cur.execute(sql(sender_id, receiver_id, task_id, content))
+                sql =  "INSERT INTO Baton (sender_id, receiver_id, task_id, content) VALUES (%s, %s, %s, %s);"
+                cur.execute(sql,(sender_id, receiver_id, task_id, content))
                 conn.commit()
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
@@ -84,6 +84,24 @@ class Baton:
             abort(500)
         finally:
             db_pool.release(conn)
+    
+    @classmethod
+    #自分以外のバトン完了してる人を取得
+    #バトンの送り先を選別するため
+    def get_receiver(cls,user_id):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT users.id FROM LEFT JOIN Baton ON users.id = Baton.receiver_id AND status = 1 WHERE users.id != %s;"
+                cur.execute(sql,(user_id,))
+                return cur.fetchall()
+        except pymysql.Error as e:
+            print(f"エラーが発生:{e}")
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
     
     # @classmethod
     # #未完、完了、失敗バトンまとめたもの
