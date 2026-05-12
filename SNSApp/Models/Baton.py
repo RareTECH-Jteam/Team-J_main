@@ -14,7 +14,7 @@ class Baton:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql =  "INSERT INTO Baton (sender_id, receiver_id, task_id,) VALUES (%s, %s, %s,);"
+                sql =  "INSERT INTO Baton (sender_id, receiver_id, task_id) VALUES (%s, %s, %s);"
                 cur.execute(sql,(sender_id, receiver_id, task_id,))
                 conn.commit()
                 return cur.lastrowid
@@ -73,13 +73,13 @@ class Baton:
                             , Baton.content 
                             , Baton.status
                             , Baton.created_at
-                            , DATE_ADD(created_at ,  INTERVAL 1 DAY) AS time_limit
+                            , DATE_ADD(Baton.created_at ,  INTERVAL 1 DAY) AS time_limit
                            FROM Baton 
                              INNER JOIN  users sender
                                on Baton.sender_id = sender.id
                                INNER JOIN users receiver
                                 on Baton.receiver_id = receiver.id
-                           WHERE status = 0 AND receiver_id = %s;
+                           WHERE Baton.status = 0 AND Baton.receiver_id = %s;
                 """
                 cur.execute(sql,(receiver_id,))
                 return cur.fetchall()

@@ -17,21 +17,23 @@ def baton_view():
         return redirect(url_for('auth.login_view'))
     
     tasks = Task.get_all() #Taskの内容をすべて拾ってくる
+    my_user_id = session.get('user_id') #今ログインしているIDを取得
+    incomplete_baton = Baton.get_by_incomplete_baton(my_user_id) #未完了バトンの確認
 
-    if tasks: #課題があれば
-        current_task = tasks[0] #最新の課題(taskの0番目)を引き出す
+    if incomplete_baton: #未完了課題があれば
+        current_task = incomplete_baton[0] #新しい未完バトンを引き出す
 
         return render_template(
             'post/baton_detail.html',
             task = current_task, #HTMLの{task.content}にぶち込む
             tasks = tasks,
-            baton=True, #HTMLの{% if baton %}をTrueにする
-            task_id=current_task['id'], #完了ボタンのID
-            sender_name="TestA", #一旦送り主をTestAと置きます… カミングスーン
-            created_at=current_task['created_at'] #届いた時間を入れる
+            baton=current_task, #HTMLの{% if baton %}をTrueにする
+            task_id=current_task['task_id'], #完了ボタンのID
+            sender_name=current_task['sender_name'], #sender_nameの取得
+            created_at=current_task['created_at']  #.strftime('%Y-%m-%d %H:%M') #届いた時間を入れる
         )
     else: #課題がないなら
-        return render_template('post/baton_detail.html',baton=False)
+        return render_template('post/baton_detail.html',baton=False,tasks=tasks)
 
 
 #バトン送信
