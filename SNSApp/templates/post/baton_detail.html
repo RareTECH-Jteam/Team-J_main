@@ -35,19 +35,21 @@
         <section class="task-arrived">
             <div class="mytask-card">
                 <div class="mytask-content">
-                    {% if baton %} <!-- 他の人からバトンが届いている場合、表示 -->
+                    {% if baton_incomplete %} <!-- 他の人からバトンが届いている場合、表示 -->
                     <div class="mytask-header">
                         <div class="task-sender">
-                            {{ sender_name }}さんからバトンが届いたよ！
+                            {{ baton_incomplete.sender_name }}さんからバトンが届いたよ！
                         </div>
                         <div class="mytask-time">
-                            <div class="task-send-time">{{ created_at }}</div>
-                            <div class="task-limit">★締め切りまであと23時間09分{{ task_limit }}!!★ </div> 
+                            <div class="task-send-time">{{ baton_incomplete.created_at }}</div>
+                            <div class="task-limit" data-taak-limit="{{baton_incomplete.task_limit}}">★締め切りまであと
+                                {{ baton_incomplete.task_limit }}!!★ 
+                            </div> 
                         </div>
                         
                     </div>
-                    <div class="task-body" id="task-detailbody-{{ task_id }}">
-                        「 {{ task.content }} 」
+                    <div class="task-body" id="task-detailbody-{{ baton_incomplete.task_id }}">
+                        「 {{ baton_incomplete.task.content }} 」
                     </div>
                     {% else %}
                     <div class="empty">
@@ -68,7 +70,7 @@
 
         <!-- バトンを作成フォーム -->
         <section class="new-task">
-            <form class="new-task-main" action="/baton" method="post">
+            <form class="new-task-main" action="/baton/send" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> <!-- なりすましリクエスト防止（CSRF対策） -->
                 <label for="select-task" class="select-title">バトンを選ぶ</label><br> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
                 <select name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ -->
