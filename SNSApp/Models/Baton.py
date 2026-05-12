@@ -17,6 +17,7 @@ class Baton:
                 sql =  "INSERT INTO Baton (sender_id, receiver_id, task_id,) VALUES (%s, %s, %s,);"
                 cur.execute(sql,(sender_id, receiver_id, task_id,))
                 conn.commit()
+                return cur.lastrowid
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
             abort(500)
@@ -93,7 +94,8 @@ class Baton:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SELECT users.id FROM LEFT JOIN Baton ON users.id = Baton.receiver_id AND status = 1 WHERE users.id != %s;"
+                sql = """SELECT users.id FROM LEFT JOIN Baton ON users.id = Baton.receiver_id AND status = 1 
+                         WHERE users.id != %s AND Baton.receiver_id IS NULL;"""
                 cur.execute(sql,(user_id,))
                 return cur.fetchall()
         except pymysql.Error as e:
