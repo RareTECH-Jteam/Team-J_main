@@ -158,7 +158,7 @@ class Baton:
                 sql = """UPDATE Baton
                              SET status = 2
                          WHERE 1 = 1
-                         AND TIMESTAMPDIFF('hour' , created_at , NOW()) >= 24
+                         AND TIMESTAMPDIFF(HOUR , created_at , NOW()) >= 24
                          AND status = 0;
                      """
                 cur.execute(sql)

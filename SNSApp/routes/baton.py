@@ -16,21 +16,30 @@ def baton_view():
         # ログインページ表示
         return redirect(url_for('auth.login_view'))
     
-    tasks = Task.get_all() #Taskの内容をすべて拾ってくる
-    my_user_id = session.get('user_id') #今ログインしているIDを取得
-    incomplete_baton = Baton.get_by_incomplete_baton(my_user_id) #未完了バトンの確認
+    user_id = SM.get_user_id() #自分のIDを入手
+    Baton.update_expired_status() #バトンの期限切れチェック
 
+    tasks = Task.get_all() #Taskの内容をすべて拾ってくる
+    incomplete_baton = Baton.get_by_incomplete_baton(user_id) #未完了バトンの確認
+    history_tasks = Baton.get_completed_and_failed(user_id) #過去の履歴確認
+
+    #history_tasksの箱からstatusが1なら成功、2なら失敗のリストを作成する
+    complete_tasks = [t for t in history_tasks if t['status'] ==1]
+    fail_tasks = [t for t in history_tasks if t['status'] ==2]
+
+    current_task = None
     if incomplete_baton: #未完了課題があれば
         current_task = incomplete_baton[0] #新しい未完バトンを引き出す
+        current_task['formatted_date'] = current_task['created_at'].strftime('%Y-%m-%d %H:%M') #日付作成
 
         return render_template(
             'post/baton_detail.html',
             task = current_task, #HTMLの{task.content}にぶち込む
-            tasks = tasks,
+            tasks=tasks,
             baton=current_task, #HTMLの{% if baton %}をTrueにする
-            task_id=current_task['task_id'], #完了ボタンのID
-            sender_name=current_task['sender_name'], #sender_nameの取得
-            created_at=current_task['created_at']  #.strftime('%Y-%m-%d %H:%M') #届いた時間を入れる
+            complete_tasks=complete_tasks, #成功バトン履歴
+            fail_tasks=fail_tasks, #失敗バトン履歴
+            user_id=user_id 
         )
     else: #課題がないなら
         return render_template('post/baton_detail.html',baton=False,tasks=tasks)
