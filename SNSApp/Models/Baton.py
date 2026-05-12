@@ -14,7 +14,7 @@ class Baton:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql =  "INSERT INTO Baton (sender_id, receiver_id, task_id,) VALUES (%s, %s, %s,);"
+                sql =  "INSERT INTO Baton (sender_id, receiver_id, task_id) VALUES (%s, %s, %s);"
                 cur.execute(sql,(sender_id, receiver_id, task_id,))
                 conn.commit()
                 return cur.lastrowid
@@ -114,8 +114,8 @@ class Baton:
                                INNER JOIN users receiver
                                 on Baton.receiver_id = receiver.id
                            WHERE 1 = 1
-                           AND  status = 0 
-                           AND receiver_id = %s;
+                           AND  Baton.status = 0 
+                           AND Baton.receiver_id = %s;
                 """
                 cur.execute(sql,(receiver_id,))
                 return cur.fetchone()

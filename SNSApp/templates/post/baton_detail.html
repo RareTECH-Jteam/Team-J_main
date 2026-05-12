@@ -99,7 +99,10 @@
                 <div class="content">
                     {% if complete_tasks %}
                         {% for complete_task in complete_tasks %}
-                            {{ task_body }}
+                            <div class="history-item">
+                                <p><strong>{{ complete_task.sender_name }}</strong> さんからのバトン</p>
+                                <p>内容：{{ complete_task.content }}</p>
+                            <hr> </div>
                         {% endfor %}
                     {% else %}
                         <div class="empty">
@@ -115,7 +118,10 @@
                 <div class="content">
                     {% if fail_tasks %}
                         {% for fail_task in fail_tasks %}
-                            {{ task_body }}
+                            <div class="history-item">
+                                <p><strong>{{ fail_task.sender_name }}</strong> さんからのバトン</p>
+                                <p>内容：{{ fail_task.content }}</p>
+                            <hr> </div>
                         {% endfor %}
                     {% else %}
                         <div class="empty">
