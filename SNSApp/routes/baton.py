@@ -47,7 +47,7 @@ def baton_send():
 
     if not users:
         flash('バトンの送り先がありません。')
-        #return redirect(url_for('baton.baton_view'))
+        return '', 204  # 何も返さない（画面遷移なし）
     
     #ランダムに１人を選択
     receiver = random.choice(users)
@@ -55,4 +55,4 @@ def baton_send():
 
     #バトン作成
     Baton.create(sender_id, receiver_id, task_id, content)
-    return redirect(url_for('baton.baton_view'))
+    return '', 204  # 何も返さない（画面遷移なし）
