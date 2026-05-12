@@ -5,6 +5,7 @@ from Models.Comment import Comment
 from Models.Baton import Baton
 from Models.Task import Task #Models/Taskから「Task」と名の付くクラスを引っ張ってくる
 from util.SessionManager import SessionManager as SM
+import random
 
 baton = Blueprint('baton', __name__)
 
@@ -23,6 +24,7 @@ def baton_view():
         return render_template(
             'post/baton_detail.html',
             task = current_task, #HTMLの{task.content}にぶち込む
+            tasks = tasks,
             baton=True, #HTMLの{% if baton %}をTrueにする
             task_id=current_task['id'], #完了ボタンのID
             sender_name="TestA", #一旦送り主をTestAと置きます… カミングスーン
