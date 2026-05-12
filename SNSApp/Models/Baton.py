@@ -25,14 +25,64 @@ class Baton:
             db_pool.release(conn)
     
     
+    # @classmethod
+    # #完了バトン取得
+    # def get_by_complete_baton(cls, receiver_id):
+    #     conn = db_pool.get_conn()
+    #     conn.ping(reconnect=True)
+    #     try:
+    #         with conn.cursor() as cur:
+    #             sql = "SELECT receiver_id, task_id, content FROM Baton WHERE status = 1 AND receiver_id = %s;"
+    #             cur.execute(sql,(receiver_id,))
+    #             return cur.fetchall()
+    #     except pymysql.Error as e:
+    #         print(f"エラーが発生:{e}")
+    #         abort(500)
+    #     finally:
+    #         db_pool.release(conn)
+    
+    # @classmethod
+    # #失敗バトン取得
+    # def get_by_failure_baton(cls, receiver_id):
+    #     conn = db_pool.get_conn()
+    #     conn.ping(reconnect=True)
+    #     try:
+    #         with conn.cursor() as cur:
+    #             sql = "SELECT receiver_id, task_id, content FROM Baton WHERE status = 2 AND receiver_id = %s;"
+    #             cur.execute(sql,(receiver_id,))
+    #             return cur.fetchall()
+    #     except pymysql.Error as e:
+    #         print(f"エラーが発生:{e}")
+    #         abort(500)
+    #     finally:
+    #         db_pool.release(conn)
+    
+
     @classmethod
-    #完了バトン取得
-    def get_by_complete_baton(cls, receiver_id):
+    #完了、失敗バトン取得
+    def get_completed_and_failed(cls, receiver_id):
         conn = db_pool.get_conn()
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SELECT receiver_id, task_id, content FROM Baton WHERE status = 1 AND receiver_id = %s;"
+                sql = """ SELECT 
+                              sender.id AS sender_id 
+                            , sender.name AS sender_name
+                            , receiver.id AS receiver_id 
+                            , receiver.name AS receiver_name
+                            , Baton.task_id 
+                            , Baton.content 
+                            , Baton.status
+                            , Baton.created_at
+                           FROM Baton 
+                             INNER JOIN  users sender
+                               on Baton.sender_id = sender.id
+                               INNER JOIN users receiver
+                                on Baton.receiver_id = receiver.id
+                           WHERE 1 = 1
+                           AND Baton.status IN(1, 2) 
+                           AND receiver_id = %s;
+                """
                 cur.execute(sql,(receiver_id,))
                 return cur.fetchall()
         except pymysql.Error as e:
@@ -40,23 +90,7 @@ class Baton:
             abort(500)
         finally:
             db_pool.release(conn)
-    
-    @classmethod
-    #失敗バトン取得
-    def get_by_failure_baton(cls, receiver_id):
-        conn = db_pool.get_conn()
-        conn.ping(reconnect=True)
-        try:
-            with conn.cursor() as cur:
-                sql = "SELECT receiver_id, task_id, content FROM Baton WHERE status = 2 AND receiver_id = %s;"
-                cur.execute(sql,(receiver_id,))
-                return cur.fetchall()
-        except pymysql.Error as e:
-            print(f"エラーが発生:{e}")
-            abort(500)
-        finally:
-            db_pool.release(conn)
-    
+
     @classmethod
     #未完バトン取得
     def get_by_incomplete_baton(cls, receiver_id):
@@ -79,7 +113,9 @@ class Baton:
                                on Baton.sender_id = sender.id
                                INNER JOIN users receiver
                                 on Baton.receiver_id = receiver.id
-                           WHERE status = 0 AND receiver_id = %s;
+                           WHERE 1 = 1
+                           AND  status = 0 
+                           AND receiver_id = %s;
                 """
                 cur.execute(sql,(receiver_id,))
                 return cur.fetchall()
