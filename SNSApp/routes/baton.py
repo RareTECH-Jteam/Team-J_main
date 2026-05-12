@@ -30,3 +30,29 @@ def baton_view():
         )
     else: #課題がないなら
         return render_template('post/baton_detail.html',baton=False)
+
+
+#バトン送信
+@baton.route('/baton/send', methods=['POST'])
+def baton_send():
+    if not SM.is_live_session():
+        return redirect(url_for('auth.login_view'))
+    
+    sender_id = SM.get_user_id()
+    task_id = request.form.get('task_id')
+    content = request.form.get('content')
+
+    #自分以外のユーザID取得
+    users = Baton.get_receiver(sender_id)
+
+    if not users:
+        flash('バトンの送り先がありません。')
+        #return redirect(url_for('baton.baton_view'))
+    
+    #ランダムに１人を選択
+    receiver = random.choice(users)
+    receiver_id = receiver['id']
+
+    #バトン作成
+    Baton.create(sender_id, receiver_id, task_id, content)
+    return redirect(url_for('baton.baton_view'))
