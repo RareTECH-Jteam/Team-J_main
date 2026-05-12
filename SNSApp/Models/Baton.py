@@ -148,6 +148,29 @@ class Baton:
         finally:
             db_pool.release(conn)
 
+    #24時間経ったもの取得する
+    @classmethod
+    def get_expired_batons(cls):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = """SELECT
+                           receiver_id
+                         FROM
+                             Baton
+                         WHERE 1 = 1
+                         AND TIMESTAMPDIFF(HOUR , created_at , NOW()) >= 24
+                         AND status = 0;
+                     """
+                cur.execute(sql)
+                return cur.fetchall()
+        except pymysql.Error as e:
+            print(f"エラーが発生:{e}")
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
     #24時間経ったものを失敗にする
     @classmethod
     def update_expired_status(cls):
