@@ -55,5 +55,5 @@ def baton_send():
     receiver_id = receiver['id']
 
     #バトン作成
-    Baton.create(sender_id, receiver_id, task_id,)
+    baton_id = Baton.create(sender_id, receiver_id, task_id,)
     return '', 204  # 何も返さない（画面遷移なし）
