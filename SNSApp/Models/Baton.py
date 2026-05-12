@@ -107,7 +107,7 @@ class Baton:
                             , Baton.content 
                             , Baton.status
                             , Baton.created_at
-                            , DATE_ADD(created_at ,  INTERVAL 1 DAY) AS time_limit
+                            , DATE_ADD(Baton.created_at ,  INTERVAL 1 DAY) AS time_limit
                            FROM Baton 
                              INNER JOIN  users sender
                                on Baton.sender_id = sender.id
@@ -118,7 +118,7 @@ class Baton:
                            AND receiver_id = %s;
                 """
                 cur.execute(sql,(receiver_id,))
-                return cur.fetchall()
+                return cur.fetchone()
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
             abort(500)
@@ -158,7 +158,7 @@ class Baton:
                 sql = """UPDATE Baton
                              SET status = 2
                          WHERE 1 = 1
-                         AND TIMESTAMPDIFF('hour' , created_at , NOW()) >= 24
+                         AND TIMESTAMPDIFF(HOUR , created_at , NOW()) >= 24
                          AND status = 0;
                      """
                 cur.execute(sql)
