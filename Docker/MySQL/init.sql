@@ -71,6 +71,11 @@ CREATE TABLE
         updated_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+-- チェーン管理テーブル
+CREATE TABLE chain (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+)ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE 
     Baton (
@@ -92,18 +97,13 @@ CREATE TABLE
         KEY idx_baton_sender_id   (sender_id),
         KEY idx_baton_receiver_id (receiver_id),
         KEY idx_baton_task_id     (task_id),
-        KEY idx_baton_chain_id    (chain_id)
+        KEY idx_baton_chain_id    (chain_id),
+        KEY idx_baton_created_at  (created_at),
         CONSTRAINT fk_baton_sender   FOREIGN KEY (sender_id)   REFERENCES users (id),
         CONSTRAINT fk_baton_receiver FOREIGN KEY (receiver_id) REFERENCES users (id),
         CONSTRAINT fk_baton_task     FOREIGN KEY (task_id)     REFERENCES tasks (id),
         CONSTRAINT fk_chain_id       FOREIGN KEY (chain_id)    REFERENCES chain (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
--- チェーン管理テーブル
-CREATE TABLE chain (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    created_at DATETIME DEFAULT NOW()
-)ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- バトン予約テーブル
 CREATE TABLE baton_queues (
@@ -112,8 +112,11 @@ CREATE TABLE baton_queues (
     sender_id BIGINT UNSIGNED NOT NULL,
     chain_id BIGINT UNSIGNED NOT NULL,
     relay_count BIGINT UNSIGNED NOT NULL,
-    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
-);
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    KEY idx_baton_queues_sender_id   (sender_id),
+    KEY idx_baton_queues_chain_id   (chain_id),
+    KEY idx_baton_queues_created_at   (created_at)
+)ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 /* バトンID(旧式)
 CREATE TABLE
@@ -243,6 +246,9 @@ VALUES
 ('1分だけタイマーなしで集中してみて感想書け') ,
 ('今の気分で一番マシな教科に1秒触れろ（開くだけOK）') ;
 
-INSERT INTO Baton (sender_id, receiver_id, task_id,content,status)
+
+INSERT INTO chain(id) VALUES(1);
+
+INSERT INTO Baton (baton_title,sender_id, receiver_id, task_id,content,chain_id,relay_count,status)
 VALUES
-    (2, 1, 1, '今日授業で習ったこと、1つ教えて！', 0)
+    ('レジェンドバトン！', 2, 1, 1, '今日授業で習ったこと、1つ教えて！', 1, 1, 0);
