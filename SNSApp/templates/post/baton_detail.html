@@ -41,7 +41,7 @@
                             {{ baton_incomplete.sender_name }}さんからバトンが届いたよ！
                         </div>
                         <div class="mytask-time">
-                            <div class="task-send-time">{{ baton_incomplete.created_at }}</div>
+                            <div class="task-send-time">{{ baton_incomplete.formatted_date }}</div>
                             <div class="task-limit" data-taak-limit="{{baton_incomplete.task_limit}}">★締め切りまであと
                                 {{ baton_incomplete.task_limit }}!!★ 
                             </div> 
@@ -49,7 +49,7 @@
                         
                     </div>
                     <div class="task-body" id="task-detailbody-{{ baton_incomplete.task_id }}">
-                        「 {{ baton_incomplete.task.content }} 」
+                        「 {{ baton_incomplete.content }} 」
                     </div>
                     {% else %}
                     <div class="empty">
@@ -78,9 +78,6 @@
                     <option class="task" value="{{ task.id }}"> <!-- プルダウンメニューで選択後、改行できない（横幅限られているので途中までしか表示できない）ため、タスクはMax25文字で！！ -->
                         {{ task.content }}
                     </option>
-                    <option class="task"> <!-- プルダウン確認用の仮コード -->
-                        今の気分で一番マシな教科に1秒触れろ（開くだけOK） <!-- プルダウン確認用の仮コード -->
-                    </option> <!-- プルダウン確認用の仮コード -->
                     {% endfor %}
                 </select>
                 <div class="send-task">
