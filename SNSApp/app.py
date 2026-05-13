@@ -8,12 +8,14 @@ from flask_socketio import join_room,emit
 from extensions import socketio
 from flask_wtf.csrf import CSRFProtect
 from datetime import timedelta
+from Models.Baton import Baton
 from routes.auth import auth
 from routes.posts import posts
 from routes.baton import baton
 from util.SessionManager import SessionManager as SM
 import uuid
 import os
+from services import services
 
 # 定数定義
 SESSION_DAYS = 30
@@ -59,13 +61,39 @@ def index():
 def on_connect():
     if not SM.is_live_session():
         return    
+    
+    # ユーザーID取得
     user_id = SM.get_user_id()
+    
+    # ルームに参加させる
     join_room(str(user_id))
 
+    # 24時間経過したバトン取得（通知するため）
+    expired_batons = Baton.get_expired_batons()
+
+    if expired_batons:
+        # 失敗扱いにする
+        Baton.update_expired_status()
+        # ユーザーごとに、失敗メッセージを通知
+        for expired_baton in expired_batons:
+            emit('notification'
+                , {'message': 'バトン失敗・・・\r\n次は頑張ろう！'}
+                , room=str(expired_baton['receiver_id']))  
+            
+            # 失効した人の数だけ、予約バトンを誰かに割り当てるチャンスを作る
+            services.assign_waiting_baton_if_possible(exclude_user_id=0)
+
+    # バトンが渡されていた場合
+    current_task = Baton.get_by_incomplete_baton(user_id)
+    if current_task:
+        emit('notification'
+            , {'message': 'バトンが渡されました！\r\n確認してみよう！'}
+            , room=str(user_id))  
+
     # クライアントにお知らせを投げ返す
-    emit('notification'
-        , {'message': 'バトンが渡されました！\r\n確認してみよう！'}
-        , room=str(user_id))    
+    # emit('notification'
+    #     , {'message': 'バトンが渡されました！\r\n確認してみよう！'}
+    #     , room=str(user_id))    
 
 
 # クライアントから「未読確認（check_unread）」がリクエストされた場合
