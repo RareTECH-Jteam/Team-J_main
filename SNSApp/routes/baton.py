@@ -27,22 +27,17 @@ def baton_view():
     complete_tasks = [t for t in history_tasks if t['status'] ==1]
     fail_tasks = [t for t in history_tasks if t['status'] ==2]
 
-    current_task = None
     if incomplete_baton: #未完了課題があれば
-        current_task = incomplete_baton[0] #新しい未完バトンを引き出す
-        current_task['formatted_date'] = current_task['created_at'].strftime('%Y-%m-%d %H:%M') #日付作成
+        incomplete_baton['formatted_date'] = incomplete_baton['created_at'].strftime('%Y-%m-%d %H:%M') #日付作成
 
-        return render_template(
-            'post/baton_detail.html',
-            task = current_task, #HTMLの{task.content}にぶち込む
-            tasks=tasks,
-            baton=current_task, #HTMLの{% if baton %}をTrueにする
-            complete_tasks=complete_tasks, #成功バトン履歴
-            fail_tasks=fail_tasks, #失敗バトン履歴
-            user_id=user_id 
-        )
-    else: #課題がないなら
-        return render_template('post/baton_detail.html',baton=False,tasks=tasks)
+    return render_template(
+        'post/baton_detail.html',
+        tasks=tasks, #HTMLの{task.content}にぶち込む
+        baton_incomplete=incomplete_baton, #HTMLの{% if baton %}をTrueにする
+        complete_tasks=complete_tasks, #成功バトン履歴
+        fail_tasks=fail_tasks #失敗バトン履歴
+    )   
+
 
 
 #バトン送信
