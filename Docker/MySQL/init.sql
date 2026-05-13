@@ -75,10 +75,13 @@ CREATE TABLE
 CREATE TABLE 
     Baton (
         id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,           -- バトンID
+        baton_title VARCHAR(25) NOT NULL,                              -- バトンタイトル
         sender_id   BIGINT UNSIGNED NOT NULL,                          -- 送信者ID
         receiver_id BIGINT UNSIGNED NOT NULL,                          -- 受信者ID
         task_id     BIGINT UNSIGNED NOT NULL,                          -- 課題ID
         content     TEXT NOT NULL,                                     -- バトン内容
+        chain_id    BIGINT UNSIGNED NOT NULL,                          -- チェインID
+        relay_count BIGINT UNSIGNED NOT NULL,                          -- 今何人目か
         status      TINYINT NOT NULL DEFAULT 0,                        -- ステータス(0:未完了 1:完了 2:失敗)
         batonpop    BIT(1) NOT NULL DEFAULT 0,                         -- 通知フラグ(0:未通知 1:通知済み)
         get_at      DATETIME(6) DEFAULT NULL,                          -- 受け取り日時
@@ -89,10 +92,28 @@ CREATE TABLE
         KEY idx_baton_sender_id   (sender_id),
         KEY idx_baton_receiver_id (receiver_id),
         KEY idx_baton_task_id     (task_id),
+        KEY idx_baton_chain_id    (chain_id)
         CONSTRAINT fk_baton_sender   FOREIGN KEY (sender_id)   REFERENCES users (id),
         CONSTRAINT fk_baton_receiver FOREIGN KEY (receiver_id) REFERENCES users (id),
-        CONSTRAINT fk_baton_task     FOREIGN KEY (task_id)     REFERENCES tasks (id)
+        CONSTRAINT fk_baton_task     FOREIGN KEY (task_id)     REFERENCES tasks (id),
+        CONSTRAINT fk_chain_id       FOREIGN KEY (chain_id)    REFERENCES chain (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+-- チェーン管理テーブル
+CREATE TABLE chain (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    created_at DATETIME DEFAULT NOW()
+)ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+-- バトン予約テーブル
+CREATE TABLE baton_queues (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    baton_title VARCHAR(25) NOT NULL,
+    sender_id BIGINT UNSIGNED NOT NULL,
+    chain_id BIGINT UNSIGNED NOT NULL,
+    relay_count BIGINT UNSIGNED NOT NULL,
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+);
 
 /* バトンID(旧式)
 CREATE TABLE

@@ -6,6 +6,9 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}">
 {#<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}"> -->#}   <!--本実装時に両端の{##}とコメントアウトを消していただければOKです！-->
 {% endblock %}
+{% block scripts %}
+<script src="{{url_for('static', filename='js/mybaton.js')}}"></script>
+{% endblock %}
 
 {% block content %}
 <div class="page">
@@ -41,8 +44,8 @@
                             {{ baton_incomplete.sender_name }}さんからバトンが届いたよ！
                         </div>
                         <div class="mytask-time">
-                            <div class="task-send-time">{{ baton_incomplete.formatted_date }}</div>
-                            <div class="task-limit" data-taak-limit="{{baton_incomplete.task_limit}}">★締め切りまであと
+                            <div class="task-send-time">{{ baton_incomplete.created_at }}</div>
+                            <div class="task-limit" id="countDown" data-task-limit="{{baton_incomplete.task_limit}}">★締め切りまであと
                                 {{ baton_incomplete.task_limit }}!!★ 
                             </div> 
                         </div>
