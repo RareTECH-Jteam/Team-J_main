@@ -78,9 +78,6 @@
                     <option class="task" value="{{ task.id }}"> <!-- プルダウンメニューで選択後、改行できない（横幅限られているので途中までしか表示できない）ため、タスクはMax25文字で！！ -->
                         {{ task.content }}
                     </option>
-                    <option class="task"> <!-- プルダウン確認用の仮コード -->
-                        今の気分で一番マシな教科に1秒触れろ（開くだけOK） <!-- プルダウン確認用の仮コード -->
-                    </option> <!-- プルダウン確認用の仮コード -->
                     {% endfor %}
                 </select>
                 <div class="send-task">
