@@ -10,7 +10,7 @@
 }
 
 /* テキスト系をまとめてセンターアライン */
-.page-title, .total-study-time, .flash-messages, .new-post, .post-list {
+.page-title, .total-study-time, .flash-messages, .empty, .new-post, .post-list {
     text-align: center; 
 }
 
