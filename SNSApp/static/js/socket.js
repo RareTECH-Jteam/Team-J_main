@@ -32,8 +32,8 @@
         notyf.open({type: 'info', message: data.message});
 
         // 文字列ではなく、オブジェクトとして送る
-        // socket.emit('notification_received', {
-        //     baton_id: data.baton_id
-        // });
+        socket.emit('notification_received', {
+            baton_id: data.baton_id
+        });
     });
 
