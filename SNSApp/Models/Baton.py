@@ -99,7 +99,8 @@ class Baton:
         try:
             with conn.cursor() as cur:
                 sql = """ SELECT 
-                              sender.id AS sender_id 
+                              Baton.id
+                            , sender.id AS sender_id 
                             , sender.name AS sender_name
                             , receiver.id AS receiver_id 
                             , receiver.name AS receiver_name
@@ -107,6 +108,7 @@ class Baton:
                             , Baton.content 
                             , Baton.status
                             , Baton.created_at
+                            , Baton.batonpop
                             , DATE_ADD(Baton.created_at ,  INTERVAL 1 DAY) AS time_limit
                            FROM Baton 
                              INNER JOIN  users sender
@@ -264,3 +266,21 @@ class Baton:
             abort(500)
         finally:
             db_pool.release(conn)
+
+    @classmethod
+    # バトンチェーンを取得
+    def mark_as_read(cls, baton_id):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = """UPDATE  Baton SET batonpop = 1 
+                         WHERE id = %s
+                      """
+                cur.execute(sql,(baton_id,))
+                cur.commit()
+        except pymysql.Error as e:
+            print(f"エラーが発生:{e}")
+            abort(500)
+        finally:
+            db_pool.release(conn)        

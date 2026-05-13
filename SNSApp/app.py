@@ -81,50 +81,44 @@ def on_connect():
                 , room=str(expired_baton['receiver_id']))  
             
             # 失効した人の数だけ、予約バトンを誰かに割り当てるチャンスを作る
-            services.assign_waiting_baton_if_possible(exclude_user_id=0)
+            # services.assign_waiting_baton_if_possible(exclude_user_id=0)
 
     # バトンが渡されていた場合
     current_task = Baton.get_by_incomplete_baton(user_id)
-    if current_task:
+    
+    # 未通知の場合のみ
+    if current_task and current_task['batonpop'] == 0:
         emit('notification'
-            , {'message': 'バトンが渡されました！\r\n確認してみよう！'}
+            , {
+                'message': 'バトンが渡されました！\r\n確認してみよう！'
+               ,'baton_id':current_task['id']
+               }
             , room=str(user_id))  
-
-    # クライアントにお知らせを投げ返す
-    # emit('notification'
-    #     , {'message': 'バトンが渡されました！\r\n確認してみよう！'}
-    #     , room=str(user_id))    
-
-
-# クライアントから「未読確認（check_unread）」がリクエストされた場合
-# @socketio.on('check_unread')
-# def check_unread():
-#     # 下記テスト用 最終的にはBatonのbatonappを見て、自分に届いたバトンで未通知のものを取得するようにする
-    
-#     """
-#     クライアントからの未読確認リクエストを処理
-#     1. セッションから現在のユーザーIDを取得
-#     2. 対象ユーザー専用のルーム（Room）に対して通知を送信
-#     """
-
-#     # ログイン中のユーザーIDを取得
-#     user_id = SM.get_user_id()
-    
-#     # クライアントにお知らせを投げ返す
-#     socketio.emit('notification'
-#                   , {'message': 'バトンが渡されました！\r\n確認してみよう！'}
-#                   , room=str(user_id))
+ 
 
 
 # -- 通知が届いた場合、Batonを通知済みにする --
-# @socketio.on('notification_received')
-# def notification_received(data):
-#     baton_idが本当にユーザーIDのものなのか、チェックすること
-#     baton_id = data.get('batonid')
-#     if baton_id:
-        # Baton.mark_as_read(data['batonid'])
+@socketio.on('notification_received')
+def notification_received(data):
+    # セッション切れていたら、何もしない
+    if not SM.is_live_session():
+        return    
+    
+    # ログイン中のユーザーID取得
+    user_id = SM.get_user_id()
+    baton_id = data.get('baton_id')
+    print(baton_id)
 
+    if not baton_id:
+        return
 
+    # 既存のメソッドを使って、このユーザーの未完了バトンを取得
+    current_task = Baton.get_by_incomplete_baton(user_id)
+
+    print(current_task['id'])
+    
+    if current_task and current_task['id'] == baton_id:
+        Baton.mark_as_read(baton_id)
 
 
 @app.errorhandler(400)

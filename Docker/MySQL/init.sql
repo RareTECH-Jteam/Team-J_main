@@ -88,7 +88,7 @@ CREATE TABLE
         chain_id    BIGINT UNSIGNED NOT NULL,                          -- チェインID
         relay_count BIGINT UNSIGNED NOT NULL,                          -- 今何人目か
         status      TINYINT NOT NULL DEFAULT 0,                        -- ステータス(0:未完了 1:完了 2:失敗)
-        batonpop    BIT(1) NOT NULL DEFAULT 0,                         -- 通知フラグ(0:未通知 1:通知済み)
+        batonpop    TINYINT NOT NULL DEFAULT 0,                        -- 通知フラグ(0:未通知 1:通知済み)
         get_at      DATETIME(6) DEFAULT NULL,                          -- 受け取り日時
         release_at  DATETIME(6) DEFAULT NULL,                          -- 渡し日時
         created_at  DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), -- 作成日時
