@@ -15,6 +15,12 @@ if (countDown){
         // 時
         const hours = Math.floor(totalSeconds / 3600);
 
+        // 分
+        const minuts = Math.floor(totalSeconds % 3600 / 60);
+
+        // 秒
+        const seconds = Math.floor(totalSeconds % 60);
+
         countDown.textContent = `///締め切りまであと ${String(hours).padStart(2, '0')}:${String(minuts).padStart(2,'0')}:${String(seconds).padStart(2,'0')}///`;
 
         if(distanse < 0){

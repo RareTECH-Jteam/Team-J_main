@@ -252,7 +252,3 @@ INSERT INTO chain(id) VALUES(1);
 INSERT INTO Baton (baton_title,sender_id, receiver_id, task_id,content,chain_id,relay_count,status)
 VALUES
     ('レジェンドバトン！', 2, 1, 1, '今日授業で習ったこと、1つ教えて！', 1, 1, 0);
-
-INSERT INTO Baton (baton_title,sender_id, receiver_id, task_id,content,chain_id,relay_count,status)
-VALUES
-    ('レジェンドバトン！', 3, 2, 1, '今日授業で習ったこと、1つ教えて！', 1, 2, 0);

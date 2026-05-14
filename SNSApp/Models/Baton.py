@@ -66,12 +66,14 @@ class Baton:
             with conn.cursor() as cur:
                 sql = """ SELECT 
                               Baton.id
+                            , Baton.baton_title
                             , sender.id AS sender_id 
                             , sender.name AS sender_name
                             , receiver.id AS receiver_id 
                             , receiver.name AS receiver_name
                             , Baton.task_id 
                             , Baton.content 
+                            , Baton.chain_id
                             , Baton.status
                             , Baton.created_at
                             , Baton.batonpop

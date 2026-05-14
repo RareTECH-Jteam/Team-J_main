@@ -69,7 +69,9 @@ def baton_send():
 
         baton_services.process_baton_relay(sender_id,baton_data)
 
-        return redirect(url_for('baton.baton_view'))
+        # return '' , 204
+        return redirect(url_for('baton_view'))
+
 
     # 新規
     chain_id = Chain.create()
@@ -87,5 +89,6 @@ def baton_send():
 
     baton_services.process_baton_relay(sender_id,baton_data)
     
-    return redirect(url_for('baton.baton_view'))
+    # return '' , 204
+    return redirect(url_for('baton_view'))
 
