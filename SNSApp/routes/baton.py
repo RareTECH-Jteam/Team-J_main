@@ -1,11 +1,9 @@
 from flask import Blueprint, session, redirect, url_for,render_template, flash , abort , request
-from Models.User import User
-from Models.Post import Post
-from Models.Comment import Comment
 from Models.Baton import Baton
 from Models.Task import Task #Models/Taskから「Task」と名の付くクラスを引っ張ってくる
+from Models.Chain import Chain
 from util.SessionManager import SessionManager as SM
-import random
+from services.baton_services import baton_services
 
 baton = Blueprint('baton', __name__)
 
@@ -17,7 +15,6 @@ def baton_view():
         return redirect(url_for('auth.login_view'))
     
     user_id = SM.get_user_id() #自分のIDを入手
-    Baton.update_expired_status() #バトンの期限切れチェック
 
     tasks = Task.get_all() #Taskの内容をすべて拾ってくる
     incomplete_baton = Baton.get_by_incomplete_baton(user_id) #未完了バトンの確認
@@ -39,7 +36,6 @@ def baton_view():
     )   
 
 
-
 #バトン送信
 @baton.route('/baton/send', methods=['POST'])
 def baton_send():
@@ -47,23 +43,49 @@ def baton_send():
         return redirect(url_for('auth.login_view'))
     
     sender_id = SM.get_user_id()
-    task_id = request.form.get('select-task')
 
+    task_id = request.form.get('select-task')
+    
     #task_idからcontent取得
     task = Task.find_by_id(task_id) 
     content = task['content']
-
-    #自分以外のユーザID取得
-    users = Baton.get_receiver(sender_id)
-
-    if not users:
-        flash('バトンの送り先がありません。')
-        return '', 204  # 何も返さない（画面遷移なし）
     
-    #ランダムに１人を選択
-    receiver = random.choice(users)
-    receiver_id = receiver['id']
+    # 共通の箱を作る
+    baton_data = {}
+    baton_id = request.form.get('baton_id')
 
-    #バトン作成
-    baton_id = Baton.create(sender_id, receiver_id, task_id, content)
-    return '', 204  # 何も返さない（画面遷移なし）
+    # バトンが渡された場合
+    if baton_id:
+        # バトン情報を取得
+        current_baton = Baton.find_by_id(baton_id)
+        
+        baton_data['baton_id'] = baton_id
+        baton_data['baton_title'] = current_baton['baton_title']
+        baton_data['sender_id'] = sender_id
+        baton_data['chain_id'] = current_baton['chain_id']
+        baton_data['relay_count'] = int(current_baton['relay_count']) + 1
+        baton_data['task_id'] = task_id
+        baton_data['content'] = content
+
+        baton_services.process_baton_relay(sender_id,baton_data)
+
+        return redirect(url_for('baton.baton_view'))
+
+    # 新規
+    chain_id = Chain.create()
+
+    # タイトル取得
+    baton_title = request.form.get('task_title')
+
+    baton_data['baton_id'] = None
+    baton_data['baton_title'] = baton_title
+    baton_data['sender_id'] = sender_id
+    baton_data['chain_id'] = chain_id
+    baton_data['relay_count'] = 1
+    baton_data['task_id'] = task_id
+    baton_data['content'] = content
+
+    baton_services.process_baton_relay(sender_id,baton_data)
+    
+    return redirect(url_for('baton.baton_view'))
+
