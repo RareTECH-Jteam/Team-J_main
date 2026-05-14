@@ -1,0 +1,113 @@
+<!-- {% extends "base.html" %} -->
+
+<!-- {% block page_css %} -->
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css')}}"> -->
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/time-rank.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}"> -->
+<link rel="stylesheet" href="../../static/css/base.css">
+<link rel="stylesheet" href="../../static/css/mypage.css">
+<link rel="stylesheet" href="../../static/css/footer.css">
+<link rel="stylesheet" href="../../static/css/ranking.css">
+<!-- {% endblock %} -->
+
+
+<!-- {% block content %} -->
+<div class="page">
+    <!-- メイン -->
+    <main>
+        <div class="full-page-title">
+            <img class="title-img" src="../../static/img/CatRabbit_in_Cup.PNG" alt="CatRabbit_in_Cup">
+            <div class="page-title">ランキング</div>
+            <img class="title-img" src="../../static/img/CatRabbit_in_Cup.PNG" alt="CatRabbit_in_Cup">
+        </div>
+        <!--ランキング表示-->
+        <div class="full-ranking-design">
+            <section class="each-ranking-view">
+                <!-- ランキングタイトル表示 -->
+                <div class="ranking-title">
+                    <img class="ranking-title-img" src="../../static/img/Studying_rabbit.PNG" alt="Studying_rabbit">
+                    <span class="ranking-title-name">勉強時間王</span>
+                </div>
+                
+                <!-- ランキング順位表示 -->
+                <!-- {% for ranking in rankings %} -->
+                <div class="ranking-scroll-box">              <!--スクロール表示-->
+                    <div class="ranking-detail">        <!--ランキング詳細-->
+                        <p class="ranking">1<!--{%rank%}--></p>                                                  <!--順位表示  -->
+                        <div class="rank-name">おっくん<!--{% username %}#}--></div>
+                        <div class="total times">
+                            100時間50分
+                            <!-- {% if not total_hours and not total_minutes %}
+                                まだ勉強記録がありません
+                            {% else total_hours and total_minutes %}
+                                {{ total_hours }}時間{{ total_minutes }}分
+                            勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
+                        </div>
+                    </div>
+                    <div class="ranking-detail">        <!--ランキング詳細-->
+                        <p class="ranking">1<!--{%rank%}--></p>                                                  <!--順位表示  -->
+                        <div class="rank-name">おっくん<!--{% username %}#}--></div>
+                        <div class="total times">
+                            100時間50分
+                            <!-- {% if not total_hours and not total_minutes %}
+                                まだ勉強記録がありません
+                            {% else total_hours and total_minutes %}
+                                {{ total_hours }}時間{{ total_minutes }}分
+                            勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
+                        </div>
+                    </div>
+                    <div class="ranking-detail">        <!--ランキング詳細-->
+                        <p class="ranking">1<!--{%rank%}--></p>                                                  <!--順位表示  -->
+                        <div class="rank-name">おっくん<!--{% username %}#}--></div>
+                        <div class="total times">
+                            100時間50分
+                            <!-- {% if not total_hours and not total_minutes %}
+                                まだ勉強記録がありません
+                            {% else total_hours and total_minutes %}
+                                {{ total_hours }}時間{{ total_minutes }}分
+                            勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
+                        </div>
+                    </div>
+                    <div class="ranking-detail">        <!--ランキング詳細-->
+                        <p class="ranking">1<!--{%rank%}--></p>                                                  <!--順位表示  -->
+                        <div class="rank-name">おっくん<!--{% username %}#}--></div>
+                        <div class="total times">
+                            100時間50分
+                            <!-- {% if not total_hours and not total_minutes %}
+                                まだ勉強記録がありません
+                            {% else total_hours and total_minutes %}
+                                {{ total_hours }}時間{{ total_minutes }}分
+                            勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+            <section class="each-ranking-view">
+                <!-- ランキングタイトル表示 -->
+                <div class="ranking-title">
+                    <img class="ranking-title-img" src="../../static/img/Baton_pass_hachimaki.PNG" alt="Baton_pass_hachimaki">
+                    <span class="ranking-title-name">レジェンドバトン</span>
+                </div>
+                
+                <!-- ランキング順位表示 -->
+                <!-- {#{% for ranking in rankings %}#} -->
+                <div class="ranking-scroll-box">
+                    <div class="ranking-detail">
+                        <p class="ranking">1<!--{%rank%}--></p>                                        <!--順位表示  -->
+                        <div class="rank-name">Aチーム<!--{% batonname %}--></div>
+                        <div class="total times">
+                            100回
+                            <!--{% baton_counts %}-->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+
+
+
+        
+        <!-- {% include 'common/footer_mypage.html' %} -->

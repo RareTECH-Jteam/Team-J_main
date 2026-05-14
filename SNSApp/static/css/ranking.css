@@ -1,0 +1,64 @@
+.full-page-title{
+    height: 10%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.title-img{
+    object-fit: contain;
+    width: 23%;
+}
+
+.page-title{
+    margin: 8% 0% 0% 0%;
+}
+
+.full-ranking-design{ 
+    width: 90%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    margin: 2% auto;
+}
+
+.each-ranking-view{
+    /* height: 50%; */
+    width: 100%;
+    margin-top: 10%;
+}
+
+.ranking-title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.ranking-title-img{
+    object-fit: contain;
+    width: 15%;
+}
+
+.ranking-title-name{
+    color: crimson;
+    font-weight: 1000;
+    /* text-shadow: gray 1px 1px; */
+    /* -webkit-text-stroke:black 0.3px; */
+}
+
+.ranking-scroll-box{
+    width: 100%;
+    height: 200px;
+    overflow: auto;
+    overflow-y: scroll;
+}
+
+.ranking-detail{
+    background-color: white;
+        display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 3% 2%;
+}
