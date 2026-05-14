@@ -60,14 +60,15 @@
                     </div>
                     {% endif %}
                 </div>
-                <form class="complete-form" action="taskupdate" method="post">
+                <!-- 260514　完了ボタンを新しいバトン送信ボタンと統合するのでコメントアウト -->
+                <!-- <form class="complete-form" action="taskupdate" method="post">
                     <input type="hidden" name="task_id" value="{{ task_id }}">
                     <input type="hidden" name="is_done" value="1">
                     <button class="mytask-complete" type="submit"
-                    onclick="return confirm('このバトンを完了しますか？');"> <!-- バトンあり　のフラグが立った時だけ表示させたい -->
-                    完了
-                    </button>
-                </form>
+                    onclick="return confirm('このバトンを完了しますか？');"> バトンあり　のフラグが立った時だけ表示させたい
+                    完了 -->
+                    <!-- </button>
+                </form> -->
             </div>
         </section>
 
@@ -75,8 +76,28 @@
         <section class="new-task">
             <form class="new-task-main" action="/baton/send" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> <!-- なりすましリクエスト防止（CSRF対策） -->
-                <label for="select-task" class="select-title">バトンを選ぶ</label><br> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
-                <select name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ -->
+                <input type="hidden" name="task_id" value="{{ task_id }}"> <!-- 自分が完了しようとしているタスク -->
+                <input type="hidden" name="is_done" value="1"> <!-- 自分のタスクの完了フラグ -->
+                {% if baton_incomplete %} <!-- 他の人からバトンが届いている場合、表示 -->
+                <input type="text" name="task_title" class="task_title" value="{{ task_title }} " readonly><br> <!-- タスクの名前をテキストエリア（一行なのでinput使用）に表示＆readonlyで編集不可に -->
+                <label for="select-task" class="select-title">バトンを選ぶ</label> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
+                <select id="select-task" name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ。ここでid="select-task"とすることでlabel for="select-task"が効く -->
+                    {% for task in tasks %}
+                    <option class="task" value="{{ task.id }}"> <!-- プルダウンメニューで選択後、改行できない（横幅限られているので途中までしか表示できない）ため、タスクはMax25文字で！！ -->
+                        {{ task.content }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="send-task">
+                        <img class="send-task-image" src="{{ url_for('static', filename='img/Baton_pass_hachimaki.PNG')}}" alt="baton_pass">
+                    <button class="send-task-btn" type="submit"
+                    onclick="return confirm('このバトンを次の人に送りますか？');">タスクを完了して<br>次の人にバトンを渡す！</button>
+                </div>
+
+                {% else %}
+                <input type="text" name="task_title" class="task_title" placeholder="新しいバトンのタイトル"><br>
+                <label for="select-task" class="select-title">バトンを選ぶ</label> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
+                <select id="select-task" name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ -->
                     {% for task in tasks %}
                     <option class="task" value="{{ task.id }}"> <!-- プルダウンメニューで選択後、改行できない（横幅限られているので途中までしか表示できない）ため、タスクはMax25文字で！！ -->
                         {{ task.content }}
@@ -88,7 +109,7 @@
                     <button class="send-task-btn" type="submit"
                     onclick="return confirm('このバトンを次の人に送りますか？');">次の人にバトンを渡す！</button>
                 </div>
-
+                {% endif %}
             </form>
         </section>
         
