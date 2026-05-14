@@ -19,7 +19,7 @@ function updateCountDown(){
     // 秒
     const seconds = totalSeconds % 60;
 
-    countDown.textContent = `★締め切りまであと ${String(hours).padStart(2, '0')}:${String(minuts).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+    countDown.textContent = `///締め切りまであと ${String(hours).padStart(2, '0')}:${String(minuts).padStart(2,'0')}:${String(seconds).padStart(2,'0')}///`;
 
     if(distanse < 0){
         clearInterval(interval);

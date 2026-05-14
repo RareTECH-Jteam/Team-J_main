@@ -4,7 +4,7 @@
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/baton.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}">
-{#<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}"> -->#}   <!--本実装時に両端の{##}とコメントアウトを消していただければOKです！-->
+
 {% endblock %}
 {% block scripts %}
 <script src="{{url_for('static', filename='js/mybaton.js')}}"></script>
@@ -40,20 +40,26 @@
                 <div class="mytask-content">
                     {% if baton_incomplete %} <!-- 他の人からバトンが届いている場合、表示 -->
                     <div class="mytask-header">
-                        <div class="task-sender">
-                            {{ baton_incomplete.sender_name }}さんからバトンが届いたよ！
+                        <div class="task-message">
+                            <div class="task-sender">
+                            {{ baton_incomplete.sender_name }}
+                            </div>
+                            <div class="question">　からのバトン、今やる？
+                            </div>
                         </div>
+                    <div class="task-body" id="task-detailbody-{{ baton_incomplete.task_id }}">
+                        「 {{ baton_incomplete.content }} 」
+                    </div>
+                        
                         <div class="mytask-time">
                             <div class="task-send-time">{{ baton_incomplete.formatted_date }}</div>
-                            <div class="task-limit" id="countDown" data-task-limit="{{baton_incomplete.time_limit}}">★締め切りまであと
-                                {{ baton_incomplete.time_limit }}!!★ 
+                            <div class="task-limit" id="countDown" data-task-limit="{{baton_incomplete.time_limit}}">締め切りまであと
+                                {{ baton_incomplete.time_limit }}
                             </div> 
                         </div>
                         
                     </div>
-                    <div class="task-body" id="task-detailbody-{{ baton_incomplete.task_id }}">
-                        「 {{ baton_incomplete.content }} 」
-                    </div>
+
                     {% else %}
                     <div class="empty">
                     <p>バトン来てないよ</p>
