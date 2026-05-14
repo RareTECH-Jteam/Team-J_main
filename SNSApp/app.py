@@ -12,6 +12,7 @@ from Models.Baton import Baton
 from routes.auth import auth
 from routes.posts import posts
 from routes.baton import baton
+from routes.ranking import ranking
 from util.SessionManager import SessionManager as SM
 import uuid
 import os
@@ -43,6 +44,9 @@ app.register_blueprint(posts)
 
 #バトン系
 app.register_blueprint(baton)
+
+#ランキング系
+app.register_blueprint(ranking)
 
 # ルートページのリダイレクト処理
 @app.route('/', methods=['GET'])
