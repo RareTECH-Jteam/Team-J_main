@@ -57,23 +57,31 @@
     font-size: 10px; /*　スペース節約と高校生の視力を信じて小さめに */
 }
 
+.task-message {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 12px;
+}
 .task-sender {
     font-size: 12px;
-    font-weight: 600;    
+    font-weight: 600;
 }
 
 .mytask-time {
+    position: relative;
     display: flex;
-    justify-content: space-between;
-
+    justify-content:space-between;
 }
 
 .task-limit {
+    position: absolute;
+    margin-left: 100px;
     color: red;
     font-weight: 600;
 }
 
 .task-body {
+    text-align: center;
     font-weight: 800;
     font-size: 14px;
 }
