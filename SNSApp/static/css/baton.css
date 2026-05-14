@@ -52,7 +52,7 @@
 .mytask-content {
     background-color: #FFCC00;
     padding: 8px 16px;
-    max-height: 48px;
+    max-height: 80px;
     text-align: left;
     font-size: 10px; /*　スペース節約と高校生の視力を信じて小さめに */
 }
@@ -75,7 +75,7 @@
 
 .task-limit {
     position: absolute;
-    margin-left: 100px;
+    margin-left: 112px;
     color: red;
     font-weight: 600;
 }
