@@ -79,6 +79,7 @@
                 <input type="hidden" name="task_id" value="{{ task_id }}"> <!-- 自分が完了しようとしているタスク -->
                 <input type="hidden" name="is_done" value="1"> <!-- 自分のタスクの完了フラグ -->
                 {% if baton_incomplete %} <!-- 他の人からバトンが届いている場合、表示 -->
+                <input type="hidden" name="chain_id" value="{{ chain_id }}"> <!-- chain_idを追加。これでバトンの繋がりを認識。 -->
                 <input type="text" name="task_title" class="task_title" value="{{ task_title }} " readonly><br> <!-- タスクの名前をテキストエリア（一行なのでinput使用）に表示＆readonlyで編集不可に -->
                 <label for="select-task" class="select-title">バトンを選ぶ</label> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
                 <select id="select-task" name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ。ここでid="select-task"とすることでlabel for="select-task"が効く -->
