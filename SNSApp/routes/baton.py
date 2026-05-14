@@ -47,7 +47,11 @@ def baton_send():
         return redirect(url_for('auth.login_view'))
     
     sender_id = SM.get_user_id()
-    task_id = request.form.get('task_id')
+    task_id = request.form.get('select-task')
+
+    #task_idからcontent取得
+    task = Task.find_by_id(task_id) 
+    content = task['content']
 
     #自分以外のユーザID取得
     users = Baton.get_receiver(sender_id)
@@ -61,5 +65,5 @@ def baton_send():
     receiver_id = receiver['id']
 
     #バトン作成
-    baton_id = Baton.create(sender_id, receiver_id, task_id,)
+    baton_id = Baton.create(sender_id, receiver_id, task_id, content)
     return '', 204  # 何も返さない（画面遷移なし）
