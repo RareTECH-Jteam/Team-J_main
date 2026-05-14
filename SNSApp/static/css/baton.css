@@ -54,7 +54,7 @@
     padding: 8px 16px;
     max-height: 48px;
     text-align: left;
-    font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
+    font-size: 10px; /*　スペース節約と高校生の視力を信じて小さめに */
 }
 
 .task-sender {
@@ -65,16 +65,17 @@
 .mytask-time {
     display: flex;
     justify-content: space-between;
-    color: red;
+
 }
 
 .task-limit {
+    color: red;
     font-weight: 600;
 }
 
 .task-body {
     font-weight: 800;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 /* 完了ボタンを右寄せにするため、親のformでflex指定 */
@@ -101,10 +102,20 @@
     text-align: left;
     max-width: 393px;
     min-height: 100px;
-    max-height: 160px;
+    max-height: 200px;
     margin: 16px 8px;
     padding: 8px 8px; /* ”バトンを選ぶ”の文字列との距離を空けるため */
     background-color:#F3F3F3;
+}
+
+.task_title {
+    min-height: 24px;
+    max-height: 36px;
+    min-width: 160px;
+    max-width: 200px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
 }
 
 .select-title {
