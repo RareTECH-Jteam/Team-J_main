@@ -6,7 +6,14 @@ from util.DB import DB
 db_pool = DB.init_db_pool()
 
 #Batonクラス
-class Baton:    
+class Baton:
+    @classmethod
+    def validate(cls, input):
+        if not input or input.strip() == '':
+            return 'タイトルを入力してください'
+
+        return None
+
     @classmethod
     # 対象のバトン取得
     def find_by_id(cls, baton_id):

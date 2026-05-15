@@ -3,7 +3,7 @@ async function showConfirm(title,text,icon,confirmText="確認",cancelButtonText
         title: title,
         text: text,
         icon: icon,
-        width: "300px",
+        width: "auto",
         showCancelButton: true,
         confirmButtonText: confirmText,
         cancelButtonText: cancelButtonText
@@ -15,7 +15,7 @@ function showError(message){
         title: 'エラー',
         text: message,
         icon: 'error',
-        width: '300px',
+        width: 'auto',
         confirmButtonText: 'OK'
     });
 }

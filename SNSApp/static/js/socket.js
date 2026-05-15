@@ -40,4 +40,3 @@
             baton_id: data.baton_id
         });
     });
-
