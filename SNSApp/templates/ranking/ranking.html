@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block page_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css')}}"> 
+<link rel="stylesheet" href="{#{ url_for('static', filename='css/mypage.css')}#}"> 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/ranking.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}">
 {% endblock %}
@@ -12,16 +12,16 @@
     <!-- メイン -->
     <main>
         <div class="full-page-title">
-            <img class="title-img" src="../../static/img/CatRabbit_in_Cup.PNG" alt="CatRabbit_in_Cup">
+            <img class="title-img" src="{{ url_for('static', filename='img/CatRabbit_in_Cup.PNG')}}" alt="CatRabbit_in_Cup">
             <div class="page-title">ランキング</div>
-            <img class="title-img" src="../../static/img/CatRabbit_in_Cup.PNG" alt="CatRabbit_in_Cup">
+            <img class="title-img" src="{{ url_for('static', filename='img/CatRabbit_in_Cup.PNG')}}" alt="CatRabbit_in_Cup">
         </div>
         <!--ランキング表示-->
         <div class="full-ranking-design">
             <section class="each-ranking-view">
                 <!-- ランキングタイトル表示 -->
                 <div class="ranking-title">
-                    <img class="ranking-title-img" src="../../static/img/Studying_rabbit.PNG" alt="Studying_rabbit">
+                    <img class="ranking-title-img" src="{{ url_for('static', filename='img/Studying_rabbit.PNG')}}" alt="Studying_rabbit">
                     <span class="ranking-title-name">勉強時間王</span>
                 </div>
                 
@@ -60,7 +60,7 @@
             <section class="each-ranking-view">
                 <!-- ランキングタイトル表示 -->
                 <div class="ranking-title">
-                    <img class="ranking-title-img" src="../../static/img/Baton_pass_hachimaki.PNG" alt="Baton_pass_hachimaki">
+                    <img class="ranking-title-img" src="{{ url_for('static', filename='img/Baton_pass_hachimaki.PNG')}}" alt="Baton_pass_hachimaki">
                     <span class="ranking-title-name">レジェンドバトン</span>
                 </div>
                 
@@ -93,8 +93,8 @@
         </div>
     </main>
 </div>
+{% include 'common/footer_mypageback.html' %}
 {% endblock %}
 
 
         
-{% include 'common/footer_mypageback.html' %}
