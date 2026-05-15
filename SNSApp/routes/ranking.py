@@ -13,5 +13,8 @@ def ranking_view():
         # ログインページ表示
         return redirect(url_for('auth.login_view'))
     
-    return render_template('ranking/ranking.html') # ランキングの画面を見る       
+    study_ranking = Post.get_study_ranking() #総勉強時間の取得
+    
+    return render_template('ranking/ranking.html', 
+                           study_ranking = study_ranking) # ランキングの画面を見る       
 

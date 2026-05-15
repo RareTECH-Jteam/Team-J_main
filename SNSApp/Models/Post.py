@@ -146,3 +146,25 @@ class Post:
             abort(500)
         finally:
             db_pool.release(conn)
+    
+    #全ユーザーの勉強時間多い順に取得
+    @classmethod
+    def get_study_ranking(cls):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = """SELECT SUM(TIME_TO_SEC(study_time)) DIV 3600 AS hours,
+                                SUM(TIME_TO_SEC(study_time)) MOD 3600 DIV 60 AS minutes
+                                FROM posts 
+                                JOIN users ON posts.user_id = users.id
+                                WHERE posts.deleted_at IS NULL
+                                GROUP BY posts.user_id, users.name
+                                ORDER BY SUM(TIME_TO_SEC(study_time)) DESC;"""
+                cur.execute(sql)
+                return cur.fetchall()
+        except pymysql.Error as e:
+            print(f"エラーが発生:{e}")
+            abort(500)
+        finally:
+            db_pool.release(conn)
