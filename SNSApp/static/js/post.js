@@ -6,11 +6,8 @@
                 menubutton: document.getElementById(`menu-${postId}`),
                 originalcontentbody: document.getElementById(`post-detailbody-${postId}`),
                 editarea : document.getElementById(`edit-area-${postId}`),
-                editdErrormessage:document.getElementById(`edit_error_message-${postId}`),
                 edittextarea:document.getElementById(`edit-content-${postId}`),
                 editstudytime:document.getElementById(`edit-study-time-input-${postId}`),
-                deleteconfirm:document.getElementById(`deleteconfirm-${postId}`),
-                deleteErrormessage:document.getElementById(`confirm_error_message-${postId}`),
                 csrfToken:document.querySelector('input[name="csrf_token"]')
                 }
         }
@@ -28,9 +25,6 @@
         function toggleMenu(postId){
             const elements = getElements(postId);
         
-            // モーダルを開く前にエラーをリセット
-            hideVisibility(elements.editdErrormessage);
-
             // 再表示
             if(elements.menubutton.style.display == "none"){
                 showElement(elements.menubutton);
@@ -98,15 +92,16 @@
                 // -- 失敗 --
                 if(!response.ok){
                     console.log(data);
+                    
                     // エラーメッセージ表示
-                    showVisibility(elements.editdErrormessage);
-                    elements.editdErrormessage.textContent = data.text;
+                    showError(data.text);
                 }
 
 
             }catch(error){
                 console.log(error);
-                showVisibility(elements.editdErrormessage);
+
+                showError("編集に失敗しました");
             }
         }
         
@@ -124,9 +119,6 @@
             elements.edittextarea.value = elements.edittextarea.getAttribute('data-original-content');
             elements.editstudytime.value = elements.editstudytime.getAttribute('data-original-studytime');
 
-            // モーダルを開く前にエラーをリセット
-            hideVisibility(elements.editdErrormessage);
-
             // 編集エリア非表示
             hideElement(elements.editarea);
 
@@ -137,27 +129,19 @@
         }
 
 
-
-        function deletePost(postId){
+        async function deletePost(postId){
             const elements = getElements(postId);
             
             // メニューを閉じる
             hideElement(elements.menubutton);
 
-            // モーダルを開く前にエラーをリセット
-            hideElement(elements.deleteErrormessage);
+            const result = await showConfirm("確認","本当に削除しますか？","warning","削除");
 
-            // 削除確認モーダル 表示
-            showElement(elements.deleteconfirm,"flex");
+            if(!result.isConfirmed) return;
 
-        }
 
-        // -- 削除クリック -- 
-        function confirmDelete(postId){
-            const elements = getElements(postId);
+             DeleteProcess(postId);
 
-            // リクエスト(DELETE)
-            DeleteProcess(postId);
         }
 
         // flask側にリクエストを飛ばす
@@ -180,31 +164,18 @@
                 if(!response.ok){
                     
                     // エラーメッセージ表示
-                    showElement(elements.deleteErrormessage);
-                    elements.deleteErrormessage.textContent = data.text;
+                    showError(data.text);
                 }
 
 
             }catch(error){
                 console.log(error);
-                showElement(elements.deleteErrormessage);
+                // showElement(elements.deleteErrormessage);
+
+                showError("削除に失敗しました");
             }
         }
         
-        // -- エラーメッセージ表示 --
-        function showErrors(){
-            const elements = getElements();
-
-        }
-        // -- 削除キャンセル -- 
-        function cancelDelete(postId){
-            const elements = getElements(postId);
-
-            // 削除エリア非表示、投稿内容表示
-            hideElement(elements.deleteconfirm);
-            showElement(elements.originalcontentbody,"flex");
-        }
-
         // -- POSTリクエスト --
         async function postRequest(url, csrfToken, body=null) {
             const options ={
