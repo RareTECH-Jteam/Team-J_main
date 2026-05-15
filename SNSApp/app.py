@@ -9,14 +9,18 @@ from extensions import socketio
 from flask_wtf.csrf import CSRFProtect
 from datetime import timedelta
 from Models.Baton import Baton
+from Models.BatonRepository import BatonRepository
 from routes.auth import auth
 from routes.posts import posts
 from routes.baton import baton
 from routes.ranking import ranking
 from util.SessionManager import SessionManager as SM
+from services.baton_services import baton_services
+from util.DB import DB
 import uuid
 import os
-from services import services
+
+db_pool = DB.init_db_pool()
 
 # 定数定義
 SESSION_DAYS = 30
@@ -76,16 +80,28 @@ def on_connect():
     expired_batons = Baton.get_expired_batons()
 
     if expired_batons:
-        # 失敗扱いにする
-        Baton.update_expired_status()
-        # ユーザーごとに、失敗メッセージを通知
-        for expired_baton in expired_batons:
-            emit('notification'
-                , {'message': 'バトン失敗・・・\r\n次は頑張ろう！'}
-                , room=str(expired_baton['receiver_id']))  
+        try:
+            conn = db_pool.get_conn()
             
-            # 失効した人の数だけ、予約バトンを誰かに割り当てるチャンスを作る
-            # services.assign_waiting_baton_if_possible(exclude_user_id=0)
+            # 失敗扱いにする
+            BatonRepository.update_expired_status(conn)
+            
+            # ユーザーごとに、失敗メッセージを通知
+            for expired_baton in expired_batons:
+                emit('notification'
+                    , {'message': 'バトン失敗・・・\r\n次は頑張ろう！'}
+                    , room=str(expired_baton['receiver_id']))  
+                
+                # 失効した人の数だけ、予約バトンを誰かに割り当てるチャンスを作る
+                baton_services.assign_waiting_baton_if_possible(conn,exclude_user_id=0)
+            
+            # コミット
+            conn.commit()
+        
+        except Exception as e:
+            conn.rollback()
+        finally:
+            db_pool.release(conn)
 
     # バトンが渡されていた場合
     current_task = Baton.get_by_incomplete_baton(user_id)

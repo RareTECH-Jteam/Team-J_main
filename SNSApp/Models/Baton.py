@@ -6,56 +6,22 @@ from util.DB import DB
 db_pool = DB.init_db_pool()
 
 #Batonクラス
-class Baton:
+class Baton:    
     @classmethod
-    #バトン作成
-    def create(cls, sender_id, receiver_id, task_id, content): 
+    # 対象のバトン取得
+    def find_by_id(cls, baton_id):
         conn = db_pool.get_conn()
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql =  "INSERT INTO Baton (sender_id, receiver_id, task_id, content, release_at) VALUES (%s, %s, %s, %s, NOW());"
-                cur.execute(sql,(sender_id, receiver_id, task_id, content, ))
-                conn.commit()
-                return cur.lastrowid
+                sql = "SELECT * FROM Baton WHERE id = %s;"
+                cur.execute(sql,(baton_id,))
+                return cur.fetchone()
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
             abort(500)
         finally:
             db_pool.release(conn)
-    
-    
-    # @classmethod
-    # #完了バトン取得
-    # def get_by_complete_baton(cls, receiver_id):
-    #     conn = db_pool.get_conn()
-    #     conn.ping(reconnect=True)
-    #     try:
-    #         with conn.cursor() as cur:
-    #             sql = "SELECT receiver_id, task_id, content FROM Baton WHERE status = 1 AND receiver_id = %s;"
-    #             cur.execute(sql,(receiver_id,))
-    #             return cur.fetchall()
-    #     except pymysql.Error as e:
-    #         print(f"エラーが発生:{e}")
-    #         abort(500)
-    #     finally:
-    #         db_pool.release(conn)
-    
-    # @classmethod
-    # #失敗バトン取得
-    # def get_by_failure_baton(cls, receiver_id):
-    #     conn = db_pool.get_conn()
-    #     conn.ping(reconnect=True)
-    #     try:
-    #         with conn.cursor() as cur:
-    #             sql = "SELECT receiver_id, task_id, content FROM Baton WHERE status = 2 AND receiver_id = %s;"
-    #             cur.execute(sql,(receiver_id,))
-    #             return cur.fetchall()
-    #     except pymysql.Error as e:
-    #         print(f"エラーが発生:{e}")
-    #         abort(500)
-    #     finally:
-    #         db_pool.release(conn)
     
 
     @classmethod
@@ -100,12 +66,14 @@ class Baton:
             with conn.cursor() as cur:
                 sql = """ SELECT 
                               Baton.id
+                            , Baton.baton_title
                             , sender.id AS sender_id 
                             , sender.name AS sender_name
                             , receiver.id AS receiver_id 
                             , receiver.name AS receiver_name
                             , Baton.task_id 
                             , Baton.content 
+                            , Baton.chain_id
                             , Baton.status
                             , Baton.created_at
                             , Baton.batonpop
@@ -141,9 +109,13 @@ class Baton:
                              ON users.id = Baton.receiver_id AND Baton.status = 0
                         WHERE users.id != %s
                         AND Baton.receiver_id IS NULL
+                        ORDER BY RAND() LIMIT 1
                      """
                 cur.execute(sql,(user_id,))
-                return cur.fetchall()
+                user = cur.fetchone()
+                if not user:
+                    return None
+                return user['id']
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
             abort(500)
@@ -172,49 +144,6 @@ class Baton:
             abort(500)
         finally:
             db_pool.release(conn)
-
-    #24時間経ったものを失敗にする
-    @classmethod
-    def update_expired_status(cls):
-        conn = db_pool.get_conn()
-        conn.ping(reconnect=True)
-        try:
-            with conn.cursor() as cur:
-                sql = """UPDATE Baton
-                             SET status = 2
-                         WHERE 1 = 1
-                         AND TIMESTAMPDIFF(HOUR , created_at , NOW()) >= 24
-                         AND status = 0;
-                     """
-                cur.execute(sql)
-                conn.commit()
-        except pymysql.Error as e:
-            print(f"エラーが発生:{e}")
-            abort(500)
-        finally:
-            db_pool.release(conn)
-
-    # @classmethod
-    # #未完、完了、失敗バトンまとめたもの
-    # def get_by_status(cls, receiver_id):
-    #     conn = db_pool.get_conn()
-    #     conn.ping(reconnect=True)
-    #     try:
-    #         with conn.cursor() as cur:
-    #             sql = """SELECT receiver_id, task_id, content, 
-    #                      CASE 
-    #                           WHEN status = 0 THEN '未完了'
-    #                           WHEN status = 1 THEN '完了'
-    #                          WHEN status = 2 THEN '失敗' 
-    #                      END AS status_label
-    #                      FROM Baton WHERE receiver_id = %s;"""
-    #             cur.execute(sql,(receiver_id,))
-    #             return cur.fetchall()
-    #     except pymysql.Error as e:
-    #         print(f"エラーが発生:{e}")
-    #         abort(500)
-    #     finally:
-    #         db_pool.release(conn)
 
     @classmethod
     # バトンチェーンを取得
@@ -268,7 +197,7 @@ class Baton:
             db_pool.release(conn)
 
     @classmethod
-    # バトンチェーンを取得
+    # 通知フラグを「通知済み」に設定
     def mark_as_read(cls, baton_id):
         conn = db_pool.get_conn()
         conn.ping(reconnect=True)
@@ -278,7 +207,7 @@ class Baton:
                          WHERE id = %s
                       """
                 cur.execute(sql,(baton_id,))
-                cur.commit()
+                conn.commit()
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
             abort(500)
