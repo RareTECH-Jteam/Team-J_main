@@ -74,6 +74,7 @@ async function postBaton(form){
         // 失敗
         if(!result.ok){
             showError(data.text);
+            console.log(data)
         }        
 
     }catch(error){

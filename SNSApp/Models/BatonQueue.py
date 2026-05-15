@@ -14,12 +14,12 @@ class BatonQueue:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM baton_queues ORDER BY created_at ASC LIMIT;"
+                sql = "SELECT * FROM baton_queues ORDER BY created_at ASC LIMIT 1;"
                 cur.execute(sql)
                 queue = cur.fetchone()
             return queue
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
-            abort(500)
+            raise Exception("予約が取得できませんでした") from e
         finally:
             db_pool.release(conn)  
