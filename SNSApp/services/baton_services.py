@@ -74,6 +74,7 @@ class baton_services:
             import traceback
             traceback.print_exc()
             conn.rollback()
+            raise e
         finally:
             db_pool.release(conn)
 

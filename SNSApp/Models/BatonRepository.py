@@ -10,7 +10,7 @@ class BatonRepository:
         try:
             with conn.cursor() as cur:
                 sql = """
-                INSERT INTO baton_queues (title, sender_id, chain_id,relay_count) 
+                INSERT INTO baton_queues (baton_title, sender_id, chain_id,relay_count) 
                 VALUES (%s, %s, %s, %s);"""
                 cur.execute(sql,(
                             baton_data['baton_title']
@@ -21,7 +21,8 @@ class BatonRepository:
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
-            abort(500)
+            # abort(500)
+            raise Exception("バトンの予約に失敗しました")
 
     @classmethod
     def baton_create_from_queue(cls, queue_data, receiver_id , conn):
@@ -42,7 +43,8 @@ class BatonRepository:
 
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
-            abort(500)
+            # abort(500)
+            raise Exception("予約リストからのバトン生成に失敗しました。")
     
     @classmethod
     def batonqueue_delete(cls, queue_id,conn):
@@ -53,7 +55,8 @@ class BatonRepository:
                 cur.execute(sql,(queue_id,))
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
-            abort(500)  
+            # abort(500)  
+            raise Exception("バトン予約の削除に失敗しました")
 
     @classmethod
     def baton_create(cls, sender_id, baton_data,conn):
@@ -92,7 +95,8 @@ class BatonRepository:
                 return cur.lastrowid
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
-            abort(500)
+            # abort(500)
+            raise Exception("バトンの作成に失敗しました")
 
     @classmethod
     def baton_update_status_success(cls,baton_id,conn):
@@ -110,7 +114,8 @@ class BatonRepository:
                 # return cur.lastrowid
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
-            abort(500) 
+            # abort(500)
+            raise Exception("バトンが完了できませんでした")
 
     #24時間経ったものを失敗にする
     @classmethod

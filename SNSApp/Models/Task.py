@@ -8,6 +8,13 @@ db_pool = DB.init_db_pool()
 
 class Task:
     @classmethod
+    def validate(cls,input):
+        if not input or input.strip() == '':
+            return 'タスクを選択してください'
+
+        return None
+    
+    @classmethod
     def get_all(cls):
         conn = db_pool.get_conn() #データベースから一つ借りてくる
         conn.ping(reconnect=True) #生存確認の一文(切れてたらreconnect)
