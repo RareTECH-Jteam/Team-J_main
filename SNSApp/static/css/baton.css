@@ -15,7 +15,7 @@
 } */
 
 /* テキスト系をまとめてセンターアライン */
-.page-title, .task-arrived, .new-task-main, .task-history {
+.page-title, .task-arrived, .new-task-main, .empty, .task-history {
     text-align: center; 
 }
 
@@ -44,6 +44,9 @@
     font-weight: 700;
 }
 
+.empty {
+    font-size: 14px;
+}
 .task-arrived {
     margin: 0px 8px;
     background-color: #FFCC00;
@@ -75,7 +78,7 @@
 
 .task-limit {
     position: absolute;
-    margin-left: 112px;
+    margin-left: 96px;
     color: red;
     font-weight: 600;
 }
