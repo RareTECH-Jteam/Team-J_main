@@ -8,6 +8,7 @@ class BatonRepository:
     def baton_queues_create(cls, sender_id ,baton_data,conn):
         """相手がいない時に予約を入れる"""
         try:
+            conn.ping(reconnect=True)
             with conn.cursor() as cur:
                 sql = """
                 INSERT INTO baton_queues (baton_title, sender_id, chain_id,relay_count) 
@@ -28,6 +29,7 @@ class BatonRepository:
     def baton_create_from_queue(cls, queue_data, receiver_id , conn):
         """予約データ(BatonQueueの結果)を元に正式なバトンを作る"""
         try:
+            conn.ping(reconnect=True)
             with conn.cursor() as cur:
                 sql = """
                 INSERT INTO batons (baton_title, sender_id, receiver_id, chain_id, relay_count, status)
@@ -50,6 +52,7 @@ class BatonRepository:
     def batonqueue_delete(cls, queue_id,conn):
         """昇格し終わった予約を消す"""
         try:
+            conn.ping(reconnect=True)
             with conn.cursor() as cur:
                 sql = "DELETE FROM baton_queues WHERE id =%s ;"
                 cur.execute(sql,(queue_id,))
@@ -62,6 +65,7 @@ class BatonRepository:
     def baton_create(cls, sender_id, baton_data,conn):
         """バトンを作成"""
         try:
+            conn.ping(reconnect=True)
             with conn.cursor() as cur:
                 sql =  """INSERT INTO Baton(
                             baton_title
@@ -70,8 +74,8 @@ class BatonRepository:
                            , task_id
                            , content
                            , chain_id
-                           , relay_count 
-                           , get_at) 
+                           , relay_count
+                           ) 
                            VALUES 
                            (%s
                           , %s
@@ -80,7 +84,6 @@ class BatonRepository:
                           , %s
                           , %s
                           , %s
-                          , NOW()
                           );"""
                 
                 cur.execute(sql,(
@@ -102,6 +105,7 @@ class BatonRepository:
     def baton_update_status_success(cls,baton_id,conn):
         """バトンを完了にする"""
         try:
+            conn.ping(reconnect=True)
             with conn.cursor() as cur:
                 sql =  """Update Baton 
                             SET status = 1
@@ -121,6 +125,7 @@ class BatonRepository:
     @classmethod
     def update_expired_status(cls,conn):
         try:
+            conn.ping(reconnect=True)
             with conn.cursor() as cur:
                 sql = """UPDATE Baton
                                 SET status = 2

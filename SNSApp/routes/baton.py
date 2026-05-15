@@ -1,4 +1,4 @@
-from flask import Blueprint, session, redirect, url_for,render_template, flash , abort , request
+from flask import Blueprint, session, redirect, url_for,render_template, flash , abort , request, jsonify
 from Models.Baton import Baton
 from Models.Task import Task #Models/Taskから「Task」と名の付くクラスを引っ張ってくる
 from Models.Chain import Chain
@@ -45,7 +45,13 @@ def baton_send():
     sender_id = SM.get_user_id()
 
     task_id = request.form.get('select-task')
-    
+
+    errors = Task.validate(task_id)
+
+    # エラー時
+    if errors:
+        return jsonify({'message': 'error', 'text': errors}), 400    
+        
     #task_idからcontent取得
     task = Task.find_by_id(task_id) 
     content = task['content']
@@ -67,17 +73,23 @@ def baton_send():
         baton_data['task_id'] = task_id
         baton_data['content'] = content
 
-        baton_services.process_baton_relay(sender_id,baton_data)
-
-        # return '' , 204
-        return redirect(url_for('baton.baton_view'))
-
+        try:
+            baton_services.process_baton_relay(sender_id,baton_data)
+        except Exception as e:
+            return {'message': 'error', 'text': str(e)}, 500         
+         
+        return {'message': 'success','text': '成功'}, 200   
 
     # 新規
     chain_id = Chain.create()
 
     # タイトル取得
     baton_title = request.form.get('task_title')
+
+    errors = Baton.validate(baton_title)
+
+    if errors:
+        return {'message': 'error', 'text': errors}, 400    
 
     baton_data['baton_id'] = None
     baton_data['baton_title'] = baton_title
@@ -87,8 +99,11 @@ def baton_send():
     baton_data['task_id'] = task_id
     baton_data['content'] = content
 
-    baton_services.process_baton_relay(sender_id,baton_data)
-    
-    # return '' , 204
-    return redirect(url_for('baton.baton_view'))
+    print(f"baton_data: {baton_data}")
 
+    try:
+        baton_services.process_baton_relay(sender_id,baton_data)
+    except Exception as e:
+        return {'message': 'error', 'text': str(e)}, 500 
+
+    return {'message': 'success','text': '成功'}, 200   

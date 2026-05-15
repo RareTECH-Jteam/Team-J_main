@@ -20,10 +20,7 @@ class baton_services:
             print(f"次の人: {next_receiver_id}")
             
             # 空き枠あり
-            if next_receiver_id:
-                username = User.get_name_by_id(next_receiver_id)
-                print("ユーザー名 " + username)      
-                          
+            if next_receiver_id:                          
                 # 受け取りユーザー設定
                 baton_data['receiver_id'] = next_receiver_id
                 
@@ -34,6 +31,9 @@ class baton_services:
                 
                 # コミット
                 conn.commit()
+
+                username = User.get_name_by_id(next_receiver_id)
+                print("ユーザー名 " + username)                  
                 
                 # 受け取った人に通知
                 socketio.emit('notification'

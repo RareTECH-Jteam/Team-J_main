@@ -31,8 +31,12 @@
     socket.on('notification', function(data) {
         notyf.open({type: 'info', message: data.message});
         console.log(data);
+        
+        // 2秒待ってからリロード
         if (data.reload){
-            location.reload();
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
         }
 
         // 文字列ではなく、オブジェクトとして送る
