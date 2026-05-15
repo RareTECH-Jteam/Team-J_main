@@ -29,8 +29,6 @@
 
         <!-- 対象の投稿（マイページで選択した一件のみ -->
         <section class="post-detail">
-            <p id="edit_error_message-{{ post.id }}" class="confirm_error_message">編集に失敗しました</p>
-
             <!-- 投稿編集用ボタンを投稿詳細枠の上に表示　-->
             <div class="post-actions">
                 {% if post.user_id == user_id %}
@@ -67,19 +65,6 @@
                     </div>
                 </div>
             </section>
-            <div id="deleteconfirm-{{post.id}}" class="confirm_box_container" style="display: none;">
-                <div class="confirm_box">
-                    <h2 class="confirm_box_title"><span class="confirm-warging">&#x26a0;</span> 警告</h2>
-                    <p class="confirm_box_message">本当に削除しますか？</p>
-                    <p id="confirm_error_message-{{post.id}}" class="confirm_error_message">削除に失敗しました</p>
-                    <div class="confirm_button_container">
-                        <button class="cancel_button" onclick="cancelDelete('{{ post.id }}')">いいえ</button>
-                        <button class="confirm_button" onclick="confirmDelete('{{ post.id }}')">はい</button>
-                    </div>
-                </div>
-            </div>
-
-
             <div class="post-card">
                 <div class="post-content">
                     <div class="post-header">
