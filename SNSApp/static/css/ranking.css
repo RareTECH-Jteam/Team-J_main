@@ -14,8 +14,12 @@
     width: 20%;
 }
 
-.page-title{
-    margin: 8% 0% 0% 0%;
+.page-title{ 
+    text-align: center;
+    height: 56px;
+    font-size: 40px;
+    font-weight: 700;
+    margin: 5% 0% 0% 0%;
 }
 
 .full-ranking-design{ 
