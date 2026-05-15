@@ -1,7 +1,7 @@
 # 【重要】サーバーが「一度にたくさんの仕事」を並行してこなせるようにする魔法の設定
 # これがないと、1人の処理中に他の人の通信が止まって（ロックして）しまいます
-from gevent import monkey
-monkey.patch_all()
+# from gevent import monkey
+# monkey.patch_all()
 
 from flask import Flask, request, redirect, render_template, session, url_for
 from flask_socketio import join_room,emit
