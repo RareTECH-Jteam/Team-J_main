@@ -70,7 +70,7 @@ def baton_send():
         baton_services.process_baton_relay(sender_id,baton_data)
 
         # return '' , 204
-        return redirect(url_for('baton_view'))
+        return redirect(url_for('baton.baton_view'))
 
 
     # 新規
@@ -90,5 +90,5 @@ def baton_send():
     baton_services.process_baton_relay(sender_id,baton_data)
     
     # return '' , 204
-    return redirect(url_for('baton_view'))
+    return redirect(url_for('baton.baton_view'))
 
