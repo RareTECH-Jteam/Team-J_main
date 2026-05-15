@@ -26,4 +26,4 @@ webassets==2.0
 Werkzeug==2.2.2
 Flask-WTF==1.0.1
 Flask-SocketIO==5.6.1
-gevent==23.9.1
+eventlet==0.33.3
