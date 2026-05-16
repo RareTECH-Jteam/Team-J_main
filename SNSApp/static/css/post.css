@@ -409,6 +409,23 @@ em-emoji-picker {
   z-index: 1000;
 }
 
+.reaction-area{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+.reaction-badge{
+    padding: 5px;
+    font-size: 12px;
+}
+
+/* 折りたたみ解除 */
+.reaction-more{
+    font-weight: bold;
+    color:gray
+}
+
 /* スマホ向けレスポンシブ対応 */
 @media screen and (max-width: 700px) {
     .confirm_box_container .confirm_box {
