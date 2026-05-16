@@ -107,3 +107,17 @@ main{
         width: 30px;
     }
 }
+
+.flash-messages{
+    text-align: center;
+}
+
+.flash-error{
+    background-color: red;
+    color: white;
+}
+
+/* .flash-success{
+    background-color: blue;
+    color: white;
+} */
