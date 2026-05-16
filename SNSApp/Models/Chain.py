@@ -34,8 +34,12 @@ class Chain:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = """SELECT chain_id, MAX(relay_count), baton_title 
-                         FROM Baton 
+                sql = """SELECT 
+                           chain_id, 
+                           MAX(relay_count) AS sum_count, 
+                           baton_title 
+                         FROM 
+                           Baton 
                          WHERE 1 = 1 
                             AND created_at >= DATE_FORMAT(NOW(), '%Y-%m-01') 
                             AND created_at <= LAST_DAY(NOW())
