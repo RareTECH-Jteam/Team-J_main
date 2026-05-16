@@ -112,6 +112,7 @@ def on_connect():
             , {
                 'message': 'バトンが渡されました！\r\n確認してみよう！'
                ,'baton_id':current_task['id']
+               ,'reload':True
                }
             , room=str(user_id))  
  

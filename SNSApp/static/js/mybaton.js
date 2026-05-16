@@ -5,10 +5,21 @@ if (countDown){
     const timeLimit = new Date(countDown.dataset.taskLimit).getTime();
 
     function updateCountDown(){
+
         const now = new Date();
         
         // 現時刻とタイムリミットの差分
         const distanse = timeLimit - now;
+
+        if(distanse < 0){
+            clearInterval(interval);
+
+            countDown.textContent ="///時間切れ！///"
+
+            setTimeout(() => location.reload(),2000)
+
+            return;
+        }
 
         // 秒に換算
         const totalSeconds = Math.floor(distanse / 1000);
@@ -24,10 +35,6 @@ if (countDown){
 
         countDown.textContent = `///締め切りまであと ${String(hours).padStart(2, '0')}:${String(minuts).padStart(2,'0')}:${String(seconds).padStart(2,'0')}///`;
 
-        if(distanse < 0){
-            clearInterval(interval);
-            location.reload();
-        }
     }
 
     // 1秒ごとに更新

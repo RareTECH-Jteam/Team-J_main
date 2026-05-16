@@ -33,14 +33,16 @@
         console.log(data);
         
         // 2秒待ってからリロード
-        if (data.reload){
+        if (data.reload && document.body.id  === "baton"){
             setTimeout(() => {
                 location.reload();
             }, 2000);
         }
 
-        // 文字列ではなく、オブジェクトとして送る
-        socket.emit('notification_received', {
-            baton_id: data.baton_id
-        });
+        if(data.baton_id){
+            // 文字列ではなく、オブジェクトとして送る
+            socket.emit('notification_received', {
+                baton_id: data.baton_id
+            });
+        }
     });
