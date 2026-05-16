@@ -14,7 +14,7 @@
     {% block page_css %}{% endblock %}                      <!--ページ毎のcssファイル用のblockです-->
 </head>
 
-<body>
+<body id="{{page_id | default('')}}">
     {% include 'common/header.html' %}                          
 
     {% block content %}{% endblock %}          <!--main部分のblockです-->

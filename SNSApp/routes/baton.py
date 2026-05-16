@@ -32,7 +32,8 @@ def baton_view():
         tasks=tasks, #HTMLの{task.content}にぶち込む
         baton_incomplete=incomplete_baton, #HTMLの{% if baton %}をTrueにする
         complete_tasks=complete_tasks, #成功バトン履歴
-        fail_tasks=fail_tasks #失敗バトン履歴
+        fail_tasks=fail_tasks, #失敗バトン履歴
+        page_id ="baton"
     )   
 
 
