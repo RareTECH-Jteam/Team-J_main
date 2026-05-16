@@ -439,13 +439,13 @@ em-emoji-picker {
 }
 
 @media (max-width: 480px) {
-  em-emoji-picker {
-    transform: scale(0.7);
-    position: fixed !important;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-    z-index: 1000;
-  }
+    em-emoji-picker {
+        transform: scale(0.7);
+        transform-origin: top right;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1000;
+    }
 }
 
