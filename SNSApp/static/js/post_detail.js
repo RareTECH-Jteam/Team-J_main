@@ -14,8 +14,11 @@ const elements = {
     reactionBtn: document.getElementById('add-reaction-btn'),
     pickerContainer: document.getElementById('picker-container'),
     reactionUserId: actionBar.dataset.reactionUserId,
+    showEmojiArea :document.getElementById('showemoji')
 }
 
+// リアクションを格納する
+let reactions = []
 
 // ピッカーを作る
 // プレビュー(preview)と検索(search)を非表示に設定
@@ -223,13 +226,142 @@ function closeAll() {
     });
 }
  
-function sendReaction(emoji){
+// リアクション送信
+async function sendReaction(emoji){
     
-    closeAll()
+    closeAll();
 
-    alert(emoji)
+    // csrfトークン取得
+    const csrfToken = elements.csrfToken.value;
+
+    reactions = [
+                    {'emoji':'👍', 'count':'3'} 
+                    , {'emoji':'😂', 'count':'3'} 
+                    , {'emoji':'❤️', 'count':'3'} 
+                    , {'emoji':'😭', 'count':'3'} 
+                    , {'emoji':'😭', 'count':'3'} 
+                    , {'emoji':'😭', 'count':'3'} 
+                    , {'emoji':'😭', 'count':'3'} 
+                    , {'emoji':'😭', 'count':'3'} 
+                    , {'emoji':'😭', 'count':'3'} 
+                    , {'emoji':'😭', 'count':'3'} 
+
+                ]
+    
+    updateReactionDisplay();
+    // elements.showEmojiArea.textContent = `${emoji} ${3}`;
+
+    return;
+
+    try{
+        const {response, data} = await FetchRequest(`/posts/${postId}/reactions`,"post",csrfToken)
+
+        // data.reactions => [{'emoji':'👍', 'count':'3'} , {'emoji':'😂', 'count':'3'} ]
+        
+
+        // -- 成功 --
+        if(response.ok){
+           reactions = data.reactions;
+        }
+        
+        // -- 失敗 --
+        if(!response.ok){
+            
+            // エラーメッセージ表示
+            showError(data.text);
+        }
+
+
+    }catch(error){
+        console.log(error);
+
+        showError("リアクションに失敗しました");
+    }
 }
 
+function createReactionElement(reactionLists){
+    
+    for(const reaction of reactionLists){
+        // spanタグ生成
+        const span = document.createElement('span');
+
+        span.className ="reaction-badge";
+
+        span.textContent = `${reaction.emoji} ${reaction.count}`
+
+        elements.showEmojiArea.appendChild(span);
+    }    
+}
+
+function updateReactionDisplay(){
+    // 絵文字表示エリアを空で初期化
+    elements.showEmojiArea.innerHTML = "";
+
+    const limit = 6
+
+    // 先頭からlimitまでを抽出
+    const displayReactions = reactions.slice(0, limit)
+
+    // 折りたたみ解除ボタン 作成
+    if(reactions.length > limit){
+        createMoreBtn();
+    }
+    // リアクション要素生成
+    createReactionElement(displayReactions);
+
+    // まだあるよ
+    if(reactions.length > limit){
+        const more = document.createElement("span"); 
+        more.textContent = "…";
+        elements.showEmojiArea.appendChild(more);
+    }
+}
+
+// -- 折りたたみ解除ボタン生成 --
+function createMoreBtn(){
+        const moreBtn = document.createElement("span");
+
+        // クラス設定
+        moreBtn.className ="reaction-more";
+        
+        // コンテント設定
+        moreBtn.textContent = "＋";
+
+        // イベント設定
+        moreBtn.addEventListener("click",function(){
+            // 折りたたみを解除して全件表示させる
+            showAllReaction(reactions)
+        })
+        // 絵文字表示エリアに追加
+        elements.showEmojiArea.appendChild(moreBtn);
+}
+
+// -- リアクションすべて表示 --
+function showAllReaction(reactionLists){
+    elements.showEmojiArea.innerHTML = "";
+
+    // 折りたたむ
+    const collapose = document.createElement("span");
+
+    // クラス設定
+    collapose.className ="reaction-more";
+
+    // 折りたたみ
+    collapose.textContent = "－";
+
+    // イベント設定
+    collapose.addEventListener("click", function(){
+        
+        // 表示を元に戻す
+        updateReactionDisplay();
+    })
+
+    // 折りたたみを追加
+    elements.showEmojiArea.appendChild(collapose);
+
+    // リアクション要素生成
+    createReactionElement(reactions);
+}
 
 // -- サーバー通信 --
 async function FetchRequest(url, method ,csrfToken, body=null) {

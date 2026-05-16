@@ -409,6 +409,30 @@ em-emoji-picker {
   z-index: 1000;
 }
 
+.reaction-area{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+.reaction-badge{
+    padding: 5px;
+    font-size: 12px;
+}
+
+/* 折りたたみ解除 */
+.reaction-more{
+    font-weight: bold;
+    color:gray
+}
+
+#add-reaction-btn .material-symbols-outlined {
+    vertical-align: middle;
+    font-size: 20px;
+    
+}
+
+
 /* スマホ向けレスポンシブ対応 */
 @media screen and (max-width: 700px) {
     .confirm_box_container .confirm_box {
@@ -422,13 +446,13 @@ em-emoji-picker {
 }
 
 @media (max-width: 480px) {
-  em-emoji-picker {
-    transform: scale(0.7);
-    position: fixed !important;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-    z-index: 1000;
-  }
+    em-emoji-picker {
+        transform: scale(0.7);
+        transform-origin: top right;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1000;
+    }
 }
 
