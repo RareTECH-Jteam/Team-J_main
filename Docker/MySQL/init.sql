@@ -169,7 +169,7 @@ CREATE TABLE
 
 */
 
--- リアクションユーザーID
+/*リアクションユーザーID(いらないかも)
 CREATE TABLE
     Re_users (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -178,21 +178,21 @@ CREATE TABLE
         updated_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
         PRIMARY KEY (id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+*/
 
 -- リアクションID
 CREATE TABLE
     reactions (
-        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-        comment_id BIGINT UNSIGNED NOT NULL,
-        Re_user_id BIGINT UNSIGNED NOT NULL,
-        content TEXT NOT NULL,
-        reaction_F BIT(1),
-        created_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,     -- リアクションID 主キー
+        comment_id BIGINT UNSIGNED NOT NULL,            -- コメントid参照　外部キー
+        user_id BIGINT UNSIGNED NOT NULL,               -- ユーザーid参照　外部キー
+        emoji_type VARCHAR(50) NOT NULL,                -- スタンプ内容
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- リアクション日時
         PRIMARY KEY (id),
-        KEY idx_reactions_comment_id (comment_id),
-        KEY idx_reactions_Re_user_id (Re_user_id),
-        CONSTRAINT fk_reactions_comment_id FOREIGN KEY (comment_id) REFERENCES comments (id),
-        CONSTRAINT fk_reactions_Re_user_id FOREIGN KEY (Re_user_id) REFERENCES Re_users (id)
+        UNIQUE KEY unique_user_reaction(comment_id,user_id,emoji_type), -- 同じ人が同じリアクションをしないようにする制約
+        FOREIGN KEY (comment_id) REFERENCES comments (id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+        -- ON DELETE CASCADE 連動削除機能。コメントが消えると紐づいているリアクションも一緒に消える
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 

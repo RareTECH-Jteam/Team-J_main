@@ -29,7 +29,7 @@ class Chain:
     
     @classmethod
     #バトンランキング取得
-    def get_chain_ranking(cls, chain_id):
+    def get_chain_ranking(cls):
         conn = db_pool.get_conn()
         conn.ping(reconnect=True)
         try:
