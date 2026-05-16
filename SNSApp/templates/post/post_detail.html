@@ -6,7 +6,8 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{url_for('static', filename='js/post.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+    <script src="{{url_for('static', filename='js/post_detail.js')}}"></script>
 {% endblock %}
 
 {% block content %}
@@ -31,20 +32,35 @@
         <section class="post-detail">
             <!-- 投稿編集用ボタンを投稿詳細枠の上に表示　-->
             <div class="post-actions">
-                {% if post.user_id == user_id %}
-
                 <div class="post-menu" id="post-menu-{{post.id}}">
-                    <button class="menu-btn" onclick="toggleMenu('{{ post.id }}')">︙</button>
-                    <div class="menu-dropdown" id="menu-{{ post.id }}" style="display:none;">
-                        <button onclick="enableEdit('{{ post.id }}')">編集</button>
-                        <button onclick="deletePost('{{ post.id }}')">削除</button>
+                    <div class="action-bar" data-postid="{{post.id}}" data-reaction-user-id="{{ user_id }}">
+                        <button class="quick-btn" onclick="sendReaction('👍')">👍</button>
+                        <button class="quick-btn" onclick="sendReaction('❤️')">❤️</button>
+                        <button class="quick-btn" onclick="sendReaction('😭')">😭</button>
+                        <button class="quick-btn" onclick="sendReaction('😂')">😂</button>
+                        <div class="picker-wrapper">
+                            <button id="add-reaction-btn" class="quick-btn">😊+</button>
+                            <div id="picker-container"></div>
+                        </div>
+
+                        {% if post.user_id == user_id %}
+                        <div class="menu-wrapper">
+                            <button class="quick-btn" onclick="toggleMenu()">︙</button>
+                            <div class="menu-dropdown" id="menu-{{ post.id }}" style="display:none;">
+                                <button onclick="enableEdit()">
+                                   <span class="pen">🖋 編集</span> 
+                                </button>
+                                <button onclick="deletePost()">
+                                    <span class="trash">🗑 削除</span>
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
-                </div>                          
-                {% endif %}
+                </div>
             </div>
             <!-- 編集ボタンによる編集エリア（非表示） -->
-            <section class="edit-post" data-post-id="{{post.id}}" 
-                      id="edit-area-{{ post.id }}" style="display: none;">
+            <section class="edit-post" id="edit-area-{{ post.id }}" style="display: none;">
                 <div class="edit-post-body">
                     <textarea id="edit-content-{{ post.id }}" name="content">{{ post.content }}</textarea> 
                     <div class="edit-post-footer">
@@ -60,8 +76,8 @@
                             >
                             分
                         </label>
-                        <button class="btn-edit" onclick="saveEdit('{{ post.id }}')">保存</button>
-                        <button class="btn-edit" onclick="cancelEdit('{{ post.id }}')">キャンセル</button>
+                        <button class="btn-edit" onclick="saveEdit()">保存</button>
+                        <button class="btn-edit" onclick="cancelEdit()">キャンセル</button>
                     </div>
                 </div>
             </section>
@@ -92,6 +108,7 @@
                             {{ minutes }}分
                         {% endif %}      
                     </div>
+                    <div id="disp"></div>
 
 
                 </div>

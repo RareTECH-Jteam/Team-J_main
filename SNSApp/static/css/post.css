@@ -351,6 +351,64 @@
     visibility: hidden;
 }
 
+/* 絵文字ピッカー */
+em-emoji-picker {
+   max-width: none !important;
+    transform: scale(0.7);
+    transform-origin: top left; /* 表示位置に合わせて調整 */
+}
+
+.pen , .trash{
+    font-weight: 500;
+}
+
+.trash{
+    color: red;
+}
+
+.picker-wrapper {
+    position: relative;
+}
+
+#picker-container{
+    position: absolute;
+    top: 30px;
+    left: 0;
+    display: none;
+}
+
+.action-bar{
+    display: flex;
+}
+
+.action-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+  margin-right: 7px;
+}
+
+.quick-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+}
+
+.picker-wrapper {
+  position: relative;
+}
+
+#picker-container {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  display: none; 
+  z-index: 1000;
+}
+
 /* スマホ向けレスポンシブ対応 */
 @media screen and (max-width: 700px) {
     .confirm_box_container .confirm_box {
@@ -362,3 +420,15 @@
         max-width: 45%;
     }
 }
+
+@media (max-width: 480px) {
+  em-emoji-picker {
+    transform: scale(0.7);
+    position: fixed !important;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: 1000;
+  }
+}
+
