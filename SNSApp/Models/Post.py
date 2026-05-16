@@ -154,13 +154,34 @@ class Post:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = """SELECT SUM(TIME_TO_SEC(study_time)) DIV 3600 AS hours,
-                                SUM(TIME_TO_SEC(study_time)) MOD 3600 DIV 60 AS minutes
-                                FROM posts 
-                                JOIN users ON posts.user_id = users.id
-                                WHERE posts.deleted_at IS NULL
-                                GROUP BY posts.user_id, users.name
-                                ORDER BY SUM(TIME_TO_SEC(study_time)) DESC;"""
+                sql = """
+                        WITH user_study_ranking AS(
+                        SELECT user_id
+                            , SUM(TIME_TO_SEC(study_time)) DIV 3600 AS total_hours
+                            , SUM(TIME_TO_SEC(study_time)) MOD 3600 DIV 60 AS  total_minutes
+                        FROM
+                            posts 
+                        WHERE 1 = 1 
+                            AND deleted_at IS NULL
+                            AND created_at >= DATE_FORMAT(NOW(), '%Y-%m-01') 
+                            AND created_at <= LAST_DAY(NOW())
+                        GROUP BY 
+                            user_id
+                        ORDER BY
+                            total_hours DESC, total_minutes DESC
+                                
+                            )
+
+                        SELECT
+                              users.id
+                            , users.name
+                            , ranking.total_hours
+                            , ranking.total_minutes
+                        FROM
+                              users 
+                              INNER JOIN user_study_ranking AS ranking
+                              ON users.id = ranking.user_id;
+                                """
                 cur.execute(sql)
                 return cur.fetchall()
         except pymysql.Error as e:
