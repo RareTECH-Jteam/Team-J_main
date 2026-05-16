@@ -34,7 +34,13 @@ class Chain:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SELECT chain_id, MAX(relay_count) FROM Baton GROUP BY chain_id ORDER BY MAX(relay_count) DESC;"
+                sql = """SELECT chain_id, MAX(relay_count), baton_title 
+                         FROM Baton 
+                         WHERE 1 = 1 
+                            AND created_at >= DATE_FORMAT(NOW(), '%Y-%m-01') 
+                            AND created_at <= LAST_DAY(NOW())
+                         GROUP BY chain_id, baton_title 
+                         ORDER BY MAX(relay_count) DESC;"""
                 cur.execute(sql)
                 return cur.fetchall()
             
