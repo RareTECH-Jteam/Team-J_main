@@ -426,6 +426,13 @@ em-emoji-picker {
     color:gray
 }
 
+#add-reaction-btn .material-symbols-outlined {
+    vertical-align: middle;
+    font-size: 20px;
+    
+}
+
+
 /* スマホ向けレスポンシブ対応 */
 @media screen and (max-width: 700px) {
     .confirm_box_container .confirm_box {
