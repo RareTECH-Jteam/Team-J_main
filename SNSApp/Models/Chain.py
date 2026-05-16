@@ -25,3 +25,22 @@ class Chain:
             abort(500)
         finally:
             db_pool.release(conn)
+
+    
+    @classmethod
+    #バトンランキング取得
+    def get_chain_ranking(cls, chain_id):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT chain_id, MAX(relay_count) FROM Baton GROUP BY chain_id ORDER BY MAX(relay_count) DESC;"
+                cur.execute(sql)
+                return cur.fetchall()
+            
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
