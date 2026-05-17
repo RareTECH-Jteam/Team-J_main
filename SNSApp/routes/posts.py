@@ -2,6 +2,7 @@ from flask import Blueprint, session, redirect, url_for,render_template, flash ,
 from Models.User import User
 from Models.Post import Post
 from Models.Comment import Comment
+from Models.Reaction import Reactions
 from util.SessionManager import SessionManager as SM
 
 posts = Blueprint('posts', __name__)
@@ -193,12 +194,16 @@ def post_detail_view(post_id):
         comment['created_at'] = comment['created_at'].strftime('%Y-%m-%d %H:%M')
         comment['user_name'] = User.get_name_by_id(comment['user_id'])
 
+    # リアクションの取得
+    reactions = Reactions.get_reactions_by_id(post_id)
+
     return render_template('post/post_detail.html'
                            , post=post
                            , comments=comments
                            , user_id=user_id
                            , hours=hours
-                           , minutes=minutes)
+                           , minutes=minutes
+                           , reactions=reactions)
 
 
 # コメント処理
