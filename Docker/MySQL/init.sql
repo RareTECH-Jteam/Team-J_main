@@ -186,7 +186,7 @@ CREATE TABLE
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,     -- リアクションID 主キー
         post_id BIGINT UNSIGNED NOT NULL,               -- 投稿id参照　外部キー
         user_id BIGINT UNSIGNED NOT NULL,               -- ユーザーid参照　外部キー
-        emoji_type VARCHAR(50) NOT NULL,                -- スタンプ内容
+        emoji_type VARCHAR(50)  COLLATE utf8mb4_bin NOT NULL,                -- スタンプ内容
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- リアクション日時
         PRIMARY KEY (id),
         UNIQUE KEY unique_user_reaction(post_id,user_id,emoji_type), -- 同じ人が同じリアクションをしないようにする制約
