@@ -1,9 +1,11 @@
+import json
 from flask import Blueprint, session, redirect, url_for,render_template, flash , abort , request
 from Models.User import User
 from Models.Post import Post
 from Models.Comment import Comment
 from Models.Reaction import Reactions
 from util.SessionManager import SessionManager as SM
+from util.DB import DB
 
 posts = Blueprint('posts', __name__)
 
@@ -195,15 +197,26 @@ def post_detail_view(post_id):
         comment['user_name'] = User.get_name_by_id(comment['user_id'])
 
     # リアクションの取得
-    reactions = Reactions.get_reactions_by_id(post_id)
+    reactions = []
+    current_reactions_info = Reactions.get_reactions_by_id(post_id)
+
+    #　整形
+    for reaction in current_reactions_info:
+        reactions.append({
+            'emoji': reaction['emoji_type'],  # emoji_type
+            'count': reaction['count']   # count
+        })
+
+    # jsonという文字列にする
+    reactions_json = json.dumps(reactions, ensure_ascii=False)
 
     return render_template('post/post_detail.html'
-                           , post=post
-                           , comments=comments
-                           , user_id=user_id
-                           , hours=hours
-                           , minutes=minutes
-                           , reactions=reactions)
+                        , post=post
+                        , comments=comments
+                        , user_id=user_id
+                        , hours=hours
+                        , minutes=minutes
+                        , reactions=reactions_json) # jsonで渡す形に変更
 
 
 # コメント処理
@@ -228,3 +241,63 @@ def create_comment(post_id):
     Comment.create(user_id, post_id, content)
     flash('コメントの投稿が完了しました','success')
     return redirect(url_for('posts.post_detail_view', post_id=post_id))
+
+#リアクション登録・削除
+@posts.route('/posts/<int:post_id>/reactions', methods=['POST'])
+def reaction_post(post_id):
+
+    # セッションが無効の場合
+    if not SM.is_live_session():
+        # ログインページ表示
+        return redirect(url_for('auth.login_view'))
+    
+    # ユーザーID設定
+    user_id = SM.get_user_id()
+
+    # JSONデータ取得
+    data = request.get_json()
+    emoji_native = data['emoji']
+
+    #空っぽチェック
+    errors = Reactions.validate(emoji_native)
+    if errors:
+        return{'message':'error','text':errors},400 # 絵文字が空っぽの場合は400エラーを出して終わり
+    
+    conn = DB.init_db_pool().get_conn() # タイムアウト対策
+    conn.ping(reconnect=True) #生存確認の一文(切れてたらreconnect)
+    
+    # 投稿されたリアクションがテーブルにあるか確認
+    is_already = Reactions.is_already_reaction(conn, post_id, user_id)
+    should_insert = True
+
+    try:
+        if is_already: #すでに押した(リアクション済み)の場合
+                Reactions.delete_reaction(conn, post_id, user_id) # 既にあるものをもう一度押した→取り消しの処理
+
+                if is_already['emoji_type'] == emoji_native: # 過去に押したものと同じなら
+                    should_insert = False # 登録はしない
+        if should_insert:
+                Reactions.insert_reaction(conn, post_id, user_id, emoji_native) # 新しくリアクションを登録する
+
+        conn.commit() # 全部うまくいったらコミット
+        
+        # 現在の最新のリアクション情報を再取得してフロントに返す
+        reactions = []
+        current_reactions_info = Reactions.get_reactions_by_id(conn, post_id)
+
+        # JSONで返却するために形を整える
+        for reaction in current_reactions_info:
+            reactions.append({
+                'emoji': reaction[0],
+                'count': reaction[1]
+            })
+
+        # jsonでお返し
+        reactions_json = json.dumps(reactions, ensure_ascii=False)
+        return {'message': 'success', 'reactions': reactions_json}, 200 # 成功時は200で返す
+
+    except Exception as e: # もし失敗したら
+        return{'message':'error','text':str(e)},500 # 500エラーを返す
+    
+    finally:
+        DB.init_db_pool().release(conn)
