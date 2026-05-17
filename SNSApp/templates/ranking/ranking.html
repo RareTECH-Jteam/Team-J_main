@@ -50,8 +50,14 @@
                         
                         <!--勉強時間表示  -->
                         <div class="total">
+                            {%if not study_ranking.total_minutes%}
+                                {{study_ranking.total_hours}}時間
+                            {%elif not study_ranking.total_hours %}
+                                {{study_ranking.total_minutes}}分
+                            {%else%}
                             {{study_ranking.total_hours}}時間{{study_ranking.total_minutes}}分
                             <!--勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
+                            {%endif%}
                         </div>
                     </div>
                     {% endfor %}              
@@ -85,11 +91,11 @@
                         {% endif %}
                         
                         <!--名前表示  -->
-                        <div class="rank-name">{{ baton_chain_ranking.chain_id }}</div>
+                        <div class="rank-name">{{ baton_chain_ranking.baton_title }}</div>
                         
                         <!--勉強時間表示  -->
                         <div class="total">
-                            {{ baton_chain_ranking.sum_count}}人達成
+                            {{ baton_chain_ranking.sum_count}}人目達成
                         </div>
                     </div>
                     {% endfor %}              
