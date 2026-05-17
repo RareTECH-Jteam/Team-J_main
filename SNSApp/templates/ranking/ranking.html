@@ -13,7 +13,7 @@
     <main>
         <div class="full-page-title">
             <img class="title-img" src="{{ url_for('static', filename='img/CatRabbit_in_Cup.PNG')}}" alt="CatRabbit_in_Cup">
-            <div class="page-title">ランキング</div>
+            <div class="page-title">{{ month }}月<br>ランキング</div>
             <img class="title-img" src="{{ url_for('static', filename='img/CatRabbit_in_Cup.PNG')}}" alt="CatRabbit_in_Cup">
         </div>
         <!--ランキング表示-->
@@ -22,14 +22,15 @@
                 <!-- ランキングタイトル表示 -->
                 <div class="ranking-title">
                     <img class="ranking-title-img" src="{{ url_for('static', filename='img/Studying_rabbit.PNG')}}" alt="Studying_rabbit">
-                    <span class="ranking-title-name">勉強時間王　（月間）</span>
+                    <span class="ranking-title-name">勉強時間王</span>
                 </div>
                 
                 <!-- ランキング順位表示 -->
                 <div class="ranking-scroll-box">
-                    {% for study_ranking in study_ranking %}              <!--スクロール表示-->
-                    {#{% if user_id == id%}#}
-                    <div class="ranking-detail">        <!--ランキング詳細-->
+                    {% for study_rank in study_ranking %}              <!--スクロール表示-->
+
+                    <div class="{% if study_rank.id == user_id %}my-ranking-detail
+                                    {%else%}ranking-detail {%endif%}">        <!--ランキング詳細-->
                         
                         <!--順位表示  -->
                         {%if loop.index0==0%}           <!--はじめの配列要素-->
@@ -46,16 +47,16 @@
                         {% endif %}
                         
                         <!--名前表示  -->
-                        <div class="rank-name">{{ study_ranking.name }}</div>
+                        <div class="rank-name">{{ study_rank.name }}</div>
                         
                         <!--勉強時間表示  -->
                         <div class="total">
-                            {%if not study_ranking.total_minutes%}
-                                {{study_ranking.total_hours}}時間
-                            {%elif not study_ranking.total_hours %}
-                                {{study_ranking.total_minutes}}分
+                            {%if not study_rank.total_minutes%}
+                                {{study_rank.total_hours}}時間
+                            {%elif not study_rank.total_hours %}
+                                {{study_rank.total_minutes}}分
                             {%else%}
-                            {{study_ranking.total_hours}}時間{{study_ranking.total_minutes}}分
+                            {{study_rank.total_hours}}時間{{study_rank.total_minutes}}分
                             <!--勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
                             {%endif%}
                         </div>
@@ -73,7 +74,7 @@
                 
                 <!-- ランキング順位表示 -->
                 <div class="ranking-scroll-box">
-                    {% for baton_chain_ranking in baton_chain_ranking %}              <!--スクロール表示-->
+                    {% for baton_chain_rank in baton_chain_ranking %}              <!--スクロール表示-->
                     <div class="ranking-detail">        <!--ランキング詳細-->
                         
                         <!--順位表示  -->
@@ -91,11 +92,11 @@
                         {% endif %}
                         
                         <!--名前表示  -->
-                        <div class="rank-name">{{ baton_chain_ranking.baton_title }}</div>
+                        <div class="rank-name">{{ baton_chain_rank.baton_title }}</div>
                         
                         <!--勉強時間表示  -->
                         <div class="total">
-                            {{ baton_chain_ranking.sum_count}}人目達成
+                            {{ baton_chain_rank.sum_count}}人目達成
                         </div>
                     </div>
                     {% endfor %}              
