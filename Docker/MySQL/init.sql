@@ -182,17 +182,17 @@ CREATE TABLE
 
 -- リアクションID
 CREATE TABLE
-    reactions (
+    post_reactions (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,     -- リアクションID 主キー
-        comment_id BIGINT UNSIGNED NOT NULL,            -- コメントid参照　外部キー
+        post_id BIGINT UNSIGNED NOT NULL,               -- 投稿id参照　外部キー
         user_id BIGINT UNSIGNED NOT NULL,               -- ユーザーid参照　外部キー
         emoji_type VARCHAR(50) NOT NULL,                -- スタンプ内容
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- リアクション日時
         PRIMARY KEY (id),
-        UNIQUE KEY unique_user_reaction(comment_id,user_id,emoji_type), -- 同じ人が同じリアクションをしないようにする制約
-        FOREIGN KEY (comment_id) REFERENCES comments (id) ON DELETE CASCADE,
+        UNIQUE KEY unique_user_reaction(post_id,user_id,emoji_type), -- 同じ人が同じリアクションをしないようにする制約
+        FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-        -- ON DELETE CASCADE 連動削除機能。コメントが消えると紐づいているリアクションも一緒に消える
+        -- ON DELETE CASCADE 連動削除機能。投稿が消えると紐づいているリアクションも一緒に消える
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 
@@ -252,3 +252,10 @@ INSERT INTO chain(id) VALUES(1);
 INSERT INTO Baton (baton_title,sender_id, receiver_id, task_id,content,chain_id,relay_count,status)
 VALUES
     ('レジェンドバトン！', 2, 1, 1, '今日授業で習ったこと、1つ教えて！', 1, 1, 0);
+
+INSERT INTO post_reactions (post_id, user_id, emoji_type) 
+VALUES
+(1, 2, X'F09F918D'),    -- [グーサイン] (16進数)
+(2, 3, X'E29DA4'),      -- [ハート] (16進数)
+(3, 1, X'F09F9882'),    -- [泣き笑い] (16進数)
+(1, 3, X'F09F98AD') ;   -- [号泣] (16進数)
