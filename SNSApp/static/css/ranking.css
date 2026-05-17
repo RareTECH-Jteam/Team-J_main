@@ -9,7 +9,7 @@
 }
 
 .full-page-title{
-    height: 20%;
+    height: 30%;
     width: 100%;
     display: flex;
     margin: 0% 0%;
@@ -19,23 +19,23 @@
 
 .title-img{
     object-fit: contain;
-    width: 18%;
+    width: 25%;
 }
 
 .page-title{ 
     text-align: center;
     height: 56px;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 700;
-    margin: 5% 0% 0% 0%;
+    /* margin: 0% 0% 5% 0%; */
 }
 
 .full-ranking-design{ 
     width: 90%;
-    height: 50%;
+    height: 40%;
     display: flex;
     flex-direction: column;
-    margin: 2% auto;
+    margin: 0% auto;
 }
 
 .each-ranking-view{
@@ -79,6 +79,17 @@
     align-items: center;
     margin: 3% 2%;
 }
+
+.my-ranking-detail{
+    background-color: orange;
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 3% 2%;
+}
+
 .ranks-medal{
     object-fit: contain;
     width: 10%;
@@ -100,6 +111,5 @@
 .total{
     width: 30%;
     text-align: end;
-    margin-right: 2%;
-
+    margin-right: 5%;
 }
