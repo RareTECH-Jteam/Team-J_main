@@ -87,6 +87,23 @@
     margin-right: 7px ; /* 投稿の枠右端に手動で無理矢理合わせてます！ */
 }
 
+.reaction-bar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.reaction-btn {
+    display: none; /* リアクションボタン系統をデフォルトでは非表示に */
+}
+
+/* .reaction-btnの親要素で面積広い.post-detailに対するマウスオーバーでリアクションボタン系統が表示される */
+.post-detail:hover .reaction-btn {
+    display: inline-flex; /* inline-flexは文字のように必要最小限サイズだけ使う */
+    font-size: 20px; /* スマホで選択しやすいように少し大きめに */
+    background-color: transparent;
+    border-color: transparent;
+}
+
 .menu-btn{
     width: 32px;
     height: 32px;
