@@ -51,13 +51,21 @@
                         
                         <!--勉強時間表示  -->
                         <div class="total">
-                            {%if not study_rank.total_minutes%}
+                            {%if not study_rank.total_minutes %}
+                                {%if study_rank.total_hours > 465%}
+                                465時間！？
+                                {%else%}
                                 {{study_rank.total_hours}}時間
+                                {%endif%}
                             {%elif not study_rank.total_hours %}
                                 {{study_rank.total_minutes}}分
                             {%else%}
-                            {{study_rank.total_hours}}時間{{study_rank.total_minutes}}分
-                            <!--勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
+                                {%if study_rank.total_hours > 465%}
+                                465時間！？
+                                {%else%}
+                                {{study_rank.total_hours}}時間{{study_rank.total_minutes}}分
+                                <!--勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
+                                {%endif%}
                             {%endif%}
                         </div>
                     </div>
