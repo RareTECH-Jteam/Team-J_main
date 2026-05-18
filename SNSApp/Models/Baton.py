@@ -235,6 +235,7 @@ class Baton:
                          FROM 
                            Baton 
                          WHERE 1 = 1 
+                            AND status = 1
                             AND created_at >= DATE_FORMAT(NOW(), '%Y-%m-01') 
                             AND created_at <= LAST_DAY(NOW())
                          GROUP BY chain_id, baton_title 
