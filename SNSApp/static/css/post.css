@@ -426,6 +426,10 @@ em-emoji-picker {
     color:gray
 }
 
+.reaction-more :hover{
+    cursor: pointer;
+}
+
 #add-reaction-btn .material-symbols-outlined {
     vertical-align: middle;
     font-size: 20px;

@@ -1,3 +1,7 @@
+/************************/
+/*  初期化処理          */
+/************************/
+
 // postIdはHTMLから取得
 const actionBar = document.querySelector('.action-bar');
 const postId = actionBar.dataset.postid;
@@ -36,6 +40,10 @@ const picker = new EmojiMart.Picker(pickerOptions)
 // ピッカー要素追加
 elements.pickerContainer.appendChild(picker);
 
+
+/************************/
+/*  投稿編集機能        */
+/************************/
 
 // 編集・削除、絵文字ピッカーの要素外をクリックしても、閉じれるように
 document.addEventListener("click", function(event) {
@@ -102,7 +110,6 @@ function saveEdit(){
 // -- 投稿内容更新 --
 async function UpdatePostContent(content,studytime){
     
-    alert(studytime)
     // csrfトークン取得
     const csrfToken = elements.csrfToken.value;
 
@@ -165,7 +172,7 @@ async function deletePost(){
     if(!result.isConfirmed) return;
 
 
-        DeletePostContent();
+    DeletePostContent();
 
 }
 
@@ -200,6 +207,24 @@ async function DeletePostContent(){
     }
 }
 
+
+/************************/
+/*  リアクション機能    */
+/************************/
+
+// -- ロードイベント --
+document.addEventListener('DOMContentLoaded', function(){
+
+    console.log(elements.showEmojiArea.dataset.reactions);
+
+    // 初回はHTML側に埋め込まれてるリアクション情報を取得
+    reactions = JSON.parse(elements.showEmojiArea.dataset.reactions);
+
+    // リアクション表示
+    updateReactionDisplay()
+})
+
+
 // -- 絵文字ピッカー表示 --
 elements.reactionBtn.addEventListener('click', function(){
     
@@ -226,57 +251,53 @@ function closeAll() {
     });
 }
  
+
+let reactionTimer = null;
 // リアクション送信
 async function sendReaction(emoji){
     
+    // 他のメニューなど開いてたら、閉じる
     closeAll();
 
     // csrfトークン取得
     const csrfToken = elements.csrfToken.value;
 
-    reactions = [
-                    {'emoji':'👍', 'count':'3'} 
-                    , {'emoji':'😂', 'count':'3'} 
-                    , {'emoji':'❤️', 'count':'3'} 
-                    , {'emoji':'😭', 'count':'3'} 
-                    , {'emoji':'😭', 'count':'3'} 
-                    , {'emoji':'😭', 'count':'3'} 
-                    , {'emoji':'😭', 'count':'3'} 
-                    , {'emoji':'😭', 'count':'3'} 
-                    , {'emoji':'😭', 'count':'3'} 
-                    , {'emoji':'😭', 'count':'3'} 
+    const body = {emoji:emoji}
 
-                ]
-    
-    updateReactionDisplay();
-    // elements.showEmojiArea.textContent = `${emoji} ${3}`;
+    // 連打された時の対策
+    clearTimeout(reactionTimer)
 
-    return;
-
-    try{
-        const {response, data} = await FetchRequest(`/posts/${postId}/reactions`,"post",csrfToken)
-
-        // data.reactions => [{'emoji':'👍', 'count':'3'} , {'emoji':'😂', 'count':'3'} ]
+    // 0.5秒後に実行する
+    reactionTimer = setTimeout(async function (){
         
+        try{
+            // レスポンス取得
+            const {response, data} = await FetchRequest(`/posts/${postId}/reactions`, "post",csrfToken, body)
 
-        // -- 成功 --
-        if(response.ok){
-           reactions = data.reactions;
-        }
-        
-        // -- 失敗 --
-        if(!response.ok){
+            // data.reactions => [{'emoji':'👍', 'count':'3'} , {'emoji':'😂', 'count':'3'} ]
             
-            // エラーメッセージ表示
-            showError(data.text);
+            // -- 成功 --
+            if(response.ok){
+                console.log(data.reactions)
+
+            reactions = data.reactions;
+
+            updateReactionDisplay()
+            }
+            
+            // -- 失敗 --
+            if(!response.ok){
+                
+                // エラーメッセージ表示
+                showError(data.text);
+            }
+
+        }catch(error){
+            console.log(error);
+
+            showError("リアクションに失敗しました");
         }
-
-
-    }catch(error){
-        console.log(error);
-
-        showError("リアクションに失敗しました");
-    }
+    },500)
 }
 
 function createReactionElement(reactionLists){
@@ -285,14 +306,23 @@ function createReactionElement(reactionLists){
         // spanタグ生成
         const span = document.createElement('span');
 
+        // クラス名設定
         span.className ="reaction-badge";
 
+        // イベント設定
+        span.addEventListener('click', function(){
+            sendReaction(reaction.emoji)
+        })
+
+        // 内容
         span.textContent = `${reaction.emoji} ${reaction.count}`
 
+        // 絵文字表示エリアに追加
         elements.showEmojiArea.appendChild(span);
     }    
 }
 
+// -- リアクションを画面に表示 --
 function updateReactionDisplay(){
     // 絵文字表示エリアを空で初期化
     elements.showEmojiArea.innerHTML = "";
@@ -309,7 +339,7 @@ function updateReactionDisplay(){
     // リアクション要素生成
     createReactionElement(displayReactions);
 
-    // まだあるよ
+    // …を追加
     if(reactions.length > limit){
         const more = document.createElement("span"); 
         more.textContent = "…";
@@ -385,7 +415,6 @@ async function FetchRequest(url, method ,csrfToken, body=null) {
 
     return {response, data};   
 }
-
 
 // -- 表示 --
 function showElement(element, display = "block"){
