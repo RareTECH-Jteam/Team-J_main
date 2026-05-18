@@ -206,7 +206,8 @@ def post_detail_view(post_id):
         for reaction in current_reactions_info:
             reactions.append({
                 'emoji': reaction['emoji_type'],  # emoji_type
-                'count': reaction['count']   # count
+                'count': reaction['count'] ,  # count
+                'users':reaction['name'].split(',') # user.name
             })
     except Exception as e:
         abort(500)

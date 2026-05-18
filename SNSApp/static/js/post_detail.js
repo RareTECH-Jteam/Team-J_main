@@ -47,17 +47,21 @@ elements.pickerContainer.appendChild(picker);
 /************************/
 
 // 編集・削除、絵文字ピッカーの要素外をクリックしても、閉じれるように
-document.addEventListener("click", function(event) {
-    if (!event.target.closest('.action-bar')) {
-        // メニューを閉じる
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.action-bar')) {
         document.querySelectorAll('.menu-dropdown').forEach(menu => {
             menu.style.display = "none";
         });
-        // ピッカーも閉じる
         elements.pickerContainer.style.display = "none";
     }
 });
 
+document.querySelector('.action-bar').addEventListener('mouseleave', function() {
+    document.querySelectorAll('.menu-dropdown').forEach(menu => {
+        menu.style.display = "none";
+    });
+    elements.pickerContainer.style.display = "none";
+});
 
 // トグルメニュークリック
 function toggleMenu(){
@@ -250,6 +254,11 @@ function closeAll() {
     document.querySelectorAll('.menu-dropdown').forEach(menu => {
         menu.style.display = "none";
     });
+
+     // ツールチップも閉じる
+    document.querySelectorAll('.reaction-tooltip').forEach(tooltip => {
+        tooltip.remove()
+    })
 }
  
 
@@ -314,6 +323,29 @@ function createReactionElement(reactionLists){
         span.addEventListener('click', function(){
             sendReaction(reaction.emoji)
         })
+
+        // マウス充てたとき、リアクションしたユーザー名を表示
+        span.addEventListener('mouseover', function(){
+            // ツールチップ取得
+            const existing = span.querySelector('.reaction-tooltip')
+            
+            // 既に存在してたら 削除
+            if(existing){
+                span.removeChild(existing);
+            } 
+            
+            // ツールチップ作成
+            const tooltip = document.createElement('div');
+            tooltip.className = "reaction-tooltip";
+            tooltip.textContent = reaction.users.join("\r\n");
+            span.appendChild(tooltip);
+        })
+
+        // マウス離したとき
+        span.addEventListener('mouseleave', function(){
+            const tooltip = document.querySelector('.reaction-tooltip');
+            if(tooltip) span.removeChild(tooltip); 
+        })        
 
         // 内容
         span.textContent = `${reaction.emoji} ${reaction.count}`

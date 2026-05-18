@@ -34,7 +34,8 @@ class reaction_services:
             for reaction in current_reactions_info:
                 reactions.append({
                     'emoji': reaction['emoji_type'],
-                    'count': reaction['count']
+                    'count': reaction['count'],
+                    'users':reaction['name'].split(',')
                 })
 
             # jsonでお返し

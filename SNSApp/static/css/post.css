@@ -93,15 +93,25 @@
 }
 
 .quick-btn {
-    display: none; /* リアクションボタン系統をデフォルトでは非表示に */
+    /* リアクションボタン系統をデフォルトでは非表示に */
+    /* display: none;  */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    font-size: 16px;
+    background-color: transparent;
+    border-color: transparent;    
 }
 
 /* .reaction-btnの親要素で面積広い.post-detailに対するマウスオーバーでリアクションボタン系統が表示される */
 .post-detail:hover .quick-btn {
     display: inline-flex; /* inline-flexは文字のように必要最小限サイズだけ使う */
-    font-size: 20px; /* スマホで選択しやすいように少し大きめに */
+    font-size: 16px; /* スマホで選択しやすいように少し大きめに */
     background-color: transparent;
     border-color: transparent;
+    opacity: 1;
+    visibility: visible;
+
 }
 
 .menu-btn{
@@ -452,7 +462,22 @@ em-emoji-picker {
     font-size: 20px;
     
 }
+.reaction-badge {
+    position: relative;
+}
 
+.reaction-tooltip{
+    position: absolute;
+    max-width: 100px;
+    z-index: 100;
+    background-color: #007a82;
+    color: white;
+    border-radius: 6px;
+    padding: 4px 8px;
+    margin-top: 2px;
+    font-size: 12px;
+    white-space: pre;
+}
 
 /* スマホ向けレスポンシブ対応 */
 @media screen and (max-width: 700px) {
