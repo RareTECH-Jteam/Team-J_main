@@ -7,9 +7,13 @@ db_pool = DB.init_db_pool()
 
 class Reactions: #リアクションクラス    
     @classmethod # リアクション機能のメイン
-    def get_reactions_by_id(cls, post_id): #clsには自分のクラス名が入る
-        conn = db_pool.get_conn() # コネクションチケット受け取り
-        conn.ping(reconnect=True) # 生存報告
+    def get_reactions_by_id(cls, post_id, conn= None): #clsには自分のクラス名が入る
+        should_release = conn is None
+        
+        if conn is None:
+            conn = db_pool.get_conn() # コネクションチケット受け取り
+            conn.ping(reconnect=True) # 生存報告
+       
         try: # try文 この領域内でエラーをかましたらexceptに移動
             with conn.cursor() as cur: # 通常カーソル
                 sql = """
@@ -22,9 +26,10 @@ class Reactions: #リアクションクラス
                 return cur.fetchall() # MySQlで該当したものすべてを呼び出し元に返す
         except pymysql.Error as e:
             print(f'リアクションにエラーが発生しています：{e}')
-            abort(500) # 画面に500エラーを返す
+            raise e # 画面に500エラーを返す
         finally:
-            db_pool.release(conn) # 借りたら返す
+            if should_release:
+                db_pool.release(conn) # 借りたら返す
 
 
     @classmethod # リアクション機能の追加機能-保存(insert)
