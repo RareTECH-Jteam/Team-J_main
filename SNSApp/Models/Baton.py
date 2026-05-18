@@ -81,6 +81,7 @@ class Baton:
                             , Baton.task_id 
                             , Baton.content 
                             , Baton.chain_id
+                            , Baton.relay_count
                             , Baton.status
                             , Baton.created_at
                             , Baton.batonpop
