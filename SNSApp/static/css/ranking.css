@@ -31,7 +31,7 @@
 }
 
 .full-ranking-design{ 
-    width: 90%;
+    width: 95%;
     height: 40%;
     display: flex;
     flex-direction: column;
@@ -109,7 +109,7 @@
 }
 
 .total{
-    width: 30%;
+    width: 38%;
     text-align: end;
     margin-right: 5%;
 }
