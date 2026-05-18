@@ -44,7 +44,12 @@
                             <div class="task-sender">
                             {{ baton_incomplete.sender_name }}
                             </div>
-                            <div class="question">　からのバトン、今やる？
+                            <div class="from">から</div>
+                            <div class="total-num">
+                            {# {{ baton_chain_rank.sum_count}} #}人完了
+                            </div>
+                            <div class="message">
+                            のバトン届いたよ
                             </div>
                         </div>
                     <div class="task-body" id="task-detailbody-{{ baton_incomplete.task_id }}">
@@ -86,7 +91,7 @@
                 <input type="hidden" name="is_done" value="1"> <!-- 自分のタスクの完了フラグ -->
                 {% if baton_incomplete %} <!-- 他の人からバトンが届いている場合、表示 -->
                 <input type="hidden" name="baton_id" value="{{ baton_incomplete.id }}"> <!-- baton_idを追加 -->
-                <input type="text" name="task_title" class="task_title" value="{{ baton_incomplete.baton_title }} " readonly><br> <!-- タスクの名前をテキストエリア（一行なのでinput使用）に表示＆readonlyで編集不可に -->
+                <input type="text" name="task_title" class="task_title" value="{{ baton_incomplete.baton_title }}" readonly><br> <!-- タスクの名前をテキストエリア（一行なのでinput使用）に表示＆readonlyで編集不可に -->
                 <label for="select-task" class="select-title">バトンを選ぶ</label> <!-- label forを使うことで文章のどこを触れても選択できる・・はず -->
                 <select id="select-task" name="select-task" class="select-task"> <!-- プルダウンリストからタスクを選ぶ。ここでid="select-task"とすることでlabel for="select-task"が効く -->
                     {% for task in tasks %}
