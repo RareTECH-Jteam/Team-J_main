@@ -202,21 +202,40 @@ VALUES
   ('おっくん', 'okun@example.com', '165d68fe9913a11c91bb7290d5d885833240c0fdb43b0b2be790f043bc9022c7'),
   ('てる', 'teru@example.com', '44b4c21936c779156df19a17832a0d91ecbfb37e6889ef6d9b465c75b00ef060'),
   ('たまちゃん', 'tamachan@example.com', 'ee839106f2f14fab267dd94f311a152490e256e69e612e4d73b710c5fc9b7ef7'),
-  ('まつけん', 'matuken@example.com', '2935bf31052e67f5ff0ba4f37e9f6ef3964831dfeee316fee07cef4ab9803a62');
+  ('まつけん', 'matuken@example.com', '2935bf31052e67f5ff0ba4f37e9f6ef3964831dfeee316fee07cef4ab9803a62'),
+  ('田中太郎', 'tanaka@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
+  ('佐藤花子', 'sato@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
+  ('鈴木一郎', 'suzuki@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
+  ('山田二郎', 'yamada@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
+  ('伊藤三郎', 'ito@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');
 
 
 INSERT INTO posts (user_id, content,study_time)
 VALUES
   (1, 'こんにちは！数学勉強中です！','01:30:00'),
   (2, '試験頑張ってきます','05:30:00'),
-  (3, 'ハッカソンの会議の日です！', '00:45:00');
+  (3, 'ハッカソンの会議の日です！', '00:45:00'),
+  (6, '今日は数学の微分を勉強しました！', '01:30:00'),
+  (7, '英単語を50個覚えました！', '00:45:00'),
+  (8, '物理の力学をやりました', '02:00:00'),
+  (9, '化学の有機化合物を復習しました', '01:00:00'),
+  (10, '古文の文法を勉強しました', '00:30:00'),
+  (6, '二次関数の問題を解きました', '01:15:00'),
+  (7, '英語のリスニングをしました', '00:50:00');  
 
 
 INSERT INTO comments (user_id, post_id, content)
 VALUES
     (2, 1, '私もがんばります！'),
     (3, 2, '応援しています！頑張ってください。'),
-    (1, 3, '22時からですね！');
+    (1, 3, '22時からですね！'),
+    (7, 4, '微分頑張ってますね！'),
+    (8, 4, '一緒に頑張りましょう！'),
+    (6, 5, '50個すごい！'),
+    (9, 5, '英単語大事ですよね'),
+    (10, 6, '物理難しいですよね'),
+    (6, 7, '有機化合物は重要ですね'),
+    (7, 8, '古文がんばれ！');    
 
 INSERT INTO tasks(content)
 VALUES
@@ -248,6 +267,8 @@ VALUES
 
 
 INSERT INTO chain(id) VALUES(1);
+INSERT INTO chain(id) VALUES(2);
+INSERT INTO chain(id) VALUES(3);
 
 INSERT INTO Baton (baton_title,sender_id, receiver_id, task_id,content,chain_id,relay_count,status)
 VALUES
