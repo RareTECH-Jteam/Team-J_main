@@ -32,7 +32,8 @@ const pickerOptions = {
     },
     locale : "ja",
     previewPosition:"none",
-    skinTonePosition:"none"
+    skinTonePosition:"preview",
+    navPosition: "bottom"
 }
 
 const picker = new EmojiMart.Picker(pickerOptions)
