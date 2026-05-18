@@ -65,6 +65,13 @@
     justify-content: flex-start;
     font-size: 12px;
 }
+
+.total-num {
+    color: red;
+    font-weight: 600;
+    margin: 0 4px 0 4px;
+}
+
 .task-sender {
     font-size: 12px;
     font-weight: 600;
