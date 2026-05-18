@@ -92,12 +92,12 @@
     justify-content: flex-end;
 }
 
-.reaction-btn {
+.quick-btn {
     display: none; /* リアクションボタン系統をデフォルトでは非表示に */
 }
 
 /* .reaction-btnの親要素で面積広い.post-detailに対するマウスオーバーでリアクションボタン系統が表示される */
-.post-detail:hover .reaction-btn {
+.post-detail:hover .quick-btn {
     display: inline-flex; /* inline-flexは文字のように必要最小限サイズだけ使う */
     font-size: 20px; /* スマホで選択しやすいように少し大きめに */
     background-color: transparent;
