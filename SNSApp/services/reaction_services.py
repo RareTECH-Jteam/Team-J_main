@@ -28,7 +28,7 @@ class reaction_services:
             
             # 現在の最新のリアクション情報を再取得してフロントに返す
             reactions = []
-            current_reactions_info = Reactions.get_reactions_by_id(post_id, conn)
+            current_reactions_info = Reactions.get_reactions_by_id(post_id)
 
             # JSONで返却するために形を整える
             for reaction in current_reactions_info:
