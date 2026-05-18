@@ -14,10 +14,12 @@ class Reactions: #リアクションクラス
         try: # try文 この領域内でエラーをかましたらexceptに移動
             with conn.cursor() as cur: # 通常カーソル
                 sql = """
-                    SELECT emoji_type, COUNT(*) as count 
-                    FROM post_reactions 
-                    WHERE post_id = %s
-                    GROUP BY emoji_type
+                    SELECT emoji_type, COUNT(*) as count , GROUP_CONCAT(users.name)  AS name
+                    FROM post_reactions pr
+                      INNER JOIN users
+                        ON users.id = pr.user_id
+                    WHERE pr.post_id = %s
+                    GROUP BY pr.emoji_type
                 """                                 # SQL文 「post_reactionsテーブルから、指定された投稿ID（WHERE post_id = %s）に一致するデータを全部選んで（SELECT）ね」って意味
                 cur.execute(sql, (post_id,)) # 上のSQL文をMySQLに発射するコマンド
                 return cur.fetchall() # MySQlで該当したものすべてを呼び出し元に返す
