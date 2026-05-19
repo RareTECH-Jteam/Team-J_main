@@ -20,6 +20,7 @@ def baton_view():
     incomplete_baton = Baton.get_by_incomplete_baton(user_id) #未完了バトンの確認
     history_tasks = Baton.get_completed_and_failed(user_id) #過去の履歴確認
 
+
     #history_tasksの箱からstatusが1なら成功、2なら失敗のリストを作成する
     complete_tasks = [t for t in history_tasks if t['status'] ==1]
     fail_tasks = [t for t in history_tasks if t['status'] ==2]
