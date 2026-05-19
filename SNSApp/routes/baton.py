@@ -62,16 +62,19 @@ def baton_send():
     baton_data = {}
     baton_id = request.form.get('baton_id')
 
+    # 自分のバトンがあるかチェック
+    my_baton = Baton.get_by_incomplete_baton(sender_id)
+
     # バトンが渡された場合
-    if baton_id:
+    if my_baton:
         # バトン情報を取得
-        current_baton = Baton.find_by_id(baton_id)
+        # current_baton = Baton.find_by_id(my_baton['id'])
         
-        baton_data['baton_id'] = baton_id
-        baton_data['baton_title'] = current_baton['baton_title']
+        baton_data['baton_id'] = my_baton['id']
+        baton_data['baton_title'] = my_baton['baton_title']
         baton_data['sender_id'] = sender_id
-        baton_data['chain_id'] = current_baton['chain_id']
-        baton_data['relay_count'] = int(current_baton['relay_count']) + 1
+        baton_data['chain_id'] = my_baton['chain_id']
+        baton_data['relay_count'] = int(my_baton['relay_count']) + 1
         baton_data['task_id'] = task_id
         baton_data['content'] = content
 

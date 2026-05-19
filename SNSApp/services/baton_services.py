@@ -16,7 +16,7 @@ class baton_services:
                 BatonRepository.baton_update_status_success(baton_data['baton_id'], conn)
 
             # ターゲット探索（自分を除外）
-            next_receiver_id = Baton.get_receiver(sender_id)
+            next_receiver_id = Baton.get_receiver(sender_id,baton_data['chain_id'])
             print(f"次の人: {next_receiver_id}")
             
             # 空き枠あり
