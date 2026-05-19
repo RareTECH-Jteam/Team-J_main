@@ -28,17 +28,6 @@
             <!-- 勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
             </div>
         </div>
-        {% with messages = get_flashed_messages(with_categories=true) %} <!-- 一時的なメッセージあれば表示 -->
-        {% if messages %}
-        <div class="flash-messages">
-            {% for category, message in messages %}
-            <div class="flash flash-{{ category }}">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
 
         {% if posts %} <!-- 投稿が存在する場合、表示 -->
         <section class="post-list">

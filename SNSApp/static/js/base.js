@@ -10,6 +10,17 @@ async function showConfirm(title,text,icon,confirmText="確認",cancelButtonText
     });
 }
 
+
+function showSuccess(message){
+    Swal.fire({
+        title: '成功',
+        text: message,
+        icon: 'success',
+        width: 'min(90%,300px)',
+        confirmButtonText: 'OK'
+    });
+}
+
 function showError(message){
     Swal.fire({
         title: 'エラー',

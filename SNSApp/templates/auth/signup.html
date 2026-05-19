@@ -17,19 +17,6 @@
 
         <p class="auth-subtitle">ユーザー情報を入力して新規登録してください。</p>
 
-        <!-- フラッシュメッセージを設定する -->
-                 {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-            <div class="flash-messages">
-                {% for category, message in messages %}
-                <div class="flash flash-{{ category }}">
-                {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-        {% endwith %}
-
         <!--フォーム入力-->
         <form class="auth-form" action="{{url_for('auth.signup_process')}}" method="post">
             <input type="hidden" name="csrf_token" value="{{csrf_token()}}">  <!--暗号トークンをform送信-->

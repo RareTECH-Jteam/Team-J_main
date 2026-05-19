@@ -17,17 +17,6 @@
         <div class="page-title">
             投稿詳細
         </div>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div class="flash-messages">
-            {% for category, message in messages %}
-            <div class="flash flash-{{ category }}">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
 
         <!-- 対象の投稿（マイページで選択した一件のみ -->
         <section class="post-detail">

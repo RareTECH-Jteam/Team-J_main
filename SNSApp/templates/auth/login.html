@@ -17,19 +17,6 @@
 
         <p class="auth-subtitle">メールアドレスとパスワードを入力して<br>ログインしてください。</p>
 
-        <!-- フラッシュメッセージ表示-->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-            <div class="flash-messages">
-                {% for category, message in messages %}
-                <div class="flash flash-{{ category }}">
-                {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-        {% endwith %}
-
 
         <!--フォーム入力-->
         <form class="auth-form" action="{{url_for('auth.login_process')}}" method="post"> <!--login[POST]のURLにform送信-->
