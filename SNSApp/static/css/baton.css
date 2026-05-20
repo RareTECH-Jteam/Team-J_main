@@ -192,7 +192,7 @@
 .complete {
     text-align: left;
     margin: 8px auto;
-    background-color:#F3F3F3;
+    background-color:#eaf6fd;
     padding: 8px 16px;
     max-height: 100px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
     overflow-y: auto;
@@ -205,9 +205,9 @@
 .fail {
     text-align: left;
     margin: 8px auto 0px auto;
-    background-color:#F3F3F3;
+    background-color:#dddddd;
     padding: 8px 16px;
-    max-height: 100px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
+    max-height: 80px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
     overflow-y: auto;
 }
 
