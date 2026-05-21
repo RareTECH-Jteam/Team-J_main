@@ -44,6 +44,7 @@ class Baton:
                             , receiver.id AS receiver_id 
                             , receiver.name AS receiver_name
                             , Baton.task_id 
+                            , Baton.baton_title
                             , Baton.content 
                             , Baton.status
                             , Baton.created_at

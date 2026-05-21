@@ -132,12 +132,16 @@
     min-width: 160px;
     max-width: 200px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     border-radius: 8px;
+    margin-left: 4px;
+    border:solid #00C3D0;
+    background-color: #FFFFFF;
 }
 
 .select-title {
     font-size: 12px;
+    margin-left: 4px;
 }
 
 .select-task{
@@ -146,9 +150,9 @@
     min-height: 40px;
     margin-left: 4px;
     border-radius: 8px;
-    color: chocolate;
     font-weight: 600;
     font-size: 11px;
+    border:solid #00C3D0;
 }
 
 .send-task {
@@ -185,8 +189,14 @@
     font-size: 12px;
 }
 
+.history-item {
+    margin: 2px 0; /* 行間を狭くしたいので、<p>タグのデフォルトの上下marginを小さくする */
+    line-height: 1.0; /* 文字の行間も詰める */
+}
+
 .complete-title {
     font-weight: 600;
+    color:hotpink;
 }
 
 .complete {
