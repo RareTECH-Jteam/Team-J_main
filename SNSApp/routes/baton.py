@@ -97,6 +97,12 @@ def baton_send():
 
     if errors:
         return {'message': 'error', 'text': errors}, 400    
+    
+    # バトンタイトル重複チェック
+    existing_baton = Baton.find_by_title(baton_title) # 入力されたタイトルをModelの関数に渡す
+    if existing_baton: # もしタイトルが既にあったら
+        return {"message" : "error","text":["そのタイトルはすでに使われているよ！"]},400 # 400エラーを返す
+
 
     baton_data['baton_id'] = None
     baton_data['baton_title'] = baton_title

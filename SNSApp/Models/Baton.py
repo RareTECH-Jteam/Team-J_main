@@ -29,6 +29,22 @@ class Baton:
             abort(500)
         finally:
             db_pool.release(conn)
+
+    @classmethod
+    # バトンの重複チェック
+    def find_by_title(cls, baton_title):
+        conn = db_pool.get_conn() # 接続チケット借りる
+        conn.ping(reconnect=True) # 生存報告
+        try:
+            with conn.cursor() as cur: # 通常カーソル使用
+                sql = "SELECT * FROM Baton WHERE baton_title = %s;" # Batonテーブルから、画面から送られてきたタイトルと「完全に一致するもの」を探す
+                cur.execute(sql,(baton_title,)) # 上のSQLへぶち込む
+                return cur.fetchone() # 見つかったら全部返す
+        except pymysql.Error as e: # TRY文内でエラーをかましたら
+            print(f"エラーが発生:{e}")
+            abort(500)
+        finally: # 最後に絶対に実行する
+            db_pool.release(conn)
     
 
     @classmethod
