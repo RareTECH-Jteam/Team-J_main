@@ -254,3 +254,29 @@ class Baton:
         finally:
             db_pool.release(conn)
 
+    @classmethod
+    # バトン総完了数を取得
+    def get_total_completed_count(cls, user_id):
+        conn = db_pool.get_conn() # 接続チケット取得
+        conn.ping(reconnect=True) # 生存報告
+        try:
+            with conn.cursor() as cur: # 通常のカーソル取得
+                sql = """
+                    SELECT COUNT(*) as total_count
+                    FROM Baton
+                    WHERE status = 1 AND sender_id = %s
+                """
+                # Batonテーブルから、「statusが1（完了）」かつ「送信者が自分」の両方を満たすデータの行数を数えて、その結果に「total_count」というあだ名を付ける
+                cur.execute(sql,(user_id,)) # 上のSQL文にこの情報をぶち込む
+                result = cur.fetchone() # resultに上の文の結果をすべて入れる
+
+                if isinstance(result,dict): # 返ってきた結果が辞書型(名前アリの箱)かどうか確認
+                    return result["total_count"]
+                return result[0] if result else 0 # 辞書じゃなく、タプル型(ただのリスト)だった場合は最初の0番目の数字を返す
+        except pymysql.Error as e: # tryの中でエラーを起こした場合この中を発動
+            print(f"バトン完了数カウントエラーが発生:{e}")
+            abort(500)
+        finally: # 上手くいこうが失敗しようが最後はここを実行
+            db_pool.release(conn) # 接続チケットの変換
+
+
