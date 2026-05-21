@@ -19,7 +19,7 @@ def baton_view():
     tasks = Task.get_all() #Taskの内容をすべて拾ってくる
     incomplete_baton = Baton.get_by_incomplete_baton(user_id) #未完了バトンの確認
     history_tasks = Baton.get_completed_and_failed(user_id) #過去の履歴確認
-    total_completed = Baton.get_total_completed_count(user_id) # バトンの総完了数取得
+    total_completed_count = Baton.get_total_completed_count(user_id) # バトンの総完了数取得
 
 
     #history_tasksの箱からstatusが1なら成功、2なら失敗のリストを作成する
@@ -36,7 +36,7 @@ def baton_view():
         complete_tasks=complete_tasks, #成功バトン履歴
         fail_tasks=fail_tasks, #失敗バトン履歴
         page_id ="baton",
-        total_completed_count=total_completed # バトン総完了数
+        total_completed_count=total_completed_count # バトン総完了数
     )
 
 
