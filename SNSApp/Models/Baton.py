@@ -107,7 +107,7 @@ class Baton:
     @classmethod
     #自分以外のバトン完了してる人を取得
     #バトンの送り先を選別するため
-    def get_receiver(cls,user_id,chain_id):
+    def get_receiver(cls,sender_id,pre_sender_id):
         conn = db_pool.get_conn()
         conn.ping(reconnect=True)
         try:
@@ -116,21 +116,21 @@ class Baton:
                          FROM users 
                            LEFT JOIN Baton 
                              ON users.id = Baton.receiver_id AND Baton.status = 0
-                        WHERE users.id != %s
+                        WHERE users.id NOT IN (%s , %s)
                         AND Baton.receiver_id IS NULL
-                        AND users.id NOT IN (
-                            SELECT sender_id FROM Baton WHERE chain_id = %s
-                        )
                         ORDER BY RAND() LIMIT 1
                      """
-                cur.execute(sql,(user_id,chain_id))
+                cur.execute(sql,(sender_id,pre_sender_id))
                 user = cur.fetchone()
                 if not user:
                     return None
                 return user['id']
         except pymysql.Error as e:
             print(f"エラーが発生:{e}")
-            abort(500)
+            raise Exception("送り先の取得に失敗しました") from e
+        except Exception as e:
+            print(f"エラーが発生:{e}")
+            raise Exception("送り先の取得に失敗しました") from e        
         finally:
             db_pool.release(conn)
 

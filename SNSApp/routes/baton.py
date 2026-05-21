@@ -72,6 +72,9 @@ def baton_send():
         
         baton_data['baton_id'] = my_baton['id']
         baton_data['baton_title'] = my_baton['baton_title']
+        # 自分に送ってきた人
+        baton_data['pre_sender_id'] = my_baton['sender_id']
+        # 自分が送る側になる
         baton_data['sender_id'] = sender_id
         baton_data['chain_id'] = my_baton['chain_id']
         baton_data['relay_count'] = int(my_baton['relay_count']) + 1
@@ -98,6 +101,8 @@ def baton_send():
 
     baton_data['baton_id'] = None
     baton_data['baton_title'] = baton_title
+    # 自分に送ってきた人はいない
+    baton_data['pre_sender_id'] = None
     baton_data['sender_id'] = sender_id
     baton_data['chain_id'] = chain_id
     baton_data['relay_count'] = 1
