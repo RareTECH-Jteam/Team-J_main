@@ -264,9 +264,9 @@ class Baton:
                 sql = """
                     SELECT COUNT(*) as total_count
                     FROM Baton
-                    WHERE status = 1 AND sender_id = %s
+                    WHERE status = 1 AND receiver_id = %s
                 """
-                # Batonテーブルから、「statusが1（完了）」かつ「送信者が自分」の両方を満たすデータの行数を数えて、その結果に「total_count」というあだ名を付ける
+                # Batonテーブルから、「statusが1（完了）」かつ「受信者が自分」の両方を満たすデータの行数を数えて、その結果に「total_count」というあだ名を付ける
                 cur.execute(sql,(user_id,)) # 上のSQL文にこの情報をぶち込む
                 result = cur.fetchone() # resultに上の文の結果をすべて入れる
 
