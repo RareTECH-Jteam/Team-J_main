@@ -91,7 +91,7 @@
                 </select>
                 <div class="send-task">
                         <img class="send-task-image" src="{{ url_for('static', filename='img/Baton_pass_hachimaki.PNG')}}" alt="baton_pass">
-                    <button class="send-task-btn" type="submit";">タスクを完了して<br>次の人にバトンを渡す！</button>
+                    <button class="send-task-btn" type="submit";>タスクを完了して<br>次の人にバトンを渡す！</button>
                 </div>
 
                 {% else %}
@@ -116,14 +116,14 @@
         <section class="task-history">
             <div class="complete">
                 <div class="complete-title">
-                    バトン完了！
+                    バトン完了！ （トータル：{# {{ complete_task.total }} #} 個） <!-- てるさんが括弧の中の引数作成中 -->
                 </div>
                 <div class="content">
                     {% if complete_tasks %}
                         {% for complete_task in complete_tasks %}
                             <div class="history-item">
-                                <p><strong>{{ complete_task.sender_name }}</strong> からのバトン</p>
-                                <p>内容：{{ complete_task.content }}</p>
+                                <p>バトン名：<strong>{{ complete_task.baton_title }}</strong></p>
+                                <p>内容：<strong>{{ complete_task.content }}</strong></p>
                             <hr> </div>
                         {% endfor %}
                     {% else %}
@@ -141,8 +141,8 @@
                     {% if fail_tasks %}
                         {% for fail_task in fail_tasks %}
                             <div class="history-item">
-                                <p><strong>{{ fail_task.sender_name }}</strong> からのバトン</p>
-                                <p>内容：{{ fail_task.content }}</p>
+                                <p>バトン名：<strong>{{ fail_task.baton_title }}</strong></p>
+                                <p>内容：<strong>{{ fail_task.content }}</strong></p>
                             <hr> </div>
                         {% endfor %}
                     {% else %}
