@@ -34,9 +34,16 @@
                             {{ baton_incomplete.sender_name }}
                             </div>
                             <div class="from">から</div>
+                            {% if baton_incomplete['relay_count']-1 > 0 %} <!-- relay_count-1　が0より大きければその数を表示させる -->
                             <div class="total-num">
-                             {{ baton_incomplete['relay_count']-1}} 人完了
+                            {{ baton_incomplete['relay_count']-1}}人が完了
                             </div>
+                            {% else %}
+                            <div class="total-num">
+                                新品
+                            </div>
+                            {% endif %}
+
                             <div class="message">
                             のバトン届いたよ
                             </div>
