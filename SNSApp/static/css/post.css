@@ -63,14 +63,14 @@
 
 .comment-card {
     padding: 8px 16px;
-    margin: 8px 32px; /* 箱の大きさ調整 */
-    background-color: #e2eba3; /* コメントの色を変えて、オリジナル投稿と区別 */
+    margin: 8px 16px; /* 箱の大きさ調整 */
 }
 
 .comment-content {
     background-color: #e2eba3; /* コメントの色を変えて、オリジナル投稿と区別 */
     text-align: left;
     font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
+    padding: 8px 16px;
 }
 
 .comment-header {
@@ -78,8 +78,17 @@
     justify-content: space-between;
 }
 
-/* 投稿コメント編集用三点ボタン */
+/* 投稿編集用三点ボタン */
 .post-menu{
+    position: relative; /*　これがないとボタンが反応しない・・ */
+    /* display: inline-block; */ /*　これはなくても大丈夫そう */
+    display: flex;
+    justify-content: flex-end; /* これで右側に寄せる */
+    margin-right: 7px ; /* 投稿の枠右端に手動で無理矢理合わせてます！ */
+}
+
+/* コメント編集用三点ボタン */
+.comment-menu{
     position: relative; /*　これがないとボタンが反応しない・・ */
     /* display: inline-block; */ /*　これはなくても大丈夫そう */
     display: flex;
@@ -92,7 +101,24 @@
     justify-content: flex-end;
 }
 
+.reaction-bar2 {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .quick-btn {
+    /* リアクションボタン系統をデフォルトでは非表示に */
+    /* display: none;  */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    font-size: 16px;
+    background-color: transparent;
+    border-color: transparent;    
+}
+
+/* 投稿に対するコメント用のボタン設定 */
+.quick-btn2 {
     /* リアクションボタン系統をデフォルトでは非表示に */
     /* display: none;  */
     opacity: 0;
@@ -111,7 +137,16 @@
     border-color: transparent;
     opacity: 1;
     visibility: visible;
+}
 
+/* .reaction-btnの親要素で面積広い.comment-cardに対するマウスオーバーでリアクションボタン系統が表示される */
+.comment-card:hover .quick-btn2 {
+    display: inline-flex; /* inline-flexは文字のように必要最小限サイズだけ使う */
+    font-size: 16px; /* スマホで選択しやすいように少し大きめに */
+    background-color: transparent;
+    border-color: transparent;
+    opacity: 1;
+    visibility: visible;
 }
 
 .menu-btn{
@@ -146,6 +181,33 @@
 }
 
 .menu-dropdown button:hover{
+    background-color: #f5f5f5;
+}
+
+
+.menu-dropdown2{
+    position: absolute; /* .comment-menuを基準に自由配置する */
+    right: 0; /* dropdownの右端を親要素の .menu-btnにピッタリ合わせる */
+    top: 100%; /* drowdownの上端を、親要素の .menu-btnの高さ100%（真下）に配置 */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 100; /* 他の要素より前面に表示：dropdownが下に潜るのを防ぐ */
+    min-width: 150px;
+}
+
+.menu-dropdown2 button{
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-dropdown2 button:hover{
     background-color: #f5f5f5;
 }
 
@@ -380,7 +442,7 @@
 
 /* 絵文字ピッカー */
 em-emoji-picker {
-   max-width: none !important;
+    max-width: none !important;
     transform: scale(0.7);
     transform-origin: top left; /* 表示位置に合わせて調整 */
 }
@@ -404,39 +466,65 @@ em-emoji-picker {
     display: none;
 }
 
+.picker-wrapper2 {
+    position: relative;
+}
+
+#picker-container2{
+    position: absolute;
+    top: 30px;
+    left: 0;
+    display: none;
+}
+
 .action-bar{
     display: flex;
 }
 
 .action-bar {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  justify-content: flex-end;
-  margin-right: 7px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: flex-end;
+    margin-right: 7px;
 }
 
 .quick-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+}
+
+.quick-btn2 {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
 }
 
 .picker-wrapper {
-  position: relative;
+    position: relative;
 }
 
 #picker-container {
-  position: absolute;
-  top: 30px;
-  right: 0;
-  display: none; 
-  z-index: 1000;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    display: none; 
+    z-index: 1000;
 }
 
 .reaction-area{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+/* コメント用のリアクション表示エリア */
+.reaction-area2{
     display: flex;
     flex-wrap: wrap;
     gap: 2px;
