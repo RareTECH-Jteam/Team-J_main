@@ -11,14 +11,18 @@ class baton_services:
     def process_baton_relay(cls, sender_id, baton_data):
         conn = db_pool.get_conn()
         try:
+            # ターゲット探索（自分または自分に送ってきた人を除外）
+            # 新規の場合はpre_sender_id = 自分になる
+            pre_sender_id = baton_data['pre_sender_id'] or sender_id
+            
+            # 次の送り先
+            next_receiver_id = Baton.get_receiver(sender_id,pre_sender_id)
+            print(f"次の人: {next_receiver_id}")
+            
             # 継続の場合のみ完了にする
             if baton_data.get('baton_id'):
                 BatonRepository.baton_update_status_success(baton_data['baton_id'], conn)
 
-            # ターゲット探索（自分を除外）
-            next_receiver_id = Baton.get_receiver(sender_id,baton_data['chain_id'])
-            print(f"次の人: {next_receiver_id}")
-            
             # 空き枠あり
             if next_receiver_id:                          
                 # 受け取りユーザー設定
