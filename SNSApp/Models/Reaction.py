@@ -80,3 +80,71 @@ class Reactions: #リアクションクラス
             except pymysql.Error as e:
                 print(f'リアクションが重複しています：{e}')
                 raise e # 500エラーを画面に返す
+
+    # コメントリアクション
+    @classmethod
+    def is_already_reaction_for_comment(cls, conn, comment_id, user_id): 
+            try: 
+                with conn.cursor(pymysql.cursors.DictCursor) as cur: # 絵文字の列名でアクセスしたいので DictCursor を部分的に使う
+                    sql = """
+                        SELECT emoji_type FROM comment_reactions 
+                        WHERE comment_id = %s AND user_id = %s
+                    """     
+                    cur.execute(sql, (comment_id, user_id)) 
+                    result = cur.fetchone() # 結果を1つだけ入れる
+                    return result
+            except pymysql.Error as e:
+                print(f'リアクションが重複しています：{e}')
+                raise e 
+    
+    @classmethod 
+    def get_comment_reactions_by_id(cls, comment_id):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True) 
+       
+        try: 
+            with conn.cursor() as cur: 
+                sql = """
+                    SELECT emoji_type, COUNT(*) as count , GROUP_CONCAT(users.name)  AS name
+                    FROM comment_reactions cr
+                      INNER JOIN users
+                        ON users.id = cr.user_id
+                    WHERE cr.comment_id = %s
+                    GROUP BY cr.emoji_type
+                """                                
+                cur.execute(sql, (comment_id,)) 
+                return cur.fetchall() 
+        except pymysql.Error as e:
+            print(f'リアクションにエラーが発生しています：{e}')
+            raise e 
+        finally:
+            db_pool.release(conn) # 借りたら返す
+
+
+    @classmethod 
+    def insert_comment_reaction(cls, conn, comment_id, user_id, emoji_type): 
+        try: 
+            with conn.cursor() as cur:
+                sql = """
+                    INSERT INTO comment_reactions (comment_id, user_id, emoji_type) 
+                    VALUES (%s, %s, %s)
+                """
+                cur.execute(sql, (comment_id, user_id, emoji_type)) 
+                return True 
+        except pymysql.Error as e:
+            print(f'リアクションにエラーが発生しています：{e}')
+            raise e
+
+    @classmethod
+    def delete_comment_reaction(cls, conn, comment_id, user_id):                 
+        try:
+            with conn.cursor() as cur: 
+                sql = """
+                    DELETE FROM comment_reactions 
+                    WHERE comment_id = %s AND user_id = %s
+                """    
+                cur.execute(sql, (comment_id, user_id)) # 
+                return True
+        except pymysql.Error as e:
+            print(f'リアクションにエラーが発生しています：{e}')
+            raise e 
