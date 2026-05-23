@@ -1,7 +1,7 @@
 async function showConfirm(title,text,icon,confirmText="確認",cancelButtonText="キャンセル"){
     return await Swal.fire({
         title: title,
-        html: message.replace(/\n/g, '<br/>'),
+        html: text.replace(/\n/g, '<br/>'),
         icon: icon,
         width: 'min(90%,300px)',
         showCancelButton: true,
