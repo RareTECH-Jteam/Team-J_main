@@ -139,6 +139,11 @@
     visibility: visible;
 }
 
+.post-detail.picker-open:hover .quick-btn {
+    opacity: 0;
+    visibility: hidden;
+}
+
 /* .reaction-btnの親要素で面積広い.comment-cardに対するマウスオーバーでリアクションボタン系統が表示される */
 .comment-card:hover .quick-btn2 {
     display: inline-flex; /* inline-flexは文字のように必要最小限サイズだけ使う */

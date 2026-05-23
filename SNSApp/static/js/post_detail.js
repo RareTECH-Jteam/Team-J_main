@@ -84,11 +84,8 @@ function closeAll() {
         tooltip.remove()
     })
 
-    // document.querySelectorAll('.edit-post').forEach(area => {
-    //     if(area.style.display === "block"){
-    //         area.style.display = "none";
-    //     }
-    // })
+    // ピッカーを閉じたときにホバー効果を元に戻す
+    document.querySelector(".post-detail").classList.remove("picker-open");
 }
 
 // 枠外クリックで閉じる
@@ -103,10 +100,22 @@ document.addEventListener('click', function(e) {
 
 // マウスが離れたら閉じる
 document.querySelectorAll('.action-bar, .action-bar-comment').forEach(bar => {
-    bar.addEventListener('mouseleave', function() {
+    bar.addEventListener('mouseleave', function(e) {
+        if(e.relatedTarget && e.relatedTarget.closest('em-emoji-picker')) return
         closeAll()
     })
 });
+
+
+// document.querySelectorAll('.add-reaction-btn').forEach(btn =>{
+//     btn.addEventListener("click",function(){
+//         // 親要素を辿る
+//         const bar = this.closest(".action-bar, .action-bar-comment");
+//         state.currentReactionType = bar.dataset.type || "post";
+//         state.currentReactionCommentId = bar.dataset.commentId || null;
+//     })
+// })
+
 
 // トグルメニュークリック
 function toggleMenu(type,commentId=""){
@@ -448,22 +457,39 @@ document.querySelectorAll('.add-reaction-btn').forEach(btn => {
         document.querySelectorAll('.menu-dropdown, .menu-dropdown2').forEach(menu => {
             menu.style.display = "none"
         })
+
+           
+        // 親要素を辿る
+        const bar = this.closest(".action-bar, .action-bar-comment");
+        state.currentReactionType = bar.dataset.type || "post";
+        state.currentReactionCommentId = bar.dataset.commentId || null;
         
-        const rect = this.getBoundingClientRect()
+
+        const rect = this.getBoundingClientRect();
         elements.pickerContainer.style.top = rect.bottom + 'px'
         elements.pickerContainer.style.left = rect.left + 'px'
         
-        showElement(elements.pickerContainer)
+        showElement(elements.pickerContainer);
+
+        // コメントの絵文字ピッカーにホバーした時に、投稿詳細のメニューが表示されるのを防ぐため
+        document.querySelector('.post-detail').classList.add('picker-open')
 
         console.log(elements.pickerContainer.style.display) 
     })
 })
 
+// 投稿に対するリアクションか、コメントに対してのリアクションかの状態を保存
+function setReactionState(type, commentId=""){
+    state.currentReactionType = type;
+    state.currentReactionCommentId = commentId;
+}
+
 let reactionTimer = null;
 // リアクション送信
-async function sendReaction(emoji,type="post",commentId=""){
-    state.currentReactionType =type;
-    state.currentReactionCommentId = commentId;
+async function sendReaction(emoji){
+
+    type = state.currentReactionType;
+    commentId = state.currentReactionCommentId;
 
     console.log(state.commentReactions[commentId])
     // 他のメニューなど開いてたら、閉じる

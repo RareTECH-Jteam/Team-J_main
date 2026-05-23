@@ -25,10 +25,10 @@
                 <div class="post-menu" id="post-menu-{{post.id}}">
                     <div class="action-bar" data-postid="{{post.id}}" data-reaction-user-id="{{ user_id }}">
                         <div class="reaction-bar"> <!-- 上部のリアクションボタン系統 -->
-                            <button class="quick-btn" onclick="sendReaction('👍','post')">👍</button>
-                            <button class="quick-btn" onclick="sendReaction('❤️','post')">❤️</button>
-                            <button class="quick-btn" onclick="sendReaction('😭','post')">😭</button>
-                            <button class="quick-btn" onclick="sendReaction('😂','post')">😂</button>
+                            <button class="quick-btn" onclick="setReactionState('post'); sendReaction('👍','post')">👍</button>
+                            <button class="quick-btn" onclick="setReactionState('post'); sendReaction('❤️','post')">❤️</button>
+                            <button class="quick-btn" onclick="setReactionState('post'); sendReaction('😭','post')">😭</button>
+                            <button class="quick-btn" onclick="setReactionState('post'); sendReaction('😂','post')">😂</button>
                             <div class="picker-wrapper">
                                 <button class="quick-btn add-reaction-btn">
                                     <span class="material-symbols-outlined">
@@ -122,12 +122,16 @@
             <!-- 投稿編集用ボタンを投稿詳細枠の上に表示　-->
             <div class="comment-actions">
                 <div class="comment-menu" id="comment-menu-{{ comment.id }}">
-                    <div class="action-bar action-bar-comment" data-commentid="{{ comment.id }}" data-reaction-user-id="{{ user_id }}">
+                    <div class="action-bar action-bar-comment" data-type="comment" data-comment-id="{{ comment.id }}" data-reaction-user-id="{{ user_id }}">
                         <div class="reaction-bar2"> <!-- 上部のリアクションボタン系統 -->
-                            <button class="quick-btn2" onclick="sendReaction('👍','comment','{{comment.id}}')">👍</button>
-                            <button class="quick-btn2" onclick="sendReaction('❤️','comment','{{comment.id}}')">❤️</button>
-                            <button class="quick-btn2" onclick="sendReaction('😭','comment','{{comment.id}}')">😭</button>
-                            <button class="quick-btn2" onclick="sendReaction('😂','comment','{{comment.id}}')">😂</button>
+                            <button class="quick-btn2" onclick="setReactionState('comment','{{comment.id}}');
+                            sendReaction('👍')">👍</button>
+                            <button class="quick-btn2" onclick="setReactionState('comment','{{comment.id}}'); 
+                            sendReaction('❤️')">❤️</button>
+                            <button class="quick-btn2" onclick="setReactionState('comment','{{comment.id}}'); 
+                            sendReaction('😭')">😭</button>
+                            <button class="quick-btn2" onclick="setReactionState('comment','{{comment.id}}'); 
+                            sendReaction('😂')">😂</button>
                             <div class="picker-wrapper2">
                                 <button  class="quick-btn2 add-reaction-btn">
                                     <span class="material-symbols-outlined">
