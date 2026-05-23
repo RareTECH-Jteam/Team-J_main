@@ -270,7 +270,7 @@ function cancelEdit(){
 // 編集キャンセル時のアクション
 function resetEditArea() {
     const type = state.editingType;
-    const commentId = state.commentId;
+    const commentId = state.editingCommentId;
 
     switch(type){
         case "post":
