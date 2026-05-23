@@ -6,23 +6,45 @@
 const actionBar = document.querySelector('.action-bar');
 const postId = actionBar.dataset.postid;
 
+
 // 全要素を一度に取得
 const elements = {
-    postmenu: document.getElementById(`post-menu-${postId}`),
+    postmenu: document.getElementById(`post-menu-${postId}`),   
     menubutton: document.getElementById(`menu-${postId}`),
     originalcontentbody: document.getElementById(`post-detailbody-${postId}`),
     editarea: document.getElementById(`edit-area-${postId}`),
     edittextarea: document.getElementById(`edit-content-${postId}`),
     editstudytime: document.getElementById(`edit-study-time-input-${postId}`),
     csrfToken: document.querySelector('input[name="csrf_token"]'),
-    reactionBtn: document.getElementById('add-reaction-btn'),
+    // reactionBtn: document.getElementById('add-reaction-btn'),
     pickerContainer: document.getElementById('picker-container'),
     reactionUserId: actionBar.dataset.reactionUserId,
     showEmojiArea :document.getElementById('showemoji')
 }
 
-// リアクションを格納する
-let reactions = []
+function getCommentElements(commentId){
+    return {
+        commentmenu: document.getElementById(`comment-menu-${commentId}`),
+        menubutton:document.getElementById(`menu-comment-${commentId}`),
+        originalcontentbody:document.getElementById(`comment-body-${commentId}`),
+        editarea: document.getElementById(`edit-area-${commentId}`),
+        edittextarea: document.getElementById(`edit-comment-content-${commentId}`),
+        showEmojiArea: document.getElementById(`showemoji-${commentId}`) 
+    }
+}
+
+const state = {
+    // リアクション
+    postReactions: [],
+    commentReactions: {}, // { commentId: [] }
+    currentReactionType: 'post',
+    currentReactionCommentId: null,
+    
+    // 編集
+    editingType: null,
+    editingCommentId: null,
+}
+
 
 // ピッカーを作る
 // プレビュー(preview)と検索(search)を非表示に設定
@@ -47,79 +69,145 @@ elements.pickerContainer.appendChild(picker);
 /************************/
 
 // 編集・削除、絵文字ピッカーの要素外をクリックしても、閉じれるように
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.action-bar')) {
-        document.querySelectorAll('.menu-dropdown').forEach(menu => {
-            menu.style.display = "none";
-        });
-        elements.pickerContainer.style.display = "none";
-    }
-});
 
-document.querySelector('.action-bar').addEventListener('mouseleave', function() {
-    document.querySelectorAll('.menu-dropdown').forEach(menu => {
+// 全部閉じる処理
+function closeAllMenus() {
+    document.querySelectorAll('.menu-dropdown, .menu-dropdown2').forEach(menu => {
         menu.style.display = "none";
     });
     elements.pickerContainer.style.display = "none";
+}
+
+function closeAll() {
+    closeAllMenus()
+    document.querySelectorAll('.reaction-tooltip').forEach(tooltip => {
+        tooltip.remove()
+    })
+
+    // document.querySelectorAll('.edit-post').forEach(area => {
+    //     if(area.style.display === "block"){
+    //         area.style.display = "none";
+    //     }
+    // })
+}
+
+// 枠外クリックで閉じる
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.action-bar') 
+        && !e.target.closest('.action-bar-comment'
+        && !e.target.closest('edit-post')
+        )) {
+        closeAll()
+    }
+});
+
+// マウスが離れたら閉じる
+document.querySelectorAll('.action-bar, .action-bar-comment').forEach(bar => {
+    bar.addEventListener('mouseleave', function() {
+        closeAll()
+    })
 });
 
 // トグルメニュークリック
-function toggleMenu(){
+function toggleMenu(type,commentId=""){
 
     // 絵文字ピッカーを非表示にしておく
     elements.pickerContainer.style.display = "none";
 
-    // トグルメニュー 再表示
-    if(elements.menubutton.style.display == "none"){
-        showElement(elements.menubutton);
-        return;
+    const target = type === 'post' 
+        ? elements.menubutton 
+        : getCommentElements(commentId).menubutton;
+       
+    if(target.style.display === "block"){
+        hideElement(target)
+        return
     }
     
-    // トグルメニュー 非表示
-    if(elements.menubutton.style.display =="block"){
-        hideElement(elements.menubutton);
-        return;
-    }
+    showElement(target)
 }
 
  // -- 編集ボタンクリック --
-function enableEdit(){
+function enableEdit(type, commentId=""){
+    state.editingType=type;
+    state.editingCommentId = commentId;
 
-    // 編集開始時の値を保存
-    elements.edittextarea.setAttribute('data-original-content', elements.edittextarea.value.trim())
-    elements.editstudytime.setAttribute('data-original-studytime', elements.editstudytime.value)
+    switch (type){
+        case "post":
+             // 編集開始時の値を保存
+            elements.edittextarea.setAttribute('data-original-content', elements.edittextarea.value.trim())
+            elements.editstudytime.setAttribute('data-original-studytime', elements.editstudytime.value)
 
-    // トグルを非表示
-    hideElement(elements.postmenu);
-    // メニューを閉じる
-    hideElement(elements.menubutton);
-    // 投稿内容を非表示
-    hideElement(elements.originalcontentbody);
+            // トグルを非表示
+            hideElement(elements.postmenu);
+            // メニューを閉じる
+            hideElement(elements.menubutton);
+            // 投稿内容を非表示
+            hideElement(elements.originalcontentbody);
 
-    // 編集エリアを表示
-    showElement(elements.editarea);
+            // 編集エリアを表示
+            showElement(elements.editarea);
+
+            break;
+
+        case "comment":
+             // コメント要素取得
+             const commentElements = getCommentElements(commentId);
+             
+             // 編集開始時の値を保存
+             commentElements.edittextarea.setAttribute('data-original-content'
+                                                      , commentElements.edittextarea.value.trim())
+
+            // トグルを非表示
+            hideElement(commentElements.commentmenu);
+            // メニューを閉じる
+            hideElement(commentElements.menubutton);
+            // 投稿内容を非表示
+            hideElement(commentElements.originalcontentbody);
+
+            // 編集エリアを表示
+            showElement(commentElements.editarea);        
+            
+            break;
+    }
 }
 
 // -- 編集保存ボタンクリック --
 function saveEdit(){
-    const textarea = document.getElementById(`edit-content-${postId}`);
+    const type = state.editingType;
+    const commentId = state.editingCommentId;
 
-    // テキストエリアの値を取得
-    const content = elements.edittextarea.value;
-    const studytime = elements.editstudytime.value;
+    let textarea;
+    let content;
+    let studytime;
+    let body;
+    
+    switch(type){
+        case "post":
+            // テキストエリアの値を取得
+            content = elements.edittextarea.value;
+            studytime = elements.editstudytime.value;
+            body = {content:content,study_time:studytime};
 
-    // リクエスト(UPDATE)
-    UpdatePostContent(content,studytime);
+            UpdatePostContent(body);
+            break;
+
+       case "comment":
+            const commentElements = getCommentElements(commentId);
+            // テキストエリアの値を取得
+            content = commentElements.edittextarea.value;
+            body = {content:content};
+
+            UpdateCommentContent(body,commentId)
+            break;
+    }
 }
 
 // -- 投稿内容更新 --
-async function UpdatePostContent(content,studytime){
+async function UpdatePostContent(body){
     
     // csrfトークン取得
     const csrfToken = elements.csrfToken.value;
-
-    const body = {content:content,study_time:studytime}
-
+    
     try{
         const {response, data} = await FetchRequest(`/posts/${postId}/update`,"post",csrfToken,body)
 
@@ -145,39 +233,113 @@ async function UpdatePostContent(content,studytime){
     }
 }
 
+// -- コメント内容更新 --
+async function UpdateCommentContent(body,commentId){
+    
+    // csrfトークン取得
+    const csrfToken = elements.csrfToken.value;
+    
+    try{
+        const {response, data} = await FetchRequest(`/posts/${commentId}/update`,"post",csrfToken,body)
+
+        // -- 成功 --
+        if(response.ok){
+            location.reload();
+        }
+        
+        // -- 失敗 --
+        if(!response.ok){
+            console.log(data);
+            
+            // エラーメッセージ表示
+            showError(data.text);
+        }
+
+    }catch(error){
+        console.log(error);
+
+        showError("編集に失敗しました");
+    }
+}
+
 // -- 編集キャンセルボタンクリック -- 
 function cancelEdit(){
-
     resetEditArea();
 }
 
+// 編集キャンセル時のアクション
 function resetEditArea() {
+    const type = state.editingType;
+    const commentId = state.commentId;
 
-    // -- 編集内容上で投稿内容が削除された時に復元する --
-    elements.edittextarea.value = elements.edittextarea.getAttribute('data-original-content');
-    elements.editstudytime.value = elements.editstudytime.getAttribute('data-original-studytime');
+    switch(type){
+        case "post":
+            // -- 編集内容上で投稿内容が削除された時に復元する --
+            elements.edittextarea.value = elements.edittextarea.getAttribute('data-original-content');
+            elements.editstudytime.value = elements.editstudytime.getAttribute('data-original-studytime');
 
-    // 編集エリア非表示
-    hideElement(elements.editarea);
+            // 編集エリア非表示
+            hideElement(elements.editarea);
 
-    // トグルのdiv全体を非表示
-    showElement(elements.postmenu, "flex");
-    // 投稿内容表示
-    showElement(elements.originalcontentbody);
+            // トグルのdiv全体を表示
+            showElement(elements.postmenu, "flex");
+            // 投稿内容表示
+            showElement(elements.originalcontentbody);
+
+            break;
+        
+        case "comment":
+            const commentElements = getCommentElements(commentId);
+
+            // -- 編集内容上で投稿内容が削除された時に復元する --
+            commentElements.edittextarea.value = commentElements.edittextarea.getAttribute('data-original-content');
+
+            // 編集エリア非表示
+            hideElement(commentElements.editarea);
+
+            // トグルのdiv全体を表示
+            showElement(commentElements.commentmenu, "flex");
+            
+            // 投稿内容表示
+            showElement(commentElements.originalcontentbody);    
+            
+            break;
+    }
+
 }
 
 // -- 投稿削除 --
-async function deletePost(){
-    
-    // メニューを閉じる
-    hideElement(elements.menubutton);
+async function deletePost(type,commentId=""){
+    state.editingType = type;
+    state.editingId = commentId;
+
+    switch(type){
+        case "post":
+            // メニューを閉じる
+            hideElement(elements.menubutton);
+            break;
+        case "comment":
+            // メニューを閉じる
+            const commentElements = getCommentElements(commentId);
+            hideElement(commentElements.menubutton);
+            break;
+    }
+
 
     const result = await showConfirm("確認","本当に削除しますか？","warning","削除");
 
     if(!result.isConfirmed) return;
 
+    // 投稿詳細削除
+    if(type==="post"){
 
-    DeletePostContent();
+        DeletePostContent();
+    }
+
+    // コメント削除
+    if(type === "comment"){
+        DeleteCommentContent()
+    }
 
 }
 
@@ -212,6 +374,36 @@ async function DeletePostContent(){
     }
 }
 
+// -- コメント削除 --
+async function DeleteCommentContent(commentId){
+    
+    // csrfトークン取得
+    const csrfToken = elements.csrfToken.value;
+
+    try{
+        const {response, data} = await FetchRequest(`/posts/${commentId}/delete`,"post",csrfToken)
+
+
+        // -- 成功 --
+        if(response.ok){
+            location.reload();
+        }
+        
+        // -- 失敗 --
+        if(!response.ok){
+            
+            // エラーメッセージ表示
+            showError(data.text);
+        }
+
+
+    }catch(error){
+        console.log(error);
+        // showElement(elements.deleteErrormessage);
+
+        showError("削除に失敗しました");
+    }
+}
 
 /************************/
 /*  リアクション機能    */
@@ -223,49 +415,57 @@ document.addEventListener('DOMContentLoaded', function(){
     console.log(elements.showEmojiArea.dataset.reactions);
 
     // 初回はHTML側に埋め込まれてるリアクション情報を取得
-    reactions = JSON.parse(elements.showEmojiArea.dataset.reactions);
-
+    state.postReactions = JSON.parse(elements.showEmojiArea.dataset.reactions);
+    state.currentReactionType = "post";
     // リアクション表示
-    updateReactionDisplay()
+    updateReactionDisplay()       
+
+    document.querySelectorAll('.reaction-area2').forEach(function(area){
+        const commentId = area.dataset.commentId;
+        state.commentReactions[commentId] = JSON.parse(area.dataset.commentReactions) || [];
+
+        state.currentReactionType = "comment";
+        state.currentReactionCommentId = commentId;
+        // リアクション表示
+        updateReactionDisplay()        
+    })
+
+    // 初期値に戻しておく
+     state.currentReactionType = "post";
+     state.currentReactionCommentId =null;
 })
 
 
-// -- 絵文字ピッカー表示 --
-elements.reactionBtn.addEventListener('click', function(){
-    
-    // 非表示
-    if (elements.pickerContainer.style.display === "block") {
-        hideElement(elements.pickerContainer)
-    } 
-    
-    // 表示
-    if(elements.pickerContainer.style.display != "block"){
+document.querySelectorAll('.add-reaction-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
         
-        closeAll();
+        if(elements.pickerContainer.style.display === "block") {
+            hideElement(elements.pickerContainer)
+            return
+        }
         
-        showElement(elements.pickerContainer);
-    }
-});
+        // メニューなど他のものを閉じる（ピッカーは除く）
+        document.querySelectorAll('.menu-dropdown, .menu-dropdown2').forEach(menu => {
+            menu.style.display = "none"
+        })
+        
+        const rect = this.getBoundingClientRect()
+        elements.pickerContainer.style.top = rect.bottom + 'px'
+        elements.pickerContainer.style.left = rect.left + 'px'
+        
+        showElement(elements.pickerContainer)
 
-// 全部閉じる処理
-function closeAll() {
-    elements.pickerContainer.style.display = "none";
-    
-    document.querySelectorAll('.menu-dropdown').forEach(menu => {
-        menu.style.display = "none";
-    });
-
-     // ツールチップも閉じる
-    document.querySelectorAll('.reaction-tooltip').forEach(tooltip => {
-        tooltip.remove()
+        console.log(elements.pickerContainer.style.display) 
     })
-}
- 
+})
 
 let reactionTimer = null;
 // リアクション送信
-async function sendReaction(emoji){
-    
+async function sendReaction(emoji,type="post",commentId=""){
+    state.currentReactionType =type;
+    state.currentReactionCommentId = commentId;
+
+    console.log(state.commentReactions[commentId])
     // 他のメニューなど開いてたら、閉じる
     closeAll();
 
@@ -281,18 +481,36 @@ async function sendReaction(emoji){
     reactionTimer = setTimeout(async function (){
         
         try{
+            let url ;
+
+            if(type === "post"){
+                url = `/posts/${postId}/reactions`;
+            }
+
+            if(type === "comment"){
+                url = `/posts/${postId}/comments/${commentId}/reactions`;
+            }
+
             // レスポンス取得
-            const {response, data} = await FetchRequest(`/posts/${postId}/reactions`, "post",csrfToken, body)
+            const {response, data} = await FetchRequest(url, "post",csrfToken, body)
 
             // data.reactions => [{'emoji':'👍', 'count':'3'} , {'emoji':'😂', 'count':'3'} ]
             
             // -- 成功 --
             if(response.ok){
                 console.log(data.reactions)
+                
+            if(type === "post"){
+                state.postReactions =data.reactions;
 
-            reactions = data.reactions;
+            }       
+            if(type=== "comment"){
+                state.commentReactions[commentId] = data.reactions;
+            }
+            
+            console.log(data.reactions)
 
-            updateReactionDisplay()
+            updateReactionDisplay();
             }
             
             // -- 失敗 --
@@ -310,8 +528,8 @@ async function sendReaction(emoji){
     },500)
 }
 
-function createReactionElement(reactionLists){
-    
+function createReactionElement(reactionLists,target){
+
     for(const reaction of reactionLists){
         // spanタグ生成
         const span = document.createElement('span');
@@ -321,7 +539,10 @@ function createReactionElement(reactionLists){
 
         // イベント設定
         span.addEventListener('click', function(){
-            sendReaction(reaction.emoji)
+            
+            sendReaction(reaction.emoji,
+                        state.currentReactionType,
+                        state.currentReactionCommentId)
         })
 
         // マウス充てたとき、リアクションしたユーザー名を表示
@@ -351,14 +572,27 @@ function createReactionElement(reactionLists){
         span.textContent = `${reaction.emoji} ${reaction.count}`
 
         // 絵文字表示エリアに追加
-        elements.showEmojiArea.appendChild(span);
+        target.appendChild(span);
     }    
 }
 
 // -- リアクションを画面に表示 --
 function updateReactionDisplay(){
+    
+    const type = state.currentReactionType;
+    
+    const commentId = state.currentReactionCommentId;
+
+    const target = type === "post"
+                    ? elements.showEmojiArea
+                    :getCommentElements(commentId).showEmojiArea
+
+    const reactions = type === "post"
+                    ? state.postReactions
+                    : state.commentReactions[commentId] || []
+    
     // 絵文字表示エリアを空で初期化
-    elements.showEmojiArea.innerHTML = "";
+    target.innerHTML = "";
 
     const limit = 6
 
@@ -367,22 +601,26 @@ function updateReactionDisplay(){
 
     // 折りたたみ解除ボタン 作成
     if(reactions.length > limit){
-        createMoreBtn();
+        createMoreBtn(target);
     }
     // リアクション要素生成
-    createReactionElement(displayReactions);
+    createReactionElement(displayReactions,target);
 
     // …を追加
     if(reactions.length > limit){
         const more = document.createElement("span"); 
         more.textContent = "…";
-        elements.showEmojiArea.appendChild(more);
+        target.appendChild(more);
     }
 }
 
 // -- 折りたたみ解除ボタン生成 --
-function createMoreBtn(){
+function createMoreBtn(target){
         const moreBtn = document.createElement("span");
+
+        const reactions = state.currentReactionType === "post"
+                        ? state.postReactions
+                        : state.commentReactions[state.currentReactionCommentId] || []
 
         // クラス設定
         moreBtn.className ="reaction-more";
@@ -393,18 +631,23 @@ function createMoreBtn(){
         // イベント設定
         moreBtn.addEventListener("click",function(){
             // 折りたたみを解除して全件表示させる
-            showAllReaction(reactions)
+            showAllReaction(reactions,target)
         })
         // 絵文字表示エリアに追加
-        elements.showEmojiArea.appendChild(moreBtn);
+        target.appendChild(moreBtn);
 }
 
 // -- リアクションすべて表示 --
-function showAllReaction(reactionLists){
-    elements.showEmojiArea.innerHTML = "";
+function showAllReaction(reactionLists,target){
+    target.innerHTML = "";
 
     // 折りたたむ
     const collapose = document.createElement("span");
+
+    const reactions = state.currentReactionType === "post"
+                    ? state.postReactions
+                    : state.commentReactions[state.currentReactionCommentId] || []
+
 
     // クラス設定
     collapose.className ="reaction-more";
@@ -420,10 +663,10 @@ function showAllReaction(reactionLists){
     })
 
     // 折りたたみを追加
-    elements.showEmojiArea.appendChild(collapose);
+    target.appendChild(collapose);
 
     // リアクション要素生成
-    createReactionElement(reactions);
+    createReactionElement(reactions,target);
 }
 
 // -- サーバー通信 --

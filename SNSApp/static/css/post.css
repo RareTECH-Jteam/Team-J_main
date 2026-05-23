@@ -460,8 +460,8 @@ em-emoji-picker {
 }
 
 #picker-container{
-    position: absolute;
-    top: 30px;
+    position: fixed;
+    top: 0;
     left: 0;
     display: none;
 }
@@ -470,12 +470,6 @@ em-emoji-picker {
     position: relative;
 }
 
-#picker-container2{
-    position: absolute;
-    top: 30px;
-    left: 0;
-    display: none;
-}
 
 .action-bar{
     display: flex;
@@ -509,14 +503,6 @@ em-emoji-picker {
     position: relative;
 }
 
-#picker-container {
-    position: absolute;
-    top: 30px;
-    right: 0;
-    display: none; 
-    z-index: 1000;
-}
-
 .reaction-area{
     display: flex;
     flex-wrap: wrap;
@@ -545,11 +531,12 @@ em-emoji-picker {
     cursor: pointer;
 }
 
-#add-reaction-btn .material-symbols-outlined {
+.quick-btn .material-symbols-outlined,
+.quick-btn2 .material-symbols-outlined {
     vertical-align: middle;
     font-size: 20px;
-    
 }
+
 .reaction-badge {
     position: relative;
 }

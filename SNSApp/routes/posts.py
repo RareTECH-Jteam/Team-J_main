@@ -196,6 +196,22 @@ def post_detail_view(post_id):
         comment['format_created_at'] = comment['created_at'].strftime('%Y-%m-%d %H:%M')
         comment['user_name'] = User.get_name_by_id(comment['user_id'])
 
+    comments_reacitons = {}
+    try:
+        for comment in comments:
+            raw = Reactions.get_comment_reactions_by_id(comment['id'])
+            reactions = []
+            for reaction in raw:
+                reactions.append({
+                    'emoji': reaction['emoji_type'],  # emoji_type
+                    'count': reaction['count'] ,  # count
+                    'users':reaction['name'].split(',')  if reaction['name'] else []# user.name
+                })
+            comments_reacitons[comment['id']] = json.dumps(reactions,ensure_ascii=False)
+
+    except Exception as e:
+        abort(500)
+
     # リアクションの取得
     reactions = []
     
@@ -207,7 +223,7 @@ def post_detail_view(post_id):
             reactions.append({
                 'emoji': reaction['emoji_type'],  # emoji_type
                 'count': reaction['count'] ,  # count
-                'users':reaction['name'].split(',') # user.name
+                'users':reaction['name'].split(',') if reaction['name'] else []# user.name
             })
     except Exception as e:
         abort(500)
@@ -221,6 +237,7 @@ def post_detail_view(post_id):
                         , user_id=user_id
                         , hours=hours
                         , minutes=minutes
+                        , comments_reacitons=comments_reacitons
                         , reactions=reactions_json) # jsonで渡す形に変更
 
 
@@ -271,6 +288,37 @@ def reaction_post(post_id):
     try:
         # jsonでお返し
         reactions = reaction_services.send_reaction(post_id, user_id, emoji_native)
+
+        return {'message': 'success', 'reactions': reactions}, 200 # 成功時は200で返す
+
+    except Exception as e: # もし失敗したら
+        return{'message':'error','text':str(e)},500 # 500エラーを返す
+    
+
+#リアクション登録・削除
+@posts.route('/posts/<int:post_id>/comments/<int:comment_id>/reactions', methods=['POST'])
+def reaction_comment(post_id ,comment_id):
+
+    # セッションが無効の場合
+    if not SM.is_live_session():
+        # ログインページ表示
+        return redirect(url_for('auth.login_view'))
+    
+    # ユーザーID設定
+    user_id = SM.get_user_id()
+
+    # JSONデータ取得
+    data = request.get_json()
+    emoji_native = data['emoji']
+
+    #空っぽチェック
+    errors = Reactions.validate(emoji_native)
+    if errors:
+        return{'message':'error','text':errors},400 # 絵文字が空っぽの場合は400エラーを出して終わり
+    
+    try:
+        # jsonでお返し
+        reactions = reaction_services.send_comment_reaction(comment_id, user_id, emoji_native)
 
         return {'message': 'success', 'reactions': reactions}, 200 # 成功時は200で返す
 

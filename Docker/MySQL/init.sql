@@ -195,6 +195,21 @@ CREATE TABLE
         -- ON DELETE CASCADE 連動削除機能。投稿が消えると紐づいているリアクションも一緒に消える
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+-- リアクションID
+CREATE TABLE
+    comment_reactions (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,     -- リアクションID 主キー
+        comment_id BIGINT UNSIGNED NOT NULL,  
+        user_id BIGINT UNSIGNED NOT NULL,               -- ユーザーid参照　外部キー
+        emoji_type VARCHAR(50)  COLLATE utf8mb4_bin NOT NULL,                -- スタンプ内容
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- リアクション日時
+        PRIMARY KEY (id),
+        UNIQUE KEY unique_user_reaction(comment_id,user_id,emoji_type), -- 同じ人が同じリアクションをしないようにする制約
+        FOREIGN KEY (comment_id) REFERENCES comments (id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+        -- ON DELETE CASCADE 連動削除機能。投稿が消えると紐づいているリアクションも一緒に消える
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;    
+
 
 INSERT INTO users (name, email, password)
 VALUES 
