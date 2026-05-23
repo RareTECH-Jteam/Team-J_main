@@ -182,7 +182,7 @@ def post_detail_view(post_id):
     if post is None:
         abort(404)
     
-    post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
+    post['format_created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
     post['user_name'] = User.get_name_by_id(post['user_id'])
 
     #分に換算
@@ -193,7 +193,7 @@ def post_detail_view(post_id):
     # 投稿に対するコメント取得
     comments = Comment.get_by_post_id(post_id)
     for comment in comments:
-        comment['created_at'] = comment['created_at'].strftime('%Y-%m-%d %H:%M')
+        comment['format_created_at'] = comment['created_at'].strftime('%Y-%m-%d %H:%M')
         comment['user_name'] = User.get_name_by_id(comment['user_id'])
 
     # リアクションの取得
