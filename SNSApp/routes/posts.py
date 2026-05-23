@@ -264,6 +264,41 @@ def create_comment(post_id):
     flash('コメントの投稿が完了しました','success')
     return redirect(url_for('posts.post_detail_view', post_id=post_id))
 
+#コメント削除
+@posts.route('/posts/<int:post_id>/comments/<int:comment_id>/delete', methods=['POST'])
+def delete_comment(post_id,comment_id):
+ # セッションが無効の場合
+    if not SM.is_live_session():
+        # ログインページ表示
+        return redirect(url_for('auth.login_view'))
+    
+    user_id = SM.get_user_id()
+
+    comment = Comment.find_by_comment_id(comment_id)
+
+    # 該当の投稿が無い場合
+    if comment is None:
+        abort(404)
+    
+    # 自分以外の投稿を削除しようとした場合
+    if comment['user_id'] != user_id:
+        return {'message': 'error', 'text': 'このコメントを削除することはできません'}, 400
+    
+    # 投稿削除
+    try:
+        Comment.delete(comment_id)
+    except Exception:
+        return {'message': 'error', 'text': '削除に失敗しました'}, 500
+    
+    flash('投稿が削除されました', 'success')
+
+    return redirect(url_for('postus.post_detail_view', post_id=post_id))
+
+
+
+
+
+
 #リアクション登録・削除
 @posts.route('/posts/<int:post_id>/reactions', methods=['POST'])
 def reaction_post(post_id):

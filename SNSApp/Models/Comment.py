@@ -36,6 +36,24 @@ class Comment:
             abort(500)
         finally:
             db_pool.release(conn)
+
+    #コメント取得
+    @classmethod
+    def find_by_comment_id(cls, comment_id):
+        conn = db_pool.get_conn()
+        conn.ping(reconnect=True)
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT * FROM comments WHERE id=%s;"
+                cur.execute(sql, (comment_id,))
+                comments = cur.fetchall()
+            return comments
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
     
      #コメント削除
     @classmethod
@@ -60,7 +78,7 @@ class Comment:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "UPDATE comments SET content = %s, WHERE id = %s;"
+                sql = "UPDATE comments SET content = %s WHERE id = %s;"
                 cur.execute(sql, (content,comment_id))
                 conn.commit()
         except pymysql.Error as e:
