@@ -92,8 +92,6 @@ def on_connect():
                     , {'message': 'バトン失敗・・・\r\n次は頑張ろう！'}
                     , room=str(expired_baton['receiver_id']))  
                 
-                # 失効した人の数だけ、予約バトンを誰かに割り当てるチャンスを作る
-                baton_services.assign_waiting_baton_if_possible(conn,exclude_user_id=0)
             
             # コミット
             conn.commit()
@@ -102,6 +100,16 @@ def on_connect():
             conn.rollback()
         finally:
             db_pool.release(conn)
+
+    # 空いている人に自動で割り振る
+    conn2 = db_pool.get_conn()
+    try:
+        baton_services.assign_waiting_baton_if_possible(conn2)
+        conn2.commit()
+    except Exception as e:
+        conn2.rollback()
+    finally:
+        db_pool.release(conn2)                
 
     # バトンが渡されていた場合
     current_task = Baton.get_by_incomplete_baton(user_id)

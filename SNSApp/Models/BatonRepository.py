@@ -11,11 +11,13 @@ class BatonRepository:
             conn.ping(reconnect=True)
             with conn.cursor() as cur:
                 sql = """
-                INSERT INTO baton_queues (baton_title, sender_id, chain_id,relay_count) 
-                VALUES (%s, %s, %s, %s);"""
+                INSERT INTO baton_queues (baton_title, sender_id, task_id, content, chain_id, relay_count)
+                VALUES (%s, %s, %s, %s, %s, %s);"""
                 cur.execute(sql,(
                             baton_data['baton_title']
                           , sender_id
+                          , baton_data['task_id']
+                          , baton_data['content']
                           , baton_data['chain_id']
                           , baton_data['relay_count']
                             ))
@@ -32,13 +34,15 @@ class BatonRepository:
             conn.ping(reconnect=True)
             with conn.cursor() as cur:
                 sql = """
-                INSERT INTO batons (baton_title, sender_id, receiver_id, chain_id, relay_count, status)
-                VALUES (%s, %s, %s, %s, %s, 0)
+                INSERT INTO Baton (baton_title, sender_id, receiver_id, task_id, content,chain_id, relay_count, status)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, 0)
                 """                
                 cur.execute(sql,(
                     queue_data['baton_title'],
                     queue_data['sender_id'],
                     receiver_id,
+                    queue_data['task_id'],
+                    queue_data['content'],
                     queue_data['chain_id'],
                     queue_data['relay_count']
                     ))

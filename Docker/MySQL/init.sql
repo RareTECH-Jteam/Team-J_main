@@ -109,10 +109,12 @@ CREATE TABLE
 CREATE TABLE baton_queues (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     baton_title VARCHAR(25) NOT NULL,
-    sender_id BIGINT UNSIGNED NOT NULL,
-    chain_id BIGINT UNSIGNED NOT NULL,
+    sender_id  BIGINT UNSIGNED NOT NULL,
+    chain_id   BIGINT UNSIGNED NOT NULL,
+    task_id    BIGINT UNSIGNED NOT NULL,                          -- 課題ID
+    content    TEXT NOT NULL,                                     -- バトン内容
     relay_count BIGINT UNSIGNED NOT NULL,
-    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    created_at  DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     KEY idx_baton_queues_sender_id   (sender_id),
     KEY idx_baton_queues_chain_id   (chain_id),
     KEY idx_baton_queues_created_at   (created_at)
@@ -215,42 +217,42 @@ INSERT INTO users (name, email, password)
 VALUES 
   ('Tomo', 'Tomo64@example.com', '0c120c7ab57b43d4db1837f2a4332ced20b2f3160bdeb186a8d601e3b0d6ace5'),
   ('おっくん', 'okun@example.com', '165d68fe9913a11c91bb7290d5d885833240c0fdb43b0b2be790f043bc9022c7'),
-  ('てる', 'teru@example.com', '44b4c21936c779156df19a17832a0d91ecbfb37e6889ef6d9b465c75b00ef060'),
-  ('たまちゃん', 'tamachan@example.com', 'ee839106f2f14fab267dd94f311a152490e256e69e612e4d73b710c5fc9b7ef7'),
-  ('まつけん', 'matuken@example.com', '2935bf31052e67f5ff0ba4f37e9f6ef3964831dfeee316fee07cef4ab9803a62'),
-  ('田中太郎', 'tanaka@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-  ('佐藤花子', 'sato@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-  ('鈴木一郎', 'suzuki@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-  ('山田二郎', 'yamada@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-  ('伊藤三郎', 'ito@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');
+  ('てる', 'teru@example.com', '44b4c21936c779156df19a17832a0d91ecbfb37e6889ef6d9b465c75b00ef060');
+--   ('たまちゃん', 'tamachan@example.com', 'ee839106f2f14fab267dd94f311a152490e256e69e612e4d73b710c5fc9b7ef7'),
+--   ('まつけん', 'matuken@example.com', '2935bf31052e67f5ff0ba4f37e9f6ef3964831dfeee316fee07cef4ab9803a62'),
+--   ('田中太郎', 'tanaka@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
+--   ('佐藤花子', 'sato@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
+--   ('鈴木一郎', 'suzuki@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
+--   ('山田二郎', 'yamada@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
+--   ('伊藤三郎', 'ito@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');
 
 
 INSERT INTO posts (user_id, content,study_time)
 VALUES
   (1, 'こんにちは！数学勉強中です！','01:30:00'),
   (2, '試験頑張ってきます','05:30:00'),
-  (3, 'ハッカソンの会議の日です！', '00:45:00'),
-  (6, '今日は数学の微分を勉強しました！', '01:30:00'),
-  (7, '英単語を50個覚えました！', '00:45:00'),
-  (8, '物理の力学をやりました', '02:00:00'),
-  (9, '化学の有機化合物を復習しました', '01:00:00'),
-  (10, '古文の文法を勉強しました', '00:30:00'),
-  (6, '二次関数の問題を解きました', '01:15:00'),
-  (7, '英語のリスニングをしました', '00:50:00');  
+  (3, 'ハッカソンの会議の日です！', '00:45:00');
+--   (6, '今日は数学の微分を勉強しました！', '01:30:00'),
+--   (7, '英単語を50個覚えました！', '00:45:00'),
+--   (8, '物理の力学をやりました', '02:00:00'),
+--   (9, '化学の有機化合物を復習しました', '01:00:00'),
+--   (10, '古文の文法を勉強しました', '00:30:00'),
+--   (6, '二次関数の問題を解きました', '01:15:00'),
+--   (7, '英語のリスニングをしました', '00:50:00');  
 
 
 INSERT INTO comments (user_id, post_id, content)
 VALUES
     (2, 1, '私もがんばります！'),
     (3, 2, '応援しています！頑張ってください。'),
-    (1, 3, '22時からですね！'),
-    (7, 4, '微分頑張ってますね！'),
-    (8, 4, '一緒に頑張りましょう！'),
-    (6, 5, '50個すごい！'),
-    (9, 5, '英単語大事ですよね'),
-    (10, 6, '物理難しいですよね'),
-    (6, 7, '有機化合物は重要ですね'),
-    (7, 8, '古文がんばれ！');    
+    (1, 3, '22時からですね！');
+    -- (7, 4, '微分頑張ってますね！'),
+    -- (8, 4, '一緒に頑張りましょう！'),
+    -- (6, 5, '50個すごい！'),
+    -- (9, 5, '英単語大事ですよね'),
+    -- (10, 6, '物理難しいですよね'),
+    -- (6, 7, '有機化合物は重要ですね'),
+    -- (7, 8, '古文がんばれ！');    
 
 INSERT INTO tasks(content)
 VALUES
@@ -281,13 +283,14 @@ VALUES
 ('今の気分で一番マシな教科に1秒触れろ（開くだけOK）') ;
 
 
-INSERT INTO chain(id) VALUES(1);
-INSERT INTO chain(id) VALUES(2);
-INSERT INTO chain(id) VALUES(3);
+-- INSERT INTO chain(id) VALUES(1);
+-- INSERT INTO chain(id) VALUES(2);
+-- INSERT INTO chain(id) VALUES(3);
 
-INSERT INTO Baton (baton_title,sender_id, receiver_id, task_id,content,chain_id,relay_count,status)
-VALUES
-    ('レジェンドバトン！', 2, 1, 1, '今日授業で習ったこと、1つ教えて！', 1, 1, 0);
+-- INSERT INTO Baton (baton_title,sender_id, receiver_id, task_id,content,chain_id,relay_count,status,created_at)
+-- VALUES
+    -- ('レジェンドバトン！', 2, 1, 1, '今日授業で習ったこと、1つ教えて！', 1, 1, 0,NOW()),
+    -- ('レジェンドバトン！', 2, 1, 1, '今日授業で習ったこと、1つ教えて！', 1, 1, 0,NOW() - INTERVAL 23 HOUR - INTERVAL 55 MINUTE - INTERVAL 00 SECOND);
 
 INSERT INTO post_reactions (post_id, user_id, emoji_type) 
 VALUES
