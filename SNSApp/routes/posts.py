@@ -299,10 +299,28 @@ def delete_comment(post_id,comment_id):
 
     return {'message': 'success'}, 200
 
+# コメント編集機能
+@posts.route('/posts/<int:post_id>/comments/<int:comment_id>/update', methods=['POST'])
+def update_comment(post_id,comment_id):
+    # セッションが無効の場合
+    if not SM.is_live_session():
+        # ログインページ表示
+        return redirect(url_for('auth.login_view'))
 
+    # JSON取得
+    data = request.get_json()
+    print(data) 
+    # 投稿内容
+    content = data.get('content', '')
+    
 
-
-
+    # 編集 
+    try:
+        Comment.update(comment_id, content)
+    except Exception:
+        return {'message': 'error', 'text': '編集に失敗しました'}, 500
+        
+    return {'message' : 'success'} , 200
 
 #リアクション登録・削除
 @posts.route('/posts/<int:post_id>/reactions', methods=['POST'])
