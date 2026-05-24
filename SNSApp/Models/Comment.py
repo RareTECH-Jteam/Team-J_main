@@ -27,7 +27,7 @@ class Comment:
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM comments WHERE post_id=%s ORDER BY created_at DESC;"
+                sql = "SELECT * FROM comments WHERE post_id=%s AND deleted_at IS NULL ORDER BY created_at DESC;"
                 cur.execute(sql, (post_id,))
                 comments = cur.fetchall()
             return comments
@@ -46,7 +46,7 @@ class Comment:
             with conn.cursor() as cur:
                 sql = "SELECT * FROM comments WHERE id=%s;"
                 cur.execute(sql, (comment_id,))
-                comments = cur.fetchall()
+                comments = cur.fetchone()
             return comments
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')

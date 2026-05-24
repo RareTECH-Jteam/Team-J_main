@@ -271,7 +271,8 @@ def create_comment(post_id):
 #コメント削除
 @posts.route('/posts/<int:post_id>/comments/<int:comment_id>/delete', methods=['POST'])
 def delete_comment(post_id,comment_id):
- # セッションが無効の場合
+    
+    # セッションが無効の場合
     if not SM.is_live_session():
         # ログインページ表示
         return redirect(url_for('auth.login_view'))
@@ -296,7 +297,7 @@ def delete_comment(post_id,comment_id):
     
     flash('投稿が削除されました', 'success')
 
-    return redirect(url_for('postus.post_detail_view', post_id=post_id))
+    return {'message': 'success'}, 200
 
 
 

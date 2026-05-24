@@ -373,7 +373,7 @@ async function deletePost(type,commentId=""){
     // コメント削除
     if(type === "comment"){
         
-        DeleteCommentContent()
+        DeleteCommentContent(commentId)
     }
 
 }
