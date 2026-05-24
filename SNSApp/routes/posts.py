@@ -205,7 +205,8 @@ def post_detail_view(post_id):
                 reactions.append({
                     'emoji': reaction['emoji_type'],  # emoji_type
                     'count': reaction['count'] ,  # count
-                    'users':reaction['name'].split(',')  if reaction['name'] else []# user.name
+                    'users':reaction['name'].split(',')  if reaction['name'] else [] , # user.name
+                    'reacted':str(user_id) in reaction['user_ids'].split(',') # 自分がリアクションしたか
                 })
             comments_reacitons[comment['id']] = json.dumps(reactions,ensure_ascii=False)
 
@@ -223,8 +224,11 @@ def post_detail_view(post_id):
             reactions.append({
                 'emoji': reaction['emoji_type'],  # emoji_type
                 'count': reaction['count'] ,  # count
-                'users':reaction['name'].split(',') if reaction['name'] else []# user.name
+                'users':reaction['name'].split(',') if reaction['name'] else [] ,# user.name
+                'reacted':str(user_id) in reaction['user_ids'].split(',') # 自分がリアクションしたか
             })
+
+
     except Exception as e:
         abort(500)
 

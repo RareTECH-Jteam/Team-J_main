@@ -526,6 +526,12 @@ em-emoji-picker {
     font-size: 12px;
 }
 
+.reaction-badge.reacted{
+    background-color: #e8f0fe;
+    border: 1px solid #4a90d9;
+    border-radius: 12px;
+}
+
 /* 折りたたみ解除 */
 .reaction-more{
     font-weight: bold;
