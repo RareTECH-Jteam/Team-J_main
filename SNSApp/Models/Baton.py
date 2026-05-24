@@ -123,9 +123,10 @@ class Baton:
     @classmethod
     #自分以外のバトン完了してる人を取得
     #バトンの送り先を選別するため
-    def get_receiver(cls,sender_id,pre_sender_id):
+    def get_receiver(cls,sender_id,pre_sender_id = None):
         conn = db_pool.get_conn()
         conn.ping(reconnect=True)
+        pre_sender_id = pre_sender_id or sender_id
         try:
             with conn.cursor() as cur:
                 sql = """SELECT users.id 

@@ -44,6 +44,7 @@ class baton_services:
                     , {
                         'message': 'バトンが渡されました！\r\n確認してみよう！'
                         ,'baton_id':new_baton_id
+                        ,'reload':True  
                        }
                     , room=str(next_receiver_id))  
                 
@@ -68,7 +69,9 @@ class baton_services:
                 
                 # 通知
                 socketio.emit('notification'
-                              , {'message': '送り先がいません。\r\n予約リストに入れました'}
+                              , {'message': '送り先がいません。\r\n予約リストに入れました'
+                                 ,'reload':True  
+                                 }
                               , room=str(sender_id))
 
                 # 自分がフリーになったので、待機中の「別のバトン」を誰かに割り当てる
@@ -85,21 +88,31 @@ class baton_services:
 
     @classmethod    
     # 予約バトンを誰かに割り当てる
-    def assign_waiting_baton_if_possible(cls,conn,exclude_user_id=0):
+    def assign_waiting_baton_if_possible(cls,conn,exclude_user_id = None):
         # キューから取得
         queue_data = BatonQueue.get_next()
+
         if queue_data:
+            
+            ex_id = exclude_user_id or queue_data['sender_id']
+            pre_id = queue_data['sender_id']
+            print(f"ex_id: {ex_id}, pre_id: {pre_id}")
+            
             # 今フリーな人を探す
-            free_user_id = Baton.get_receiver(exclude_user_id)
+            free_user_id = Baton.get_receiver(ex_id,pre_id)
+
+            print(free_user_id)
             
             if free_user_id:
                 # 予約から正式なバトンを作成
                 BatonRepository.baton_create_from_queue(queue_data, free_user_id , conn)
                 
                 # 予約から削除する
-                BatonRepository.batonqueue_delete(queue_data['id'])
+                BatonRepository.batonqueue_delete(queue_data['id'],conn)
                 
                 # 通知
                 socketio.emit('notification', 
-                            {'message': '待機バトンが回ってきました！'},
+                            {'message': '待機バトンが回ってきました！'
+                             ,'reload':True  
+                             },
                             room=str(free_user_id))
