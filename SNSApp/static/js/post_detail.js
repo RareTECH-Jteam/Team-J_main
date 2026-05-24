@@ -103,7 +103,8 @@ document.addEventListener('click', function(e) {
 // マウスが離れたら閉じる
 document.querySelectorAll('.action-bar, .action-bar-comment').forEach(bar => {
     bar.addEventListener('mouseleave', function(e) {
-        if(e.relatedTarget && e.relatedTarget.closest('em-emoji-picker')) return
+       if(e.relatedTarget && e.relatedTarget.closest('.action-bar, .action-bar-comment')) return 
+       
         closeAll()
     })
 });
