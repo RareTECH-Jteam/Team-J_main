@@ -241,26 +241,85 @@ class Baton:
             abort(500)
         finally:
             db_pool.release(conn)        
-    
+
     @classmethod
-    #バトンランキング取得
+        #バトンランキング取得
     def get_chain_ranking(cls):
         conn = db_pool.get_conn()
         conn.ping(reconnect=True)
         try:
             with conn.cursor() as cur:
-                sql = """SELECT 
-                           chain_id, 
-                           MAX(relay_count) AS sum_count, 
-                           baton_title 
-                         FROM 
-                           Baton 
-                         WHERE 1 = 1 
-                            AND status = 1
-                            AND created_at >= DATE_FORMAT(NOW(), '%Y-%m-01') 
-                            AND created_at <= LAST_DAY(NOW())
-                         GROUP BY chain_id, baton_title 
-                         ORDER BY MAX(relay_count) DESC;"""
+                sql = """WITH relay_count_ranking AS ( 
+                        SELECT
+                            chain_id                            #バトン固有のid　※baton_idは渡された時点で値が変わるためバトン固有の値ではない)
+                            , MAX(relay_count) AS sum_count     #バトンが渡された数（渡した時点で＋１される）
+                            , baton_title 
+                            , MAX(CASE WHEN relay_count = 1 
+                                THEN sender_id ELSE NULL END) 
+                                AS creator_id                   #初めにバトンが渡ったときの送り主のidを取得する（始めの送り主＝作成者）
+                        FROM
+                            Baton 
+                        WHERE
+                            1 = 1 
+                            AND status = 1                      #完了したバトン
+                            AND created_at >= DATE_FORMAT(NOW(), '%Y-%m-01')    
+                            AND created_at <= LAST_DAY(NOW()) 
+                        GROUP BY
+                            chain_id
+                            , baton_title 
+                        ORDER BY
+                            MAX(relay_count) DESC
+                        ) 
+
+                        SELECT
+                            chain_id
+                            , sum_count
+                            , baton_title
+                            , creator_id
+                        FROM
+                            relay_count_ranking;""" 
+
+                #まつけん作メソッド（上と同じ処理ですが、復習のために残しておきます）
+                # sql = """WITH relay_count_ranking AS(                 #バトンランキング情報の一時テーブル
+                #         SELECT 
+                #            chain_id, 
+                #            MAX(relay_count) AS sum_count, 
+                #            baton_title 
+                #          FROM 
+                #            Baton 
+                #          WHERE 1 = 1 
+                #             AND status = 1
+                #             AND created_at >= DATE_FORMAT(NOW(), '%Y-%m-01') 
+                #             AND created_at <= LAST_DAY(NOW())
+                #          GROUP BY chain_id, baton_title 
+                #          ORDER BY MAX(relay_count) DESC
+                #         )
+
+                #         ,baton_creator AS(                            #sender_idの一時テーブル
+                #         SELECT 
+                #             chain_id,
+                #             sender.id AS sender_id 
+
+                #         FROM Baton
+                #         INNER JOIN  users sender
+                #             on Baton.sender_id = sender.id
+                #         WHERE 1 = 1 
+                #             AND status = 1 
+                #             AND relay_count = 1
+                #         )
+    
+                #         SELECT                                        #ランキング情報にsender_idをくっつける
+                #             relay_count_ranking.chain_id, 
+                #             sum_count, 
+                #             baton_title,
+                #             sender_id  
+                #         FROM
+                #             relay_count_ranking
+                #         INNER JOIN 
+                #             baton_creator
+                #         ON 
+                #             relay_count_ranking.chain_id = baton_creator.chain_id;"""
+                
                 cur.execute(sql)
                 return cur.fetchall()
             
@@ -269,6 +328,7 @@ class Baton:
             abort(500)
         finally:
             db_pool.release(conn)
+
 
     @classmethod
     # バトン総完了数を取得

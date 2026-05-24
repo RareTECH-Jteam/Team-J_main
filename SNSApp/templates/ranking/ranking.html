@@ -83,7 +83,9 @@
                 <!-- ランキング順位表示 -->
                 <div class="ranking-scroll-box">
                     {% for baton_chain_rank in baton_chain_ranking %}              <!--スクロール表示-->
-                    <div class="ranking-detail">        <!--ランキング詳細-->
+
+                    <div class="{% if baton_chain_rank.creator_id == user_id %}my-ranking-detail
+                                    {%else%}ranking-detail {%endif%}">        <!--ランキング詳細-->
                         
                         <!--順位表示  -->
                         {%if loop.index0==0%}           <!--はじめの配列要素-->
@@ -107,7 +109,7 @@
                             {{ baton_chain_rank.sum_count}}人目達成
                         </div>
                     </div>
-                    {% endfor %}              
+                    {% endfor %}
                 </div>
             </section>
         </div>
