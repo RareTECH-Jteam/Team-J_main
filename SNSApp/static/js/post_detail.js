@@ -63,29 +63,31 @@ const picker = new EmojiMart.Picker(pickerOptions)
 // ピッカー要素追加
 elements.pickerContainer.appendChild(picker);
 
-
 /************************/
-/*  投稿編集機能        */
+/*  閉じる系操作        */
 /************************/
-
 // 編集・削除、絵文字ピッカーの要素外をクリックしても、閉じれるように
 
-// 全部閉じる処理
+function closeAll() {
+    
+    // 編集・削除・絵文字ピッカーを閉じる
+    closeAllMenus()
+    
+    // ツールチップ（誰がリアクションしたか）を削除
+    document.querySelectorAll('.reaction-tooltip').forEach(tooltip => {
+        tooltip.remove()
+    })
+    
+    // ピッカーを閉じたときにホバー効果を元に戻す
+    document.querySelector(".post-detail").classList.remove("picker-open");
+}
+
+// 全部閉じる処理（編集・削除・絵文字ピッカー）
 function closeAllMenus() {
     document.querySelectorAll('.menu-dropdown, .menu-dropdown2').forEach(menu => {
         menu.style.display = "none";
     });
     elements.pickerContainer.style.display = "none";
-}
-
-function closeAll() {
-    closeAllMenus()
-    document.querySelectorAll('.reaction-tooltip').forEach(tooltip => {
-        tooltip.remove()
-    })
-
-    // ピッカーを閉じたときにホバー効果を元に戻す
-    document.querySelector(".post-detail").classList.remove("picker-open");
 }
 
 // 枠外クリックで閉じる
@@ -107,36 +109,37 @@ document.querySelectorAll('.action-bar, .action-bar-comment').forEach(bar => {
 });
 
 
-// document.querySelectorAll('.add-reaction-btn').forEach(btn =>{
-//     btn.addEventListener("click",function(){
-//         // 親要素を辿る
-//         const bar = this.closest(".action-bar, .action-bar-comment");
-//         state.currentReactionType = bar.dataset.type || "post";
-//         state.currentReactionCommentId = bar.dataset.commentId || null;
-//     })
-// })
 
 
-// トグルメニュークリック
+/************************/
+/*  投稿編集機能        */
+/************************/
+
+// --  編集・削除メニューの表示、非表示を行う --
 function toggleMenu(type,commentId=""){
 
     // 絵文字ピッカーを非表示にしておく
     elements.pickerContainer.style.display = "none";
 
+    // 投稿かコメントかによって、取得するメニュー要素（編集・削除）を変える
     const target = type === 'post' 
         ? elements.menubutton 
         : getCommentElements(commentId).menubutton;
        
+    // メニューが表示されていたら、閉じる
     if(target.style.display === "block"){
         hideElement(target)
         return
     }
     
+    // メニューを表示
     showElement(target)
 }
 
  // -- 編集ボタンクリック --
 function enableEdit(type, commentId=""){
+    
+    // 状態管理設定
     state.editingType=type;
     state.editingCommentId = commentId;
 
@@ -182,6 +185,8 @@ function enableEdit(type, commentId=""){
 
 // -- 編集保存ボタンクリック --
 function saveEdit(){
+    
+    // 状態管理取得
     const type = state.editingType;
     const commentId = state.editingCommentId;
 
@@ -192,21 +197,30 @@ function saveEdit(){
     
     switch(type){
         case "post":
-            // テキストエリアの値を取得
+            // 編集内容の値を取得
             content = elements.edittextarea.value;
             studytime = elements.editstudytime.value;
+            
+            // リクエストボディ
             body = {content:content,study_time:studytime};
 
+            // 投稿内容アップデート
             UpdatePostContent(body);
+            
             break;
 
        case "comment":
             const commentElements = getCommentElements(commentId);
-            // テキストエリアの値を取得
+            
+            // 編集内容の値を取得
             content = commentElements.edittextarea.value;
+            
+            // リクエストボディ
             body = {content:content};
 
+            // コメント内容アップデート
             UpdateCommentContent(body,commentId)
+           
             break;
     }
 }
@@ -249,7 +263,7 @@ async function UpdateCommentContent(body,commentId){
     const csrfToken = elements.csrfToken.value;
     
     try{
-        const {response, data} = await FetchRequest(`/posts/${commentId}/update`,"post",csrfToken,body)
+        const {response, data} = await FetchRequest(`/posts/${postId}/comments/${commentId}/update`,"post",csrfToken,body)
 
         // -- 成功 --
         if(response.ok){
@@ -273,17 +287,22 @@ async function UpdateCommentContent(body,commentId){
 
 // -- 編集キャンセルボタンクリック -- 
 function cancelEdit(){
+    
+    // 編集リセット
     resetEditArea();
+
 }
 
 // 編集キャンセル時のアクション
 function resetEditArea() {
+    
+    // 状態管理取得
     const type = state.editingType;
     const commentId = state.editingCommentId;
 
     switch(type){
         case "post":
-            // -- 編集内容上で投稿内容が削除された時に復元する --
+            // -- 編集内中に投稿が削除された時に復元する --
             elements.edittextarea.value = elements.edittextarea.getAttribute('data-original-content');
             elements.editstudytime.value = elements.editstudytime.getAttribute('data-original-studytime');
 
@@ -300,7 +319,7 @@ function resetEditArea() {
         case "comment":
             const commentElements = getCommentElements(commentId);
 
-            // -- 編集内容上で投稿内容が削除された時に復元する --
+            // -- 編集中にコメントが削除された時に復元する --
             commentElements.edittextarea.value = commentElements.edittextarea.getAttribute('data-original-content');
 
             // 編集エリア非表示
@@ -319,6 +338,8 @@ function resetEditArea() {
 
 // -- 投稿削除 --
 async function deletePost(type,commentId=""){
+    
+    // 状態管理設定
     state.editingType = type;
     state.editingId = commentId;
 
@@ -326,17 +347,21 @@ async function deletePost(type,commentId=""){
         case "post":
             // メニューを閉じる
             hideElement(elements.menubutton);
+           
             break;
         case "comment":
-            // メニューを閉じる
             const commentElements = getCommentElements(commentId);
+
+           // メニューを閉じる
             hideElement(commentElements.menubutton);
+           
             break;
     }
 
-
+    
     const result = await showConfirm("確認","本当に削除しますか？","warning","削除");
-
+    
+    // 削除キャンセル時、何もしない
     if(!result.isConfirmed) return;
 
     // 投稿詳細削除
@@ -347,6 +372,7 @@ async function deletePost(type,commentId=""){
 
     // コメント削除
     if(type === "comment"){
+        
         DeleteCommentContent()
     }
 
@@ -390,7 +416,7 @@ async function DeleteCommentContent(commentId){
     const csrfToken = elements.csrfToken.value;
 
     try{
-        const {response, data} = await FetchRequest(`/posts/${commentId}/delete`,"post",csrfToken)
+        const {response, data} = await FetchRequest(`/posts/${postId}/comments/${commentId}/delete`,"post",csrfToken)
 
 
         // -- 成功 --
@@ -408,7 +434,6 @@ async function DeleteCommentContent(commentId){
 
     }catch(error){
         console.log(error);
-        // showElement(elements.deleteErrormessage);
 
         showError("削除に失敗しました");
     }
@@ -426,16 +451,20 @@ document.addEventListener('DOMContentLoaded', function(){
     // 初回はHTML側に埋め込まれてるリアクション情報を取得
     state.postReactions = JSON.parse(elements.showEmojiArea.dataset.reactions);
     state.currentReactionType = "post";
+    
     // リアクション表示
     updateReactionDisplay()       
 
     document.querySelectorAll('.reaction-area2').forEach(function(area){
+        // data属性からコメントID取得
         const commentId = area.dataset.commentId;
         state.commentReactions[commentId] = JSON.parse(area.dataset.commentReactions) || [];
-
+        
+        // 状態を設定
         state.currentReactionType = "comment";
         state.currentReactionCommentId = commentId;
-        // リアクション表示
+        
+        // コメントごとにリアクション表示
         updateReactionDisplay()        
     })
 
@@ -444,10 +473,11 @@ document.addEventListener('DOMContentLoaded', function(){
      state.currentReactionCommentId =null;
 })
 
-
+// -- 絵文字ピッカー表示するボタンのクリック時 --
 document.querySelectorAll('.add-reaction-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         
+        // 開いてたら閉じる
         if(elements.pickerContainer.style.display === "block") {
             hideElement(elements.pickerContainer)
             return
@@ -459,16 +489,17 @@ document.querySelectorAll('.add-reaction-btn').forEach(btn => {
         })
 
            
-        // 親要素を辿る
+        // 親要素を辿り、data属性から状態を取得する
         const bar = this.closest(".action-bar, .action-bar-comment");
         state.currentReactionType = bar.dataset.type || "post";
         state.currentReactionCommentId = bar.dataset.commentId || null;
         
-
+        // クリックした要素の位置を取得する(絵文字ピッカーは重いので、使いまわすために表示をずらす)
         const rect = this.getBoundingClientRect();
         elements.pickerContainer.style.top = rect.bottom + 'px'
         elements.pickerContainer.style.left = rect.left + 'px'
         
+        // 絵文字ピッカー表示
         showElement(elements.pickerContainer);
 
         // コメントの絵文字ピッカーにホバーした時に、投稿詳細のメニューが表示されるのを防ぐため
@@ -478,26 +509,29 @@ document.querySelectorAll('.add-reaction-btn').forEach(btn => {
     })
 })
 
-// 投稿に対するリアクションか、コメントに対してのリアクションかの状態を保存
+// -- 投稿かコメントのリアクションかの状態を保存 --
 function setReactionState(type, commentId=""){
     state.currentReactionType = type;
     state.currentReactionCommentId = commentId;
 }
 
+// settimeout設定変数
 let reactionTimer = null;
+
 // リアクション送信
 async function sendReaction(emoji){
 
+    // 状態取得
     type = state.currentReactionType;
     commentId = state.currentReactionCommentId;
 
-    console.log(state.commentReactions[commentId])
     // 他のメニューなど開いてたら、閉じる
     closeAll();
 
     // csrfトークン取得
     const csrfToken = elements.csrfToken.value;
 
+    // リクエストボディ
     const body = {emoji:emoji}
 
     // 連打された時の対策
@@ -509,10 +543,12 @@ async function sendReaction(emoji){
         try{
             let url ;
 
+            // 投稿
             if(type === "post"){
                 url = `/posts/${postId}/reactions`;
             }
 
+            // コメント
             if(type === "comment"){
                 url = `/posts/${postId}/comments/${commentId}/reactions`;
             }
@@ -524,19 +560,19 @@ async function sendReaction(emoji){
             
             // -- 成功 --
             if(response.ok){
-                console.log(data.reactions)
                 
-            if(type === "post"){
-                state.postReactions =data.reactions;
-
-            }       
-            if(type=== "comment"){
-                state.commentReactions[commentId] = data.reactions;
-            }
-            
-            console.log(data.reactions)
-
-            updateReactionDisplay();
+                // 投稿
+                if(type === "post"){
+                    state.postReactions =data.reactions;
+                }       
+                
+                // コメント
+                if(type=== "comment"){
+                    state.commentReactions[commentId] = data.reactions;
+                }
+                
+                // リアクション表示
+                updateReactionDisplay();
             }
             
             // -- 失敗 --
@@ -554,6 +590,7 @@ async function sendReaction(emoji){
     },500)
 }
 
+// -- リアクションされた絵文字の表示領域を生成 --
 function createReactionElement(reactionLists,target){
 
     for(const reaction of reactionLists){
@@ -563,7 +600,7 @@ function createReactionElement(reactionLists,target){
         // クラス名設定
         span.className ="reaction-badge";
 
-        // イベント設定
+        // イベント設定(絵文字を直接クリックしても、反映されるように)
         span.addEventListener('click', function(){
             
             sendReaction(reaction.emoji,
@@ -576,7 +613,7 @@ function createReactionElement(reactionLists,target){
             // ツールチップ取得
             const existing = span.querySelector('.reaction-tooltip')
             
-            // 既に存在してたら 削除
+            // 表示はマウス充てた時の1回だけにする
             if(existing){
                 span.removeChild(existing);
             } 
@@ -593,6 +630,13 @@ function createReactionElement(reactionLists,target){
             const tooltip = document.querySelector('.reaction-tooltip');
             if(tooltip) span.removeChild(tooltip); 
         })        
+
+        // 自分のリアクションを目立たせるクラス
+        if(reaction.reacted){
+            span.classList.add("reacted");
+        }else{
+            span.classList.remove("reacted");
+        }
 
         // 内容
         span.textContent = `${reaction.emoji} ${reaction.count}`
@@ -697,6 +741,8 @@ function showAllReaction(reactionLists,target){
 
 // -- サーバー通信 --
 async function FetchRequest(url, method ,csrfToken, body=null) {
+   
+    // リクエストの設定
     const options ={
         method: method,                                         // postリクエスト
         credentials:"same-origin",                              // 資格情報

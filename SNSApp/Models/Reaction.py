@@ -14,7 +14,7 @@ class Reactions: #リアクションクラス
         try: # try文 この領域内でエラーをかましたらexceptに移動
             with conn.cursor() as cur: # 通常カーソル
                 sql = """
-                    SELECT emoji_type, COUNT(*) as count , GROUP_CONCAT(users.name)  AS name
+                    SELECT emoji_type, COUNT(*) as count , GROUP_CONCAT(users.name)  AS name , GROUP_CONCAT(users.id)  AS user_ids
                     FROM post_reactions pr
                       INNER JOIN users
                         ON users.id = pr.user_id
@@ -105,7 +105,7 @@ class Reactions: #リアクションクラス
         try: 
             with conn.cursor() as cur: 
                 sql = """
-                    SELECT emoji_type, COUNT(*) as count , GROUP_CONCAT(users.name)  AS name
+                    SELECT emoji_type, COUNT(*) as count , GROUP_CONCAT(users.name)  AS name ,GROUP_CONCAT(users.id)  AS user_ids
                     FROM comment_reactions cr
                       INNER JOIN users
                         ON users.id = cr.user_id

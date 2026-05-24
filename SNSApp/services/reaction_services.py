@@ -6,7 +6,7 @@ db_pool = DB.init_db_pool()
 
 class reaction_services:
     @classmethod
-    def send_reaction(cls, post_id, user_id,emoji_native):
+    def send_reaction(cls, post_id, user_id, emoji_native):
          
         conn = db_pool.get_conn() # タイムアウト対策
         conn.ping(reconnect=True) #生存確認の一文(切れてたらreconnect)
@@ -35,7 +35,8 @@ class reaction_services:
                 reactions.append({
                     'emoji': reaction['emoji_type'],
                     'count': reaction['count'],
-                    'users':reaction['name'].split(',') if reaction['name'] else []
+                    'users':reaction['name'].split(',') if reaction['name'] else [],
+                    'reacted':str(user_id) in reaction['user_ids'].split(',') # 自分がリアクションしたか
                 })
 
             # jsonでお返し
@@ -81,7 +82,8 @@ class reaction_services:
                 reactions.append({
                     'emoji': reaction['emoji_type'],
                     'count': reaction['count'],
-                    'users':reaction['name'].split(',') if reaction['name'] else []
+                    'users':reaction['name'].split(',') if reaction['name'] else [],
+                    'reacted':str(user_id) in reaction['user_ids'].split(',') # 自分がリアクションしたか
                 })
 
             # jsonでお返し
