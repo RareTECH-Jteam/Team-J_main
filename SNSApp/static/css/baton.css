@@ -47,6 +47,7 @@
 .empty {
     font-size: 14px;
 }
+
 .task-arrived {
     margin: 0px 8px;
     background-color: #FFCC00;
@@ -121,8 +122,8 @@
     max-width: 393px;
     min-height: 100px;
     max-height: 200px;
-    margin: 16px 8px;
-    padding: 8px 8px; /* ”バトンを選ぶ”の文字列との距離を空けるため */
+    margin: 8px 8px 8px 8px;
+    padding: 8px 8px 0px 8px; /* ”バトンを選ぶ”の文字列との距離を空けるため */
     background-color:#F3F3F3;
 }
 
@@ -184,7 +185,7 @@
     text-align: left;
     max-width: 393px;
     min-height: 100px;
-    margin: 8px auto;
+    margin: 0px auto;
     padding: 0px 16px;
     font-size: 12px;
 }
@@ -201,10 +202,10 @@
 
 .complete {
     text-align: left;
-    margin: 8px auto;
+    margin: 16px auto 0px auto;
     background-color:#eaf6fd;
     padding: 8px 16px;
-    max-height: 100px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
+    max-height: 56px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
     overflow-y: auto;
 }
 
@@ -217,7 +218,7 @@
     margin: 8px auto 0px auto;
     background-color:#dddddd;
     padding: 8px 16px;
-    max-height: 80px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
+    max-height: 56px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
     overflow-y: auto;
 }
 
