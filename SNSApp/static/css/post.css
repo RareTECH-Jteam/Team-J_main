@@ -454,7 +454,7 @@
 em-emoji-picker {
     max-width: none !important;
     transform: scale(0.7);
-    transform-origin: top left; /* 表示位置に合わせて調整 */
+    transform-origin: top left; 
 }
 
 .pen , .trash{
@@ -591,12 +591,17 @@ em-emoji-picker {
 }
 
 @media (max-width: 700px) {
-  em-emoji-picker {
-    transform: scale(0.7);
-    position: fixed !important;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-    z-index: 1000;
-}
+    .picker-container {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        top: auto !important;
+        z-index: 1000;
+    }
+    
+    em-emoji-picker {
+        height: 350px !important;
+        transform: none !important;
+    }
 }
