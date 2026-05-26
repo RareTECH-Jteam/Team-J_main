@@ -139,10 +139,15 @@
     visibility: visible;
 }
 
-.post-detail.picker-open:hover .quick-btn {
+/* .post-detail.picker-open:hover .quick-btn {
     opacity: 0;
     visibility: hidden;
-}
+} */
+
+/* body.picker-open .comment-card:hover .quick-btn2 {
+    opacity: 0 !important;
+    visibility: hidden !important;
+} */
 
 /* .reaction-btnの親要素で面積広い.comment-cardに対するマウスオーバーでリアクションボタン系統が表示される */
 .comment-card:hover .quick-btn2 {
@@ -464,11 +469,19 @@ em-emoji-picker {
     position: relative;
 }
 
-#picker-container{
+/* #picker-container{
     position: fixed;
     top: 0;
     left: 0;
     display: none;
+} */
+
+/* 追加 */
+.picker-container {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    z-index: 1000;
 }
 
 .picker-wrapper2 {
@@ -577,14 +590,13 @@ em-emoji-picker {
     }
 }
 
-@media (max-width: 480px) {
-    em-emoji-picker {
-        transform: scale(0.7);
-        transform-origin: top right;
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 1000;
-    }
+@media (max-width: 700px) {
+  em-emoji-picker {
+    transform: scale(0.7);
+    position: fixed !important;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: 1000;
 }
-
+}
