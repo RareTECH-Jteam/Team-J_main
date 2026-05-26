@@ -180,7 +180,9 @@ class Post:
                         FROM
                               users 
                               INNER JOIN user_study_ranking AS ranking
-                              ON users.id = ranking.user_id;
+                              ON users.id = ranking.user_id
+                        ORDER BY
+                            ranking.total_hours DESC , ranking.total_minutes DESC ;  # 降順になるように
                                 """
                 cur.execute(sql)
                 return cur.fetchall()
