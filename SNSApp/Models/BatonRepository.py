@@ -134,7 +134,8 @@ class BatonRepository:
                 sql = """UPDATE Baton
                                 SET status = 2
                             WHERE 1 = 1
-                            AND TIMESTAMPDIFF(HOUR , created_at , NOW()) >= 24
+                            # AND TIMESTAMPDIFF(HOUR , created_at , NOW()) >= 24 発表用に30秒に
+                            AND TIMESTAMPDIFF(SECOND , created_at , NOW()) >= 30
                             AND status = 0;
                         """
                 cur.execute(sql)
