@@ -508,13 +508,19 @@ document.querySelectorAll('.add-reaction-btn').forEach(btn => {
         container.className = 'picker-container'
         const picker = new EmojiMart.Picker(pickerOptions)
         container.appendChild(picker)
-        if(state.currentReactionType === 'comment') {
+        
+        if(window.innerWidth <= 700) {
+            // スマホ: bodyに追加するだけ、位置はCSSで制御
+            document.body.appendChild(container)
+        } else if(state.currentReactionType === 'comment') {
+            // PC + コメント
             const rect = this.getBoundingClientRect()
             container.style.position = 'fixed'
             container.style.top = rect.bottom + 'px'
             container.style.left = rect.left + 'px'
             document.body.appendChild(container)
         } else {
+            // PC + 投稿
             this.closest('.picker-wrapper').appendChild(container)
         }
     })
