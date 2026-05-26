@@ -38,7 +38,7 @@
                         <div class="post-user">
                             <span class="display-name">{{ post.user_name }}</span>
                         </div>
-                        <div class="post-time">{{ post.created_at }}</div>
+                        <div class="post-time">{{ post.format_created_at }}</div>
                     </div>
                     <div class="edit-completed">
                     {% if post.created_at != post.updated_at %}
