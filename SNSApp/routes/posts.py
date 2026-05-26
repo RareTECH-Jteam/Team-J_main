@@ -32,7 +32,7 @@ def mypage_view():
     # 投稿一覧
     all_posts = Post.get_all()
     for post in all_posts:
-        post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
+        post['format_created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
         post['user_name'] = User.get_name_by_id(post['user_id'])
         study_time = Post. time_to_minutes(post['study_time'])
         post['hours'] =   study_time // 60

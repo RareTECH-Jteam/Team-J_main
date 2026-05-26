@@ -215,11 +215,12 @@ CREATE TABLE
 
 INSERT INTO users (name, email, password)
 VALUES 
-  ('Tomo', 'Tomo64@example.com', '0c120c7ab57b43d4db1837f2a4332ced20b2f3160bdeb186a8d601e3b0d6ace5'),
+  -- ('Tomo', 'Tomo64@example.com', '0c120c7ab57b43d4db1837f2a4332ced20b2f3160bdeb186a8d601e3b0d6ace5'),
+  ('Tomo', '1234', '0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c'),
   ('おっくん', 'okun@example.com', '165d68fe9913a11c91bb7290d5d885833240c0fdb43b0b2be790f043bc9022c7'),
-  ('てる', 'teru@example.com', '44b4c21936c779156df19a17832a0d91ecbfb37e6889ef6d9b465c75b00ef060');
---   ('たまちゃん', 'tamachan@example.com', 'ee839106f2f14fab267dd94f311a152490e256e69e612e4d73b710c5fc9b7ef7'),
---   ('まつけん', 'matuken@example.com', '2935bf31052e67f5ff0ba4f37e9f6ef3964831dfeee316fee07cef4ab9803a62'),
+  ('てる', 'teru@example.com', '44b4c21936c779156df19a17832a0d91ecbfb37e6889ef6d9b465c75b00ef060'),
+  ('たまちゃん', 'tamachan@example.com', 'ee839106f2f14fab267dd94f311a152490e256e69e612e4d73b710c5fc9b7ef7'),
+  ('まつけん', 'matuken@example.com', '2935bf31052e67f5ff0ba4f37e9f6ef3964831dfeee316fee07cef4ab9803a62');
 --   ('田中太郎', 'tanaka@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
 --   ('佐藤花子', 'sato@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
 --   ('鈴木一郎', 'suzuki@test.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
@@ -269,7 +270,6 @@ VALUES
 ('「これテスト出そう」って勝手に予想してみて') ,
 ('今日の先生の話で一番印象に残ったフレーズ教えて') ,
 ('数学でも英語でもいいから“1問だけ”倒してこい') ,
--- ('ノート開いた瞬間スクショ（証拠）') ,
 ('「なんとなく理解した気がする」ことを説明してみて') ,
 ('30秒だけ教科書読んで、覚えてる単語3つ書け') ,
 ('友達に1つだけ勉強の話ふってみて（内容も書け）') ,
@@ -283,14 +283,14 @@ VALUES
 ('今の気分で一番マシな教科に1秒触れろ（開くだけOK）') ;
 
 
--- INSERT INTO chain(id) VALUES(1);
+ INSERT INTO chain(id) VALUES(1);
 -- INSERT INTO chain(id) VALUES(2);
 -- INSERT INTO chain(id) VALUES(3);
 
--- INSERT INTO Baton (baton_title,sender_id, receiver_id, task_id,content,chain_id,relay_count,status,created_at)
--- VALUES
-    -- ('レジェンドバトン！', 2, 1, 1, '今日授業で習ったこと、1つ教えて！', 1, 1, 0,NOW()),
-    -- ('レジェンドバトン！', 2, 1, 1, '今日授業で習ったこと、1つ教えて！', 1, 1, 0,NOW() - INTERVAL 23 HOUR - INTERVAL 55 MINUTE - INTERVAL 00 SECOND);
+INSERT INTO Baton (baton_title,sender_id, receiver_id, task_id,content,chain_id,relay_count,status,created_at)
+VALUES
+--  ('レジェンドバトン！', 2, 1, 1, '画面遷移、機能について教えて！', 1, 1, 0,NOW())
+  ('レジェンドバトン！', 2, 1, 1, '画面遷移、機能について教えて！', 1, 1, 0,NOW() - INTERVAL 00 HOUR - INTERVAL 00 MINUTE - INTERVAL 00 SECOND);
 
 INSERT INTO post_reactions (post_id, user_id, emoji_type) 
 VALUES
