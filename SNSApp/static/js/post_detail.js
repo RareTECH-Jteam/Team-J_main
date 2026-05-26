@@ -17,7 +17,7 @@ const elements = {
     editstudytime: document.getElementById(`edit-study-time-input-${postId}`),
     csrfToken: document.querySelector('input[name="csrf_token"]'),
     // reactionBtn: document.getElementById('add-reaction-btn'),
-    pickerContainer: document.getElementById('picker-container'),
+    // pickerContainer: document.getElementById('picker-container'),
     reactionUserId: actionBar.dataset.reactionUserId,
     showEmojiArea :document.getElementById('showemoji')
 }
@@ -58,10 +58,10 @@ const pickerOptions = {
     navPosition: "bottom"
 }
 
-const picker = new EmojiMart.Picker(pickerOptions)
+// const picker = new EmojiMart.Picker(pickerOptions)
 
-// ピッカー要素追加
-elements.pickerContainer.appendChild(picker);
+// // ピッカー要素追加
+// elements.pickerContainer.appendChild(picker);
 
 /************************/
 /*  閉じる系操作        */
@@ -78,8 +78,9 @@ function closeAll() {
         tooltip.remove()
     })
     
-    // ピッカーを閉じたときにホバー効果を元に戻す
-    document.querySelector(".post-detail").classList.remove("picker-open");
+    // // ピッカーを閉じたときにホバー効果を元に戻す
+    // // document.querySelector(".post-detail").classList.remove("picker-open");
+    // document.body.classList.remove("picker-open")
 }
 
 // 全部閉じる処理（編集・削除・絵文字ピッカー）
@@ -87,7 +88,10 @@ function closeAllMenus() {
     document.querySelectorAll('.menu-dropdown, .menu-dropdown2').forEach(menu => {
         menu.style.display = "none";
     });
-    elements.pickerContainer.style.display = "none";
+    // elements.pickerContainer.style.display = "none";
+        // ピッカーを削除
+    const existing = document.querySelector('.picker-container')
+    if(existing) existing.remove()
 }
 
 // 枠外クリックで閉じる
@@ -103,11 +107,15 @@ document.addEventListener('click', function(e) {
 // マウスが離れたら閉じる
 document.querySelectorAll('.action-bar, .action-bar-comment').forEach(bar => {
     bar.addEventListener('mouseleave', function(e) {
-       if(e.relatedTarget && e.relatedTarget.closest('.action-bar, .action-bar-comment')) return 
-       
+        // ピッカーが開いてる場合は閉じない
+        const pickerExists = document.querySelector('.picker-container')
+        if(pickerExists) return
+        
+        if(e.relatedTarget && e.relatedTarget.closest('.action-bar, .action-bar-comment')) return 
+        
         closeAll()
     })
-});
+})
 
 
 
@@ -119,8 +127,9 @@ document.querySelectorAll('.action-bar, .action-bar-comment').forEach(bar => {
 // --  編集・削除メニューの表示、非表示を行う --
 function toggleMenu(type,commentId=""){
 
-    // 絵文字ピッカーを非表示にしておく
-    elements.pickerContainer.style.display = "none";
+    // ピッカーを削除
+    const existing = document.querySelector('.picker-container')
+    if(existing) existing.remove()
 
     // 投稿かコメントかによって、取得するメニュー要素（編集・削除）を変える
     const target = type === 'post' 
@@ -478,38 +487,38 @@ document.addEventListener('DOMContentLoaded', function(){
 document.querySelectorAll('.add-reaction-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         
-        // 開いてたら閉じる
-        if(elements.pickerContainer.style.display === "block") {
-            hideElement(elements.pickerContainer)
+        // 既存のピッカーがあれば削除して終了
+        const existing = document.querySelector('.picker-container')
+        if(existing) {
+            existing.remove()
+            document.body.classList.remove('picker-open')
             return
         }
         
-        // メニューなど他のものを閉じる（ピッカーは除く）
         document.querySelectorAll('.menu-dropdown, .menu-dropdown2').forEach(menu => {
             menu.style.display = "none"
         })
 
-           
-        // 親要素を辿り、data属性から状態を取得する
-        const bar = this.closest(".action-bar, .action-bar-comment");
-        state.currentReactionType = bar.dataset.type || "post";
-        state.currentReactionCommentId = bar.dataset.commentId || null;
+        const bar = this.closest(".action-bar, .action-bar-comment")
+        state.currentReactionType = bar.dataset.type || "post"
+        state.currentReactionCommentId = bar.dataset.commentId || null
         
-        // クリックした要素の位置を取得する(絵文字ピッカーは重いので、使いまわすために表示をずらす)
-        const rect = this.getBoundingClientRect();
-        elements.pickerContainer.style.top = rect.bottom + 'px'
-        elements.pickerContainer.style.left = rect.left + 'px'
-        
-        // 絵文字ピッカー表示
-        showElement(elements.pickerContainer);
-
-        // コメントの絵文字ピッカーにホバーした時に、投稿詳細のメニューが表示されるのを防ぐため
-        document.querySelector('.post-detail').classList.add('picker-open')
-
-        console.log(elements.pickerContainer.style.display) 
+        // ピッカーを新しく作成
+        const container = document.createElement('div')
+        container.className = 'picker-container'
+        const picker = new EmojiMart.Picker(pickerOptions)
+        container.appendChild(picker)
+        if(state.currentReactionType === 'comment') {
+            const rect = this.getBoundingClientRect()
+            container.style.position = 'fixed'
+            container.style.top = rect.bottom + 'px'
+            container.style.left = rect.left + 'px'
+            document.body.appendChild(container)
+        } else {
+            this.closest('.picker-wrapper').appendChild(container)
+        }
     })
 })
-
 // -- 投稿かコメントのリアクションかの状態を保存 --
 function setReactionState(type, commentId=""){
     state.currentReactionType = type;
