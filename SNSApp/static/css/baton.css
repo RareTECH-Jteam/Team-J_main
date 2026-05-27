@@ -1,0 +1,224 @@
+/*とりあえずページを中央揃えに */
+.page {
+    max-width: 600px; /* 横幅制限（スマホ想定） */
+    margin: 0 auto; /*　全体を中央寄せに */
+    padding: 0 16px; /* 端の余白（スマホで詰まりすぎを防ぐ） */
+
+    min-height: 100vh; /* vhはviewport height、今回使う高さの最低値を画面の高さに指定 */
+    display: flex;
+    flex-direction: column; /* mainとfooterを縦並びにしてfooterを最下部に押し出すため */
+}
+
+/*　headerとfooterで使った余りの高さ方向のスペースをmainが全部使う..がこれがあるとfooterが下に行き過ぎる */
+/* main {
+    flex: 1; 
+} */
+
+/* テキスト系をまとめてセンターアライン */
+.page-title, .task-arrived, .new-task-main, .empty, .task-history {
+    text-align: center; 
+}
+
+.page-title {
+    position: relative; /* これがあることで画像のabsoluteの基準が.page-titleになってくれる。これがないと一番近いpostition付き親が基準になってしまい（bodyとか画面全体）吹っ飛ぶ可能性あり。 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px; /* 画像のpositionをabsoluteにすると上にはみ出してしまうのでpage-titleに高さを持たせた */
+}
+
+.title-image {
+    min-height: 112px;
+    position: absolute; /* 画像だけアライメントしないで絶対値で位置決める */
+    left: -40px; /* .page-title の左から120px となる */
+    margin-right: 12px
+}
+
+.title-image img {
+    height: 112px;
+}
+
+.title {
+    height: 56px;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.empty {
+    font-size: 14px;
+}
+
+.task-arrived {
+    margin: 0px 8px;
+    background-color: #FFCC00;
+}
+
+.mytask-content {
+    background-color: #FFCC00;
+    padding: 8px 16px;
+    max-height: 80px;
+    text-align: left;
+    font-size: 10px; /*　スペース節約と高校生の視力を信じて小さめに */
+}
+
+.task-message {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 12px;
+}
+
+.total-num {
+    color: red;
+    font-weight: 600;
+    margin: 0 4px 0 4px;
+}
+
+.task-sender {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.mytask-time {
+    position: relative;
+    display: flex;
+    justify-content:space-between;
+}
+
+.task-limit {
+    position: absolute;
+    margin-left: 96px;
+    color: red;
+    font-weight: 600;
+}
+
+.task-body {
+    text-align: center;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+/* 完了ボタンを右寄せにするため、親のformでflex指定 */
+.complete-form {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* バトン完了ボタンの色や形状調整 */
+.mytask-complete {
+    margin-right: 16px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    background-color:#00C3D0;
+    font-size: 12px;
+    padding: 8px 24px;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-color: #FFFFFF;
+    box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);
+}
+
+.new-task-main {
+    text-align: left;
+    max-width: 393px;
+    min-height: 100px;
+    max-height: 200px;
+    margin: 8px 8px 8px 8px;
+    padding: 8px 8px 0px 8px; /* ”バトンを選ぶ”の文字列との距離を空けるため */
+    background-color:#F3F3F3;
+}
+
+.task_title {
+    min-height: 24px;
+    max-height: 36px;
+    min-width: 160px;
+    max-width: 200px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 8px;
+    margin-left: 4px;
+    border:solid #00C3D0;
+    background-color: #FFFFFF;
+}
+
+.select-title {
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+.select-task{
+    min-width: 200px;
+    max-width: 290px; /* プルダウンメニューの幅を広くする・・プルダウンだと選択したテキストが改行されないのが辛い・・ */
+    min-height: 40px;
+    margin-left: 4px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 11px;
+    border:solid #00C3D0;
+}
+
+.send-task {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.send-task-image {
+    flex-shrink: 0; /* 狭くても潰れるな！ってやつ */
+    height: 80px;
+    margin: 8px;
+}
+
+/* バトン送信ボタンの色や形状調整 */
+.send-task-btn {
+    margin-right: 8px; /* バトン完了ボタンと右端揃える。.new-task-mainのpaddingの分、これが必要になった */
+    margin-top: 16px;
+    margin-bottom: 16px;
+    background-color:#00C3D0;
+    font-size: 12px;
+    padding: 8px 8px;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-color: #FFFFFF;
+    box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);
+}
+
+.task-history {
+    text-align: left;
+    max-width: 393px;
+    min-height: 100px;
+    margin: 0px auto;
+    padding: 0px 16px;
+    font-size: 12px;
+}
+
+.history-item {
+    margin: 2px 0; /* 行間を狭くしたいので、<p>タグのデフォルトの上下marginを小さくする */
+    line-height: 1.0; /* 文字の行間も詰める */
+}
+
+.complete-title {
+    font-weight: 600;
+    color:hotpink;
+}
+
+.complete {
+    text-align: left;
+    margin: 16px auto 0px auto;
+    background-color:#eaf6fd;
+    padding: 8px 16px;
+    max-height: 56px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
+    overflow-y: auto;
+}
+
+.fail-title {
+    font-weight: 600;
+}
+
+.fail {
+    text-align: left;
+    margin: 8px auto 0px auto;
+    background-color:#dddddd;
+    padding: 8px 16px;
+    max-height: 56px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
+    overflow-y: auto;
+}
+

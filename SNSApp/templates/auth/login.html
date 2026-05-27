@@ -2,39 +2,46 @@
 
 <!--headタグ内の設定-->
 {% block title %}ログイン - Manabu {% endblock %}
-{% block page_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}">{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}">
+{% endblock %}
 
 
-<!--bpdyタグ内のコード-->
-{% block page_title %}ログイン{% endblock %}
-
+<!--bodyタグ内のコード-->
 {% block content %}
-    <p class="auth-subtitle">メールアドレスとパスワードを入力してログインしてください。</p>
+<div class="page">
+    <!-- メイン -->
+    <main>
+        <div class="page-title">ログイン</div>
 
-    <!-- フラッシュメッセージ表示（このコミットでは入力値チェックとするが、次のコミットでフラッシュメッセージを表示させる） -->
+
+        <p class="auth-subtitle">メールアドレスとパスワードを入力して<br>ログインしてください。</p>
 
 
-     <!--フォーム入力-->
-    <form class="auth-form" method="post"> <!--login[POST]のURL-->
+        <!--フォーム入力-->
+        <form class="auth-form" action="{{url_for('auth.login_process')}}" method="post"> <!--login[POST]のURLにform送信-->
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">    <!--暗号トークンをform送信-->
 
-        <!--メールアドレス入力-->
-        <div>
-            <label>メールアドレス</label>
-            <input type="text" name="email" placeholder="メールアドレス" required>
-        </div>
+            <!--メールアドレス入力-->
+            <div class="user-info">
+                <label>メールアドレス</label>
+                <input type="text" name="email" placeholder="メールアドレス">  <!--フラッシュメッセージを導入したらrequiredは消します-->
+            </div>
+            
+            <!--パスワード入力-->
+            <div class="user-info">
+                <label>パスワード</label>
+                <input type="password" name="password_confirmation" placeholder="パスワード">
+            </div>
+
+            <img class="login_img" src="{{ url_for('static', filename='img/Cheering_cat.PNG')}}" alt="Cheering_cat">  <!--後でurl_forに変更する-->
+            
+            <div class="auth-botton-container">
+                <button class="auth-botton" type="submit">ログイン</button>
+                <a class="switch-auth-mode" href="{{url_for('auth.signup_view')}}">新規登録はこちら</a>
+            </div>
         
-        <!--パスワード入力-->
-        <div>
-            <label>パスワード</label>
-            <input type="password" name="password_confirmation" placeholder="パスワード" required>
-        </div>
-
-        <img src="../img/Cheering_cat.PNG" alt="Cheering_cat">  <!--後でurl_forに変更する-->
-        
-        <div class="auth-botton-container">
-            <button class="auth-botton" type="submit">ログイン</button>
-            <a class="switch-auth-mode" href="{{url_for('auth.signup_view')}}">新規登録はこちら</a>
-        </div>
-        
-    </form>
+        </form>
+    </main>
+</div>
 {% endblock %} 

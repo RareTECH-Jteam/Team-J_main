@@ -1,0 +1,607 @@
+/*とりあえずページを中央揃えに */
+.page {
+    max-width: 600px; /* 横幅制限（スマホ想定） */
+    margin: 0 auto; /*　全体を中央寄せに */
+    padding: 0 16px; /* 端の余白（スマホで詰まりすぎを防ぐ） */
+
+    min-height: 100vh; /* vhはviewport height、今回使う高さの最低値を画面の高さに指定 */
+    display: flex;
+    flex-direction: column; /* mainとfooterを縦並びにしてfooterを最下部に押し出すため */
+}
+
+/* テキスト系をまとめてセンターアライン */
+.page-title, .post-detail, .comment-list, .empty, .flash-messages, .new-post {
+    text-align: center; 
+}
+
+/*　headerとfooterで使った余りの高さ方向のスペースをmainが全部使う..がこれがあるとバトン画面のfooterが下に行き過ぎる */
+/* main {
+    flex: 1; 
+} */
+
+.page-title {
+    height: 56px;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.comment-list {
+    max-height: 200px; /* 投稿リストは画面スクロールさせて、フッターまで一画面に収める */
+    overflow-y: auto;
+}
+
+.post-detail {
+    display: flex;
+    flex-direction: column; /*　これで三点ボタンと投稿枠を縦に並べる */
+}
+
+.post-card {
+    flex: 1;
+    padding: 8px 16px;
+    margin: 4px 8px 8px 8px; /* トグルと近づけるため、topのマージンを4に。ちなみに順番は上右した左。 */
+    background-color: #F3F3F3;
+}
+
+.post-content {
+    background-color: #F3F3F3;
+    text-align: left;
+    font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.display-name {
+    font-weight: 600;
+}
+
+.post-study-time {
+    color: chocolate;
+}
+
+.comment-card {
+    padding: 8px 16px;
+    margin: 8px 16px; /* 箱の大きさ調整 */
+}
+
+.comment-content {
+    background-color: #e2eba3; /* コメントの色を変えて、オリジナル投稿と区別 */
+    text-align: left;
+    font-size: 12px; /*　スペース節約と高校生の視力を信じて小さめに */
+    padding: 8px 16px;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 投稿編集用三点ボタン */
+.post-menu{
+    position: relative; /*　これがないとボタンが反応しない・・ */
+    /* display: inline-block; */ /*　これはなくても大丈夫そう */
+    display: flex;
+    justify-content: flex-end; /* これで右側に寄せる */
+    margin-right: 7px ; /* 投稿の枠右端に手動で無理矢理合わせてます！ */
+}
+
+/* コメント編集用三点ボタン */
+.comment-menu{
+    position: relative; /*　これがないとボタンが反応しない・・ */
+    /* display: inline-block; */ /*　これはなくても大丈夫そう */
+    display: flex;
+    justify-content: flex-end; /* これで右側に寄せる */
+    margin-right: 7px ; /* 投稿の枠右端に手動で無理矢理合わせてます！ */
+}
+
+.reaction-bar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.reaction-bar2 {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.quick-btn {
+    /* リアクションボタン系統をデフォルトでは非表示に */
+    /* display: none;  */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    font-size: 16px;
+    background-color: transparent;
+    border-color: transparent;    
+}
+
+/* 投稿に対するコメント用のボタン設定 */
+.quick-btn2 {
+    /* リアクションボタン系統をデフォルトでは非表示に */
+    /* display: none;  */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    font-size: 16px;
+    background-color: transparent;
+    border-color: transparent;    
+}
+
+/* .reaction-btnの親要素で面積広い.post-detailに対するマウスオーバーでリアクションボタン系統が表示される */
+.post-detail:hover .quick-btn {
+    display: inline-flex; /* inline-flexは文字のように必要最小限サイズだけ使う */
+    font-size: 16px; /* スマホで選択しやすいように少し大きめに */
+    background-color: transparent;
+    border-color: transparent;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* .post-detail.picker-open:hover .quick-btn {
+    opacity: 0;
+    visibility: hidden;
+} */
+
+/* body.picker-open .comment-card:hover .quick-btn2 {
+    opacity: 0 !important;
+    visibility: hidden !important;
+} */
+
+/* .reaction-btnの親要素で面積広い.comment-cardに対するマウスオーバーでリアクションボタン系統が表示される */
+.comment-card:hover .quick-btn2 {
+    display: inline-flex; /* inline-flexは文字のように必要最小限サイズだけ使う */
+    font-size: 16px; /* スマホで選択しやすいように少し大きめに */
+    background-color: transparent;
+    border-color: transparent;
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-btn{
+    width: 32px;
+    height: 32px;
+    transform: rotate(90deg);
+    background-color:#F3F3F3;
+    border: 1px solid #b4c1d1;
+    font-size: 16px;
+}
+
+.menu-dropdown{
+    position: absolute; /* .post-menuを基準に自由配置する */
+    right: 0; /* dropdownの右端を親要素の .menu-btnにピッタリ合わせる */
+    top: 100%; /* drowdownの上端を、親要素の .menu-btnの高さ100%（真下）に配置 */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 100; /* 他の要素より前面に表示：dropdownが下に潜るのを防ぐ */
+    min-width: 150px;
+}
+
+.menu-dropdown button{
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-dropdown button:hover{
+    background-color: #f5f5f5;
+}
+
+
+.menu-dropdown2{
+    position: absolute; /* .comment-menuを基準に自由配置する */
+    right: 0; /* dropdownの右端を親要素の .menu-btnにピッタリ合わせる */
+    top: 100%; /* drowdownの上端を、親要素の .menu-btnの高さ100%（真下）に配置 */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 100; /* 他の要素より前面に表示：dropdownが下に潜るのを防ぐ */
+    min-width: 150px;
+}
+
+.menu-dropdown2 button{
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-dropdown2 button:hover{
+    background-color: #f5f5f5;
+}
+
+.edit-post-footer {
+    position: absolute; /* 勉強時間入力スペースなどを枠に入れる */
+    bottom: 8px;
+    left: 8px;
+    display: flex;
+
+    align-items: center;
+    background-color:#F3F3F3
+}
+
+.btn-edit {
+    margin-right: 4px;
+    background-color:#00C3D0;
+    font-size: 12px;
+    padding: 8px 8px;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-color: #FFFFFF;
+    box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);    
+}
+
+.edit-post {
+    text-align: center; 
+}
+
+.edit-post {
+    margin-top: 16px;
+}
+
+/* 上段だけ横並びにする（投稿フォームとイメージ */
+.edit-post-body {
+    position: relative; /* 勉強時間などの枠を白い枠に入れ込むため */
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    width: 100%;
+    background-color: #F3F3F3;
+}
+
+.edit-post textarea {
+    flex: 1; /* 残り幅全部使う */
+    min-height: 56px;
+    border: none;
+    resize: none;
+    font-size: 12px;
+    background-color: #F3F3F3;
+    padding: 8px;
+    padding-bottom: 56px;
+}
+
+/* 勉強時間入力スペース周りの色や形状調整 */
+.edit-study-box {
+    min-width: 100px;
+    text-align: left;
+    background-color:#00C3D0;
+    padding: 8px 8px;
+    border-radius: 16px;
+    margin-right: 8px;
+}
+
+/* 勉強時間入力スペースの色や形状調整 */
+.edit-study-box input {
+    width: 24px;
+    background-color:#F3F3F3;
+    padding: 4px 8px;
+    border-radius: 8px;
+    text-align: right;
+}
+
+.new-post {
+    margin-top: 16px;
+}
+
+/* formを縦並びにする */
+.new-post-main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px; /* 間の余白 */
+    padding: 8px 16px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    margin: 8px 8px; /* 箱の大きさ調整 */
+    justify-content: space-between;
+    background-color:#F3F3F3;
+}
+
+.new-post textarea {
+    flex: 1; /* 残り幅全部使う */
+    min-height: 32px;
+    border: none;
+    resize: none;
+    font-size: 12px;
+    background-color: #F3F3F3;
+    padding-bottom: 32px;
+}
+
+/* 投稿ボタンの色や形状調整 */
+.btn-primary {
+    margin-right: 4px;
+    background-color:#00C3D0;
+    font-size: 12px;
+    padding: 8px 16px;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-color: #FFFFFF;
+    box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.2);
+}
+
+.edit-post-footer button {
+    padding: 4px 12px;
+    white-space: nowrap;  /* テキストが折り返さないようにする */
+}
+
+.new-post-main textarea{
+    font-size: 14px;
+}
+
+.new-post-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* 削除モーダル */
+.confirm_box_container {
+    position: fixed;
+    top: 0;    
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirm_box_container .confirm_box {
+    width: min(30em, 90%);
+    background: white;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-shadow: 0px 2px 8px 0 #676767;
+    margin-top: 2%;
+}
+
+.confirm_box_container .confirm_box_title {
+    font-size: 1rem;
+    /* font-weight: 400; */
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 0.1rem solid #a3a3a3;
+    width: 100%;
+    color: #D97706;
+}
+
+.confirm-warging {
+    color: #D97706; /* アンバー */
+    /* font-weight: 600; */
+}
+
+.confirm_box_container .confirm_box_message {
+    font-size: 1rem;
+    height: 13rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirm_box_container .confirm_button_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 5rem;
+    font-size: 1.6rem;
+}
+
+.confirm_box_container .confirm_button_container .confirm_button {
+    width: min(12rem, 45%);
+    height: 4rem;
+    background: #d31a1a;
+    color: white;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.confirm_box_container .confirm_button_container .confirm_button:hover {
+    background: #a31a1a;
+}
+
+.confirm_box_container .confirm_button_container .cancel_button {
+    width: min(12rem, 45%);
+    height: 4rem;
+    border: 0.1rem solid #000000;
+    background: white;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.confirm_box_container .confirm_button_container .cancel_button:hover {
+    box-shadow: 0 0 7px 0 rgb(102, 102, 102);
+    background: #fbfbfb;
+}
+
+.confirm_error_message{
+    color: #d31a1a;
+    font-size: 1rem;      /* ← 大きくする */
+    font-weight: 600;
+    text-align: center;
+    padding: 0.5rem;
+    visibility: hidden;
+}
+
+/* 絵文字ピッカー */
+em-emoji-picker {
+    max-width: none !important;
+    transform: scale(0.7);
+    transform-origin: top left; 
+}
+
+.pen , .trash{
+    font-weight: 500;
+}
+
+.trash{
+    color: red;
+}
+
+.picker-wrapper {
+    position: relative;
+}
+
+/* #picker-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+} */
+
+/* 追加 */
+.picker-container {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    z-index: 1000;
+}
+
+.picker-wrapper2 {
+    position: relative;
+}
+
+
+.action-bar{
+    display: flex;
+}
+
+.action-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: flex-end;
+    margin-right: 7px;
+}
+
+.quick-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+}
+
+.quick-btn2 {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+}
+
+.picker-wrapper {
+    position: relative;
+}
+
+.reaction-area{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+/* コメント用のリアクション表示エリア */
+.reaction-area2{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+.reaction-badge{
+    padding: 5px;
+    font-size: 12px;
+}
+
+.reaction-badge.reacted{
+    background-color: #e8f0fe;
+    border: 1px solid #4a90d9;
+    border-radius: 12px;
+}
+
+/* 折りたたみ解除 */
+.reaction-more{
+    font-weight: bold;
+    color:gray
+}
+
+.reaction-more :hover{
+    cursor: pointer;
+}
+
+.quick-btn .material-symbols-outlined,
+.quick-btn2 .material-symbols-outlined {
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.reaction-badge {
+    position: relative;
+}
+
+.reaction-tooltip{
+    position: absolute;
+    max-width: 100px;
+    z-index: 100;
+    background-color: #007a82;
+    color: white;
+    border-radius: 6px;
+    padding: 4px 8px;
+    margin-top: 2px;
+    font-size: 12px;
+    white-space: pre;
+}
+
+/* スマホ向けレスポンシブ対応 */
+@media screen and (max-width: 700px) {
+    .confirm_box_container .confirm_box {
+        width: 90%;
+    }
+
+    .confirm_box_container .confirm_button_container .confirm_button,
+    .confirm_box_container .confirm_button_container .cancel_button {
+        max-width: 45%;
+    }
+}
+
+@media (max-width: 700px) {
+    .picker-container {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        top: auto !important;
+        z-index: 1000;
+    }
+    
+    em-emoji-picker {
+        height: 350px !important;
+        transform: none !important;
+    }
+}

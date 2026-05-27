@@ -1,4 +1,4 @@
-from flask import session
+from flask import session, flash
 
 class SessionManager:
     @staticmethod

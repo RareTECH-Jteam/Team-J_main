@@ -5,22 +5,45 @@
     <meta charset="UTF-8">                                                  <!--文字エンコードをUTF-8に指定-->
     <title>{% block title %}マナ部{% endblock %}</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">   <!--画面サイズをデバイスサイズに合わせて最適化-->
-    <link rel="stylesheet" href="base.css">                                 <!--パスはファイルを入れたら記述します-->
-    {% block page_css %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css')}}">       
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon-96_96.png') }}"> <!-- ファビコン：ブラウザタブにウサギ！ -->
+    {% block page_css %}{% endblock %}                      <!--ページ毎のcssファイル用のblockです-->
 </head>
 
-<body>
+<body id="{{page_id | default('')}}">
     {% include 'common/header.html' %}                          
 
-    <main>
-        <h2 class="auth-title">{% block page_title %}{% endblock %}</h2>                   <!--headerの下に表示するページタイトル文のことです-->
+    {% block content %}{% endblock %}          <!--main部分のblockです-->
 
-        {% block content %}{% endblock %}                                  <!--ページタイトル以外のmain部分です-->
-    
-        <!--フッターは２つファイルを作成するので、mainにそれぞれincludeしてください-->
-        <!--(マイページはfooter_mypage.html、投稿詳細・バトン画面・ランキングはfooter_mypageback.htmlをincludeしてください)-->
-    </main>
+    <!--フッターは２つファイルを作成するので、mainにそれぞれincludeしてください-->
+    <!--(マイページはfooter_mypage.html、投稿詳細・バトン画面・ランキングはfooter_mypageback.htmlをincludeしてください)-->
+    <!-- ログインした後に動かす -->
+    {% if session.get('user_id') %}
+        <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+        <script src="{{url_for('static', filename='js/socket.js')}}"></script>
+    {% endif %}
+    {% block scripts %}{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{url_for('static', filename='js/base.js')}}"></script>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <script>
+            {% if category == 'error' %}
+                showError('{{ message }}')
+            {% else %}
+                showSuccess('{{ message }}')
+            {% endif %}                    
+            </script>    
+        {% endfor %}
+    {% endif %}
+    {% endwith %}        
 </body>
 
 </html>

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}500エラー{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="error-wrapper">
+    <div>
+        <p class="error-num">5 0 0</p>
+
+        <div class="error-description">
+            <p>エラーが発生しました。<br>管理者にお問い合わせ下さい。</p>
+            <a href="{{ url_for('posts.mypage_view')}}">戻る</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

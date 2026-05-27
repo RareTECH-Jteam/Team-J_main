@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{#{ url_for('static', filename='css/mypage.css')}#}"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ranking.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}">
+{% endblock %}
+
+
+{% block content %}
+<div class="page">
+    <!-- メイン -->
+    <main>
+        <div class="full-page-title">
+            <img class="title-img" src="{{ url_for('static', filename='img/CatRabbit_in_Cup.PNG')}}" alt="CatRabbit_in_Cup">
+            <div class="page-title">{{ month }}月<br>ランキング</div>
+            <img class="title-img" src="{{ url_for('static', filename='img/CatRabbit_in_Cup.PNG')}}" alt="CatRabbit_in_Cup">
+        </div>
+        <!--ランキング表示-->
+        <div class="full-ranking-design">
+            <section class="each-ranking-view">
+                <!-- ランキングタイトル表示 -->
+                <div class="ranking-title">
+                    <img class="ranking-title-img" src="{{ url_for('static', filename='img/Top_rabbit.PNG')}}" alt="Top_rabbit">
+                    <span class="ranking-title-name">勉強時間王</span>
+                </div>
+                
+                <!-- ランキング順位表示 -->
+                <div class="ranking-scroll-box">
+                    {% for study_rank in study_ranking %}              <!--スクロール表示-->
+
+                    <div class="{% if study_rank.id == user_id %}my-ranking-detail
+                                    {%else%}ranking-detail {%endif%}">        <!--ランキング詳細-->
+                        
+                        <!--順位表示  -->
+                        {%if loop.index0==0%}           <!--はじめの配列要素-->
+                        <img class="ranks-medal" src="{{ url_for('static', filename='img/Gold_medal.png')}}" alt="Gold_medal">
+
+                        {%elif loop.index0==1%}          <!--２つ目の配列要素-->
+                        <img class="ranks-medal" src="{{ url_for('static', filename='img/Silver_medal.png')}}" alt="Silver_medal">
+
+                        {%elif loop.index0==2%}          <!--３つ目の配列要素-->
+                        <img class="ranks-medal" src="{{ url_for('static', filename='img/Bronze_medal.png')}}" alt="Bronze_medal">
+                        
+                        {%else%}  <!--4つ目以降の配列要素のとき-->
+                        <p class="ranks">{{loop.index}}</p>
+                        {% endif %}
+                        
+                        <!--名前表示  -->
+                        <div class="rank-name">{{ study_rank.name }}</div>
+                        
+                        <!--勉強時間表示  -->
+                        <div class="total">
+                            {%if not study_rank.total_minutes %}
+                                {%if study_rank.total_hours > 465%}
+                                465時間！？
+                                {%else%}
+                                {{study_rank.total_hours}}時間
+                                {%endif%}
+                            {%elif not study_rank.total_hours %}
+                                {{study_rank.total_minutes}}分
+                            {%else%}
+                                {%if study_rank.total_hours > 465%}
+                                465時間！？
+                                {%else%}
+                                {{study_rank.total_hours}}時間{{study_rank.total_minutes}}分
+                                <!--勉強時間を「時間」＋「分」に換算して表示　はBEで処理してくれる！ -->
+                                {%endif%}
+                            {%endif%}
+                        </div>
+                    </div>
+                    {% endfor %}              
+                </div>
+                
+            </section>
+            <section class="each-ranking-view">
+                <!-- ランキングタイトル表示 -->
+                <div class="ranking-title">
+                    <img class="ranking-title-img" src="{{ url_for('static', filename='img/Top_cat.PNG')}}" alt="Top_cat">
+                    <span class="ranking-title-name">レジェンドバトン</span>
+                </div>
+                
+                <!-- ランキング順位表示 -->
+                <div class="ranking-scroll-box">
+                    {% for baton_chain_rank in baton_chain_ranking %}              <!--スクロール表示-->
+
+                    <div class="{% if baton_chain_rank.creator_id == user_id %}my-ranking-detail
+                                    {%else%}ranking-detail {%endif%}">        <!--ランキング詳細-->
+                        
+                        <!--順位表示  -->
+                        {%if loop.index0==0%}           <!--はじめの配列要素-->
+                        <img class="ranks-medal" src="{{ url_for('static', filename='img/Gold_medal.png')}}" alt="Gold_medal">
+
+                        {%elif loop.index0==1%}          <!--２つ目の配列要素-->
+                        <img class="ranks-medal" src="{{ url_for('static', filename='img/Silver_medal.png')}}" alt="Silver_medal">
+
+                        {%elif loop.index0==2%}          <!--３つ目の配列要素-->
+                        <img class="ranks-medal" src="{{ url_for('static', filename='img/Bronze_medal.png')}}" alt="Bronze_medal">
+                        
+                        {%else%}  <!--4つ目以降の配列要素のとき-->
+                        <p class="ranks">{{loop.index}}</p>
+                        {% endif %}
+                        
+                        <!--名前表示  -->
+                        <div class="rank-name">{{ baton_chain_rank.baton_title }}</div>
+                        
+                        <!--勉強時間表示  -->
+                        <div class="total">
+                            {{ baton_chain_rank.sum_count}}人目達成
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </main>
+    {% include 'common/footer_mypageback.html' %}
+</div>
+
+{% endblock %}
+
+
+        

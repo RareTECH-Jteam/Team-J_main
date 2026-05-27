@@ -1,0 +1,36 @@
+/* 404/500/その他エラー画面のCSS */
+
+.error-wrapper {
+    /* min-height: 100dvh; /* 今見えている高さを100%使うことで文字の位置を真ん中当たりに持ってくる100dvhにしても見づらいので無効化 */
+    display: flex;
+    flex-direction: column; /* 文字を真ん中揃えにするため */
+    justify-content: center;
+    align-items: center;
+}
+
+.flash-messages {
+    font-size: 24px;
+    color: red;
+}
+
+.error-description {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 32px;
+}
+
+.error-description p {
+    margin: 10px auto;
+    color: red;
+}
+
+/* 500, 400ページ */
+
+.error-num {
+    font-size: 56px;
+    text-align: center;
+    font-weight: 600;
+    margin: 0px;
+}

@@ -16,7 +16,7 @@ class DB:
            # データベース名
            database=os.getenv('DB_DATABASE'),
            # 最大コネクション数
-           max_size=5,
+           max_size=20,
            # 文字コード
            charset="utf8mb4",
            # カーソルクラス（辞書型でフェッチ）

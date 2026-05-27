@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css')}}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_reaction" />
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+    <script src="{{url_for('static', filename='js/post_detail.js')}}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <main>
+        <div class="page-title">
+            投稿詳細
+        </div>
+
+        <!-- 対象の投稿（マイページで選択した一件のみ -->
+        <section class="post-detail">
+            <!-- 投稿編集用ボタンを投稿詳細枠の上に表示　-->
+            <div class="post-actions">
+                <div class="post-menu" id="post-menu-{{post.id}}">
+                    <div class="action-bar" data-postid="{{post.id}}" data-reaction-user-id="{{ user_id }}">
+                        <div class="reaction-bar"> <!-- 上部のリアクションボタン系統 -->
+                            <button class="quick-btn" onclick="setReactionState('post'); sendReaction('👍','post')">👍</button>
+                            <button class="quick-btn" onclick="setReactionState('post'); sendReaction('❤️','post')">❤️</button>
+                            <button class="quick-btn" onclick="setReactionState('post'); sendReaction('😭','post')">😭</button>
+                            <button class="quick-btn" onclick="setReactionState('post'); sendReaction('😂','post')">😂</button>
+                            <div class="picker-wrapper">
+                                <button class="quick-btn add-reaction-btn">
+                                    <span class="material-symbols-outlined">
+                                    add_reaction
+                                    </span>                                
+                                </button>
+                                <div id="picker-container"></div>
+                            </div>
+                        </div>
+
+                        {% if post.user_id == user_id %}
+                        <div class="menu-wrapper">
+                            <button class="quick-btn" onclick="toggleMenu('post')">︙</button>
+                            <div class="menu-dropdown" id="menu-{{ post.id }}" style="display:none;">
+                                <button onclick="enableEdit('post')">
+                                    <span class="pen">🖋 編集</span> 
+                                </button>
+                                <button onclick="deletePost('post')">
+                                    <span class="trash">🗑 削除</span>
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- 編集ボタンによる編集エリア（非表示） -->
+            <section class="edit-post" id="edit-area-{{ post.id }}" style="display: none;">
+                <div class="edit-post-body">
+                    <textarea id="edit-content-{{ post.id }}" name="content">{{ post.content }}</textarea> 
+                    <div class="edit-post-footer">
+                        <label class="edit-study-box">勉強時間：
+                            <input 
+                                id="edit-study-time-input-{{post.id}}"
+                                type="text"
+                                name="study-time"
+                                inputmode="numeric" 
+                                pattern="[0-9]{1,3}"
+                                maxlength="3"
+                                value="{{ hours * 60 + minutes }}"
+                            >
+                            分
+                        </label>
+                        <button class="btn-edit" onclick="saveEdit('post')">保存</button>
+                        <button class="btn-edit" onclick="cancelEdit('post')">キャンセル</button>
+                    </div>
+                </div>
+            </section>
+            <div class="post-card">
+                <div class="post-content">
+                    <div class="post-header">
+                        <div class="post-user">
+                            <span class="display-name">{{ post.user_name }}</span>
+                        </div>
+                        <div class="post-time">{{ post.format_created_at }}</div>
+                    </div>
+                    <div class="edit-completed">
+                        {% if post.created_at != post.updated_at %}
+                        （編集済み）
+                        {% else %}
+                        {% endif %}
+                    </div>
+                    <div class="post-body" id="post-detailbody-{{ post.id }}">
+                        {{ post.content }}
+                    </div>
+                    <div class="post-study-time"  id="post-study-time-{{post.id}}">
+                        勉強時間：
+                        {% if hours and minutes %}
+                            {{ hours }}時間{{ minutes }}分
+                        {% elif hours %}
+                            {{ hours }}時間
+                        {% else %}
+                            {{ minutes }}分
+                        {% endif %}      
+                    </div>
+                </div>
+                <!-- 選択した絵文字を表示する -->
+                <div class="reaction-area" id="showemoji" 
+                    data-reactions="{{ reactions }}">
+                </div>
+            </div>
+        </section>
+
+        <!-- 選んだ投稿に対するコメント一覧 -->
+        {% if comments and comments|length > 0 %}
+        <section class="comment-list">
+            {% for comment in comments %}
+            <div class="comment-card"> <!-- コメント本文へのホバーでリアクションボタン表示させるためにだいぶ上方へシフトさせた -->
+
+            <!-- ここからリアクションボタン配置してみる -->
+            <!-- 投稿編集用ボタンを投稿詳細枠の上に表示　-->
+            <div class="comment-actions">
+                <div class="comment-menu" id="comment-menu-{{ comment.id }}">
+                    <div class="action-bar action-bar-comment" data-type="comment" data-comment-id="{{ comment.id }}" data-reaction-user-id="{{ user_id }}">
+                        <div class="reaction-bar2"> <!-- 上部のリアクションボタン系統 -->
+                            <button class="quick-btn2" onclick="setReactionState('comment','{{comment.id}}');
+                            sendReaction('👍')">👍</button>
+                            <button class="quick-btn2" onclick="setReactionState('comment','{{comment.id}}'); 
+                            sendReaction('❤️')">❤️</button>
+                            <button class="quick-btn2" onclick="setReactionState('comment','{{comment.id}}'); 
+                            sendReaction('😭')">😭</button>
+                            <button class="quick-btn2" onclick="setReactionState('comment','{{comment.id}}'); 
+                            sendReaction('😂')">😂</button>
+                            <div class="picker-wrapper2">
+                                <button  class="quick-btn2 add-reaction-btn">
+                                    <span class="material-symbols-outlined">
+                                    add_reaction
+                                    </span>                                
+                                </button>
+                                <!-- <div id="picker-container2"></div> -->
+                            </div>
+                        </div>
+
+                        {% if comment.user_id == user_id %}
+                        <div class="menu-wrapper">
+                            <button class="quick-btn2" onclick="toggleMenu('comment','{{comment.id}}')">︙</button>
+                            <div class="menu-dropdown2" id="menu-comment-{{ comment.id }}" style="display:none;"> <!-- 投稿menuのidと区別するため、id名を違う系統に変更！ -->
+                                <button onclick="enableEdit('comment','{{comment.id}}')">
+                                    <span class="pen">🖋 編集</span> 
+                                </button>
+                                <button onclick="deletePost('comment','{{comment.id}}')">
+                                    <span class="trash">🗑 削除</span>
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <section class="edit-post" id="edit-area-{{ comment.id }}" style="display: none;">
+                <div class="edit-post-body">
+                    <textarea id="edit-comment-content-{{ comment.id }}" name="content">{{ comment.content }}</textarea> 
+                    <div class="edit-post-footer">
+                        <button class="btn-edit" onclick="saveEdit('comment','{{comment.id}}')">保存</button>
+                        <button class="btn-edit" onclick="cancelEdit('comment','{{comment.id}}')">キャンセル</button>
+                    </div>
+                </div>
+            </section>
+            
+                <div class="comment-content"> <!-- 大元のcomment-cardは、コメント本文へのホバーでリアクションボタン表示させるためにだいぶ上方へシフト -->
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <span class="display-name">{{ comment.user_name }}</span>
+                        </div>
+                        <div class="comment-time">{{ comment.format_created_at }}</div>
+                    </div>
+                    <div class="edit-completed">
+                        {% if comment.created_at != comment.updated_at %}
+                        （編集済み）
+                        {% else %}
+                        {% endif %}
+                    </div>
+                    <div class="comment-body" id="comment-body-{{comment.id}}">
+                        {{ comment.content }}
+                    </div>
+                    <!-- 選択した絵文字を表示する -->
+                    <div class="reaction-area2" id="showemoji-{{comment.id}}" 
+                        data-comment-reactions="{{ comments_reacitons[comment.id] }}"
+                        data-comment-id="{{comment.id}}"> <!-- コメント専用のreaction変数が必要！ -->
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+        {% else %}
+        <div class="empty">
+            コメントがありません。
+        </div>
+        {% endif %}
+
+        <!-- コメント全体のアクション：サンプルアプリと異なり、下段へ -->
+        <section class="comments-section">
+            <div class="comments-title">コメント</div>
+
+        <!-- コメント投稿フォーム -->
+            <section class="new-post">
+                <form class="new-post-main" action="/posts/{{ post.id }}/comments" method="post">
+                    <textarea name="content" placeholder="どんなコメントで高め合う！？"></textarea>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="new-post-footer">
+                        <button class="btn-primary" type="submit">
+                            コメントを投稿する
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </section>
+    </main>
+    {% include 'common/footer_mypageback.html' %}
+</div>
+{% endblock %}
